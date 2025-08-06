@@ -1,16 +1,16 @@
-"use client";
+"use client"
 
-import { motion } from "framer-motion";
-import Image from "next/image";
+import { motion } from "framer-motion"
+import Image from "next/image"
 
 interface Skill {
-  name: string;
-  logo: string;
+  name: string
+  logo: string
 }
 
 interface SkillsGridProps {
-  title: string;
-  skills: Skill[];
+  title: string
+  skills: Skill[]
 }
 
 export function SkillsGrid({ title, skills }: SkillsGridProps) {
@@ -37,7 +37,7 @@ export function SkillsGrid({ title, skills }: SkillsGridProps) {
               transition={{ duration: 0.3, delay: index * 0.03 }}
               viewport={{ once: true }}
             >
-              <div className="w-12 h-12 bg-primary rounded-xl p-2 mb-3 group-hover: scale-105 transition-transform duration-200">
+              <div className="w-12 h-12 bg-primary rounded-xl p-2 mb-3 group-hover:scale-105 transition-transform duration-200">
                 <Image
                   src={skill.logo || "/placeholder.svg"}
                   alt={skill.name}
@@ -55,5 +55,5 @@ export function SkillsGrid({ title, skills }: SkillsGridProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }

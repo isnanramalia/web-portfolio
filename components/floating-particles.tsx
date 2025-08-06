@@ -1,4 +1,5 @@
 "use client";
+
 import { useRef } from "react";
 import { motion } from "framer-motion";
 
@@ -14,7 +15,10 @@ export function FloatingParticles() {
   }));
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div
+      ref={containerRef}
+      className="fixed inset-0 pointer-events-none overflow-hidden z-0"
+    >
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
@@ -35,7 +39,7 @@ export function FloatingParticles() {
             repeat: Number.POSITIVE_INFINITY,
             ease: "easeInOut",
           }}
-        ></motion.div>
+        />
       ))}
     </div>
   );

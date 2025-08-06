@@ -1,29 +1,27 @@
-"use client";
-import { motion } from "framer-motion";
+"use client"
+
+import { motion } from "framer-motion"
+
 interface IsnaLogoProps {
-  size?: "sm" | "md" | "lg";
-  variant?: "default" | "minimal" | "gradient";
-  className?: string;
+  size?: "sm" | "md" | "lg"
+  variant?: "default" | "minimal" | "gradient"
+  className?: string
 }
 
-export function IsnaLogo({
-  size = "md",
-  variant = "default",
-  className = "",
-}: IsnaLogoProps) {
+export function IsnaLogo({ size = "md", variant = "default", className = "" }: IsnaLogoProps) {
   const sizeClasses = {
     sm: "w-8 h-8",
     md: "w-10 h-10",
-    lg: "w-16 h-16,",
-  };
+    lg: "w-16 h-16",
+  }
 
   const textSizes = {
     sm: "text-sm",
     md: "text-lg",
     lg: "text-2xl",
-  };
+  }
 
-  if (variant == "minimal") {
+  if (variant === "minimal") {
     return (
       <motion.div
         className={`${sizeClasses[size]} bg-primary rounded-2xl flex items-center justify-center ${className}`}
@@ -31,33 +29,25 @@ export function IsnaLogo({
         whileTap={{ scale: 0.95 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
       >
-        <span
-          className={`${textSizes[size]} font-bold text-primary-foreground`}
-        >
-          I
-        </span>
+        <span className={`${textSizes[size]} font-bold text-primary-foreground`}>I</span>
       </motion.div>
-    );
+    )
   }
 
-  if ((variant = "gradient")) {
+  if (variant === "gradient") {
     return (
       <motion.div
-        className={`${sizeClasses[size]} bg-primary rounded-2xl ${className}`}
+        className={`${sizeClasses[size]} relative overflow-hidden rounded-2xl ${className}`}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/80 to-primary/60"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/80 to-primary/60" />
         <div className="relative w-full h-full flex items-center justify-center">
-          <span
-            className={`${textSizes[size]} font-bold text-primary-foreground`}
-          >
-            I
-          </span>
+          <span className={`${textSizes[size]} font-bold text-primary-foreground`}>I</span>
         </div>
       </motion.div>
-    );
+    )
   }
 
   return (
@@ -67,14 +57,12 @@ export function IsnaLogo({
       whileTap={{ scale: 0.95 }}
       transition={{ type: "spring", stiffness: 400, damping: 17 }}
     >
-      <span className={`${textSizes[size]} font-bold text-primary-foreground`}>
-        I
-      </span>
+      <span className={`${textSizes[size]} font-bold text-primary-foreground`}>I</span>
     </motion.div>
-  );
+  )
 }
 
-// full isna text logo
+// Full ISNA Text Logo
 export function IsnaTextLogo({ className = "" }: { className?: string }) {
   return (
     <motion.div
@@ -94,7 +82,7 @@ export function IsnaTextLogo({ className = "" }: { className?: string }) {
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.3 }}
+            transition={{ delay: 0.4, duration: 0.3 }}
           >
             I
           </motion.span>
@@ -108,24 +96,24 @@ export function IsnaTextLogo({ className = "" }: { className?: string }) {
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.3 }}
+            transition={{ delay: 0.6, duration: 0.3 }}
           >
             N
           </motion.span>
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.3 }}
+            transition={{ delay: 0.7, duration: 0.3 }}
           >
             A
           </motion.span>
         </span>
       </motion.div>
     </motion.div>
-  );
+  )
 }
 
-// animated logo for loading/hero
+// Animated Logo for Loading/Hero
 export function IsnaAnimatedLogo({ className = "" }: { className?: string }) {
   return (
     <motion.div
@@ -134,12 +122,7 @@ export function IsnaAnimatedLogo({ className = "" }: { className?: string }) {
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <svg
-        viewBox="0 0 200 80"
-        className="w-full h-full"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+      <svg viewBox="0 0 200 80" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
         {/* Background */}
         <motion.rect
           width="200"
@@ -153,51 +136,17 @@ export function IsnaAnimatedLogo({ className = "" }: { className?: string }) {
         />
 
         {/* ISNA Text */}
-        <motion.g
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
+        <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4, duration: 0.6 }}>
           {/* I */}
           <motion.g
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.4 }}
           >
-            <rect
-              x="30"
-              y="20"
-              width="12"
-              height="4"
-              rx="2"
-              fill="currentColor"
-              className="text-primary-foreground"
-            />
-            <rect
-              x="33"
-              y="24"
-              width="6"
-              height="28"
-              rx="3"
-              fill="currentColor"
-              className="text-primary-foreground"
-            />
-            <rect
-              x="30"
-              y="52"
-              width="12"
-              height="4"
-              rx="2"
-              fill="currentColor"
-              className="text-primary-foreground"
-            />
-            <circle
-              cx="36"
-              cy="15"
-              r="2"
-              fill="currentColor"
-              className="text-primary-foreground"
-            />
+            <rect x="30" y="20" width="12" height="4" rx="2" fill="currentColor" className="text-primary-foreground" />
+            <rect x="33" y="24" width="6" height="28" rx="3" fill="currentColor" className="text-primary-foreground" />
+            <rect x="30" y="52" width="12" height="4" rx="2" fill="currentColor" className="text-primary-foreground" />
+            <circle cx="36" cy="15" r="2" fill="currentColor" className="text-primary-foreground" />
           </motion.g>
 
           {/* S */}
@@ -222,24 +171,8 @@ export function IsnaAnimatedLogo({ className = "" }: { className?: string }) {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.4 }}
           >
-            <rect
-              x="80"
-              y="25"
-              width="6"
-              height="30"
-              rx="3"
-              fill="currentColor"
-              className="text-primary-foreground"
-            />
-            <rect
-              x="100"
-              y="25"
-              width="6"
-              height="30"
-              rx="3"
-              fill="currentColor"
-              className="text-primary-foreground"
-            />
+            <rect x="80" y="25" width="6" height="30" rx="3" fill="currentColor" className="text-primary-foreground" />
+            <rect x="100" y="25" width="6" height="30" rx="3" fill="currentColor" className="text-primary-foreground" />
             <rect
               x="86"
               y="35"
@@ -278,15 +211,7 @@ export function IsnaAnimatedLogo({ className = "" }: { className?: string }) {
               className="text-primary-foreground"
               transform="rotate(15 143 40)"
             />
-            <rect
-              x="125"
-              y="40"
-              width="15"
-              height="4"
-              rx="2"
-              fill="currentColor"
-              className="text-primary-foreground"
-            />
+            <rect x="125" y="40" width="15" height="4" rx="2" fill="currentColor" className="text-primary-foreground" />
           </motion.g>
         </motion.g>
 
@@ -313,5 +238,5 @@ export function IsnaAnimatedLogo({ className = "" }: { className?: string }) {
         />
       </svg>
     </motion.div>
-  );
+  )
 }

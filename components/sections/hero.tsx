@@ -15,11 +15,13 @@ export function HeroSection({ y, scrollToSection }: HeroSectionProps) {
   return (
     <motion.section
       id="hero"
-      className="px-4 sm: px-6 lg:px-12 py-88 lg:py-16 relative overflow-hidden"
+      className="px-4 sm:px-6 lg:px-12 py-8 lg:py-16 relative overflow-hidden"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
+      <motion.div className="absolute inset-0 bg-accent/50" style={{ y }} />
+
       <div className="max-w-4xl mx-auto relative">
         {/* Mobile Profile Section */}
         <div className="lg:hidden mb-12 text-center">
@@ -32,8 +34,8 @@ export function HeroSection({ y, scrollToSection }: HeroSectionProps) {
               <div className="relative">
                 <div className="w-32 h-32 bg-primary rounded-2xl flex items-center justify-center p-1">
                   <Image
-                    src="/foto"
-                    alt="foto isna"
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-tlDA4KeKTFGCgK9lXR1OG0HhrYhsXU.png"
+                    alt="Isna Nur Amalia"
                     width={120}
                     height={120}
                     className="rounded-2xl object-cover"
@@ -55,8 +57,8 @@ export function HeroSection({ y, scrollToSection }: HeroSectionProps) {
                 className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl smooth-hover"
                 onClick={() => {
                   const link = document.createElement("a");
-                  link.href = "/IsnaNurAmalia_CV.pdf";
-                  link.download = "CV-IsnaNurAmalia.pdf";
+                  link.href = "/cv-isna-nur-amalia.pdf";
+                  link.download = "CV-Isna-Nur-Amalia.pdf";
                   link.click();
                 }}
               >

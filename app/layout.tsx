@@ -18,6 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Isna Nur Amalia - Frontend Developer",
   description: "Frontend Developer based in Semarang, Indonesia",
+  icons: "/public/favicon.ico",
 };
 
 export default function RootLayout({
