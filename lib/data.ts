@@ -14,6 +14,29 @@ export const education = [
   // },
 ];
 
+export const socialMedia = [
+  {
+    name: "GitHub",
+    url: "https://github.com/isnanramalia",
+    icon: "github",
+  },
+  {
+    name: "LinkedIn",
+    url: "https://linkedin.com/in/isnanramalia",
+    icon: "linkedin",
+  },
+  {
+    name: "Medium",
+    url: "https://medium.com/@isnanramalia",
+    icon: "medium",
+  },
+  {
+    name: "Instagram",
+    url: "https://medium.com/@isnanramalia",
+    icon: "instagram",
+  },
+];
+
 export const workExperience = [
   {
     title: "Senior Frontend Developer",
@@ -74,55 +97,53 @@ export const workExperience = [
 
 export const skillsData = [
   {
-    category: "Frontend Frameworks",
-    skills: [
-      {
-        name: "React",
-        logo: "/icons/whatsapp-icon.png?height=40&width=40&text=React",
-      },
-      {
-        name: "Next.js",
-        logo: "/placeholder.svg?height=40&width=40&text=Next",
-      },
-      {
-        name: "Vue.js",
-        logo: "/placeholder.svg?height=40&width=40&text=Vue",
-      },
-      {
-        name: "Angular",
-        logo: "/placeholder.svg?height=40&width=40&text=Angular",
-      },
-      {
-        name: "Svelte",
-        logo: "/placeholder.svg?height=40&width=40&text=Svelte",
-      },
-      {
-        name: "Nuxt.js",
-        logo: "/placeholder.svg?height=40&width=40&text=Nuxt",
-      },
-    
-    ],
+    name: "React",
+    logo: "/icons/react.svg",
   },
   {
-    category: "Programming Languages",
-    skills: [
-      {
-        name: "JavaScript",
-        logo: "/placeholder.svg?height=40&width=40&text=JS",
-      },
-      {
-        name: "TypeScript",
-        logo: "/placeholder.svg?height=40&width=40&text=TS",
-      },
-      {
-        name: "Python",
-        logo: "/placeholder.svg?height=40&width=40&text=Python",
-      },
-      { name: "PHP", logo: "/placeholder.svg?height=40&width=40&text=PHP" },
-      { name: "Java", logo: "/placeholder.svg?height=40&width=40&text=Java" },
-    ],
+    name: "Next.js",
+    logo: "/icons/next-js.svg",
   },
- 
+  {
+    name: "Vue.js",
+    logo: "/placeholder.svg?height=40&width=40&text=Vue",
+  },
+  {
+    name: "Angular",
+    logo: "/placeholder.svg?height=40&width=40&text=Angular",
+  },
+  {
+    name: "TypeScript",
+    logo: "/placeholder.svg?height=40&width=40&text=TS",
+  },
+  {
+    name: "JavaScript",
+    logo: "/placeholder.svg?height=40&width=40&text=JS",
+  },
+  {
+    name: "Tailwind CSS",
+    logo: "/icons/tailwind.png",
+  },
+  {
+    name: "Bootstrap",
+    logo: "/icons/bootstrap.png",
+  },
+  {
+    name: "Laravel",
+    logo: "/icons/laravel.png",
+  },
+  {
+    name: "PHP",
+    logo: "/placeholder.svg?height=40&width=40&text=PHP",
+  },
+  {
+    name: "Node.js",
+    logo: "/placeholder.svg?height=40&width=40&text=Node",
+  },
+  {
+    name: "MySQL",
+    logo: "/placeholder.svg?height=40&width=40&text=MySQL",
+  },
 ];
 
 export const projects = [
@@ -207,8 +228,7 @@ export const projects = [
       "Analytics dashboard for social media management with real-time data visualization and reporting features.",
     longDescription:
       "A comprehensive social media management platform that helps businesses track their social media performance across multiple platforms. Features include automated posting, engagement analytics, competitor analysis, and detailed reporting.",
-    image:
-      "/placeholder.svg?height=400&width=500&text=Social+Media+Dashboard",
+    image: "/placeholder.svg?height=400&width=500&text=Social+Media+Dashboard",
     techStack: ["Vue.js", "Vuex", "D3.js", "Firebase"],
     features: [
       "Multi-platform social media integration",

@@ -1,9 +1,16 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { IsnaLogo } from "@/components/isna-logo";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sun, Moon, Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { MoonIcon, SunIcon, Menu } from "lucide-react";
+import { IsnaLogo } from "../isna-logo";
+
+interface NavigationItem {
+  id: string;
+  label: string;
+  icon: React.ComponentType<any>;
+}
 
 interface NavigationProps {
   scrolled: boolean;
@@ -12,11 +19,7 @@ interface NavigationProps {
   activeSection: string;
   theme: string | undefined;
   setTheme: (theme: string) => void;
-  navigationItems: Array<{
-    id: string;
-    label: string;
-    icon: any;
-  }>;
+  navigationItems: NavigationItem[];
   scrollToSection: (sectionId: string) => void;
   scrollToHero: () => void;
 }
@@ -32,124 +35,249 @@ export function Navigation({
   scrollToSection,
   scrollToHero,
 }: NavigationProps) {
+  const toggleMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [setMobileMenuOpen]);
+
+  const navigationVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.25, 0.1, 0.25, 1] as any,
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const logoVariants = {
+    initial: { scale: 1, rotateY: 0 },
+    hover: {
+      scale: 1.05,
+      rotateY: 15,
+      transition: {
+        type: "spring" as const,
+        stiffness: 300,
+        damping: 20,
+      },
+    },
+  };
+
   return (
     <>
-      {/* Fixed Navigation */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      <motion.nav
+        initial="hidden"
+        animate="visible"
+        variants={navigationVariants}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
           scrolled
-            ? "bg-background/80 backdrop-blur-md shadow-sm border-b border-border"
-            : "bg-background border-b border-border"
+            ? "bg-background/80 backdrop-blur-md border-b border-border/40 shadow-lg"
+            : "bg-transparent"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-4 lg:py-6">
-            {/* Logo - Clickable to go to hero */}
-            <motion.button
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <motion.div
+              variants={logoVariants}
+              whileHover="hover"
+              className="relative cursor-pointer"
               onClick={scrollToHero}
-              className="flex items-center space-x-2"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
             >
-              <IsnaLogo size="sm" />
-              <span className="font-bold text-lg text-foreground">Isna</span>
-            </motion.button>
+              <IsnaLogo />
+            </motion.div>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-8 text-sm">
+            <motion.div
+              className="hidden md:flex items-center space-x-8"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.1,
+                    delayChildren: 0.2,
+                  },
+                },
+              }}
+            >
               {navigationItems.map((item) => (
-                <button
+                <motion.button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className={`nav-item flex items-center space-x-2 transition-all duration-200 ${
+                  className={`relative px-3 py-2 text-sm font-medium transition-all duration-200 ${
                     activeSection === item.id
-                      ? "text-primary font-medium"
+                      ? "text-primary"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
+                  variants={{
+                    hidden: { opacity: 0, y: -20 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  whileHover={{
+                    scale: 1.05,
+                    transition: { type: "spring", stiffness: 400, damping: 10 },
+                  }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <item.icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                </button>
+                  {item.label}
+                  {activeSection === item.id && (
+                    <motion.div
+                      className="absolute inset-x-0 -bottom-1 h-0.5 bg-primary rounded-full"
+                      layoutId="activeSection"
+                      initial={false}
+                      transition={{
+                        type: "spring",
+                        stiffness: 380,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+                </motion.button>
               ))}
-            </div>
+            </motion.div>
 
-            {/* Theme Toggle & Mobile Menu */}
+            {/* Theme Toggle & Mobile Menu Button */}
             <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                className="w-9 h-9 rounded-2xl"
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, scale: 0.8 },
+                  visible: { opacity: 1, scale: 1 },
+                }}
+                whileHover={{
+                  scale: 1.1,
+                  rotate: theme === "dark" ? 180 : 0,
+                  transition: { type: "spring", stiffness: 200, damping: 10 },
+                }}
+                whileTap={{ scale: 0.9 }}
               >
-                <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                <span className="sr-only">Toggle theme</span>
-              </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className="relative overflow-hidden"
+                >
+                  <motion.div
+                    animate={{
+                      rotate: theme === "dark" ? 0 : 180,
+                      opacity: theme === "dark" ? 1 : 0,
+                    }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute inset-0 flex items-center justify-center"
+                  >
+                    <MoonIcon className="h-4 w-4" />
+                  </motion.div>
+                  <motion.div
+                    animate={{
+                      rotate: theme === "dark" ? 180 : 0,
+                      opacity: theme === "dark" ? 0 : 1,
+                    }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute inset-0 flex items-center justify-center"
+                  >
+                    <SunIcon className="h-4 w-4" />
+                  </motion.div>
+                </Button>
+              </motion.div>
 
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2 text-muted-foreground hover:text-foreground transition-colors z-50 relative"
+              {/* Mobile Menu Button */}
+              <motion.button
+                onClick={toggleMenu}
+                className="md:hidden relative p-2 rounded-lg hover:bg-muted/50 transition-colors"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: { opacity: 1 },
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                {mobileMenuOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
-                )}
-              </button>
+                <motion.div
+                  animate={{ rotate: mobileMenuOpen ? 90 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {mobileMenuOpen ? (
+                    <motion.div
+                      initial={{ opacity: 0, rotate: -90 }}
+                      animate={{ opacity: 1, rotate: 0 }}
+                      className="w-6 h-6 relative"
+                    >
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-4 h-0.5 bg-current absolute rotate-45" />
+                        <div className="w-4 h-0.5 bg-current absolute -rotate-45" />
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <Menu className="w-6 h-6" />
+                  )}
+                </motion.div>
+              </motion.button>
             </div>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
-      {/* Full Screen Mobile Menu */}
+      {/* Mobile Menu - Floating Style */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div
-            className="fixed inset-0 z-40 lg:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
+          <>
             {/* Backdrop */}
             <motion.div
-              className="absolute inset-0 bg-background/95 backdrop-blur-md"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              className="fixed inset-0 z-30 md:hidden"
+              onClick={() => setMobileMenuOpen(false)}
             />
 
-            {/* Menu Content */}
+            {/* Floating Menu */}
             <motion.div
-              className="relative flex flex-col items-center justify-center h-full px-8"
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+              initial={{ opacity: 0, scale: 0.9, y: -20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: -20 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="fixed top-20 right-4 z-40 md:hidden"
             >
-              <div className="space-y-8 text-center">
-                {navigationItems.map((item, index) => (
-                  <motion.button
-                    key={item.id}
-                    onClick={() => scrollToSection(item.id)}
-                    className={`flex flex-col items-center space-y-2 text-2xl font-medium transition-all duration-200 ${
-                      activeSection === item.id
-                        ? "text-primary"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1, duration: 0.3 }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <item.icon className="w-8 h-8" />
-                    <span>{item.label}</span>
-                  </motion.button>
-                ))}
-              </div>
+              <motion.div
+                className="bg-background/95 backdrop-blur-lg border border-border rounded-2xl shadow-2xl p-4 w-56"
+                initial={{ y: -10 }}
+                animate={{ y: 0 }}
+              >
+                <div className="space-y-2">
+                  {navigationItems.map((item, index) => (
+                    <motion.button
+                      key={item.id}
+                      onClick={() => scrollToSection(item.id)}
+                      className={`flex items-center space-x-3 w-full px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
+                        activeSection === item.id
+                          ? "text-primary bg-primary/10"
+                          : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                      }`}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05, duration: 0.2 }}
+                      whileHover={{ x: 4 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <item.icon className="w-5 h-5" />
+                      <span>{item.label}</span>
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

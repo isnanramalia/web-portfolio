@@ -43,7 +43,7 @@ export function AboutSection({
       viewport={{ once: true }}
     >
       <div className="max-w-4xl mx-auto">
-        <motion.h2
+        {/* <motion.h2
           className="text-2xl font-medium mb-8 text-foreground"
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -51,10 +51,9 @@ export function AboutSection({
           viewport={{ once: true }}
         >
           About Me
-        </motion.h2>
+        </motion.h2> */}
 
-        {/* Brief Description */}
-        <motion.div
+        {/* <motion.div
           className="mb-12 p-6 bg-accent rounded-2xl border border-border"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -72,7 +71,7 @@ export function AboutSection({
             code and staying up-to-date with the latest industry trends and best
             practices.
           </p>
-        </motion.div>
+        </motion.div> */}
 
         {/* Educational Background */}
         <div className="mb-12">

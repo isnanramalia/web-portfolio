@@ -99,7 +99,7 @@ export default function Portfolio() {
 
           {/* Main Content Area */}
           <div className="w-full lg:ml-[35%] lg:w-[65%] min-h-screen relative z-10">
-            <div className="pt-20">
+            <div className="pt-16">
               <HeroSection y={y} scrollToSection={scrollToSection} />
 
               <AboutSection

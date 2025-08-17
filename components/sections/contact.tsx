@@ -11,7 +11,7 @@ export function ContactSection({}: ContactSectionProps) {
   return (
     <motion.section
       id="contact"
-      className="px-4 sm:px-6 lg:px-12 py-8 lg:py-16 bg-accent/50"
+      className="px-4 sm:px-6 lg:px-12 py-12 lg:py-16 bg-accent/50"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
