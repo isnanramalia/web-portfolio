@@ -11,7 +11,7 @@ export function ContactSection({}: ContactSectionProps) {
   return (
     <motion.section
       id="contact"
-      className="px-4 sm:px-6 lg:px-12 py-12 lg:py-16 bg-accent/50"
+      className="px-4 sm:px-6 lg:px-12 py-12 lg:py-32 bg-accent/50"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
@@ -59,19 +59,29 @@ export function ContactSection({}: ContactSectionProps) {
             </Button>
             <Button
               asChild
-              className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl px-8 py-2 smooth-hover"
+              variant="outline"
+              className="border-primary text-primary dark:text-white hover:bg-primary/5 hover:border-primary/30 rounded-2xl px-8 py-2 smooth-hover transition-all duration-300 group"
             >
               <a
                 href="https://wa.me/6281234567890?text=Hi%20Isna,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20discuss..."
                 target="_blank"
                 rel="noopener norefferer"
               >
+                {/* Icon untuk light mode - default hitam */}
                 <Image
-                  src="/whatsapp-icon.png"
+                  src="/icons/whatsapp-icon.png"
                   alt="Contact Isna via WhatsApp"
                   width={16}
                   height={16}
-                  className="w-4 h-4 mr-2"
+                  className="w-4 h-4 mr-2 dark:hidden transition-all duration-300"
+                />
+                {/* Icon untuk dark mode - default putih */}
+                <Image
+                  src="/icons/whatsapp-white.png"
+                  alt="Contact Isna via WhatsApp"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4 mr-2 hidden dark:block transition-all duration-300"
                 />
                 WhatsApp
               </a>

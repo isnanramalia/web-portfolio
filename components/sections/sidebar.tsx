@@ -65,77 +65,51 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
               <motion.div
-                className="w-32 h-32 bg-gradient-to-br from-primary via-primary/90 to-primary/60 rounded-3xl flex items-center justify-center p-2 shadow-2xl relative overflow-hidden border border-primary/20"
+                className="w-32 h-32 bg-gradient-to-br from-background/80 via-card/90 to-muted/80 backdrop-blur-lg border border-border/50 rounded-2xl flex items-center justify-center p-1 shadow-lg relative overflow-hidden"
                 style={{
+                  backdropFilter: "blur(16px) saturate(120%)",
                   background: `
                     linear-gradient(135deg, 
-                      hsl(var(--primary)) 0%, 
-                      hsl(var(--primary) / 0.9) 35%, 
-                      hsl(var(--primary) / 0.7) 100%
-                    ),
-                    linear-gradient(225deg, 
-                      transparent 40%, 
-                      hsl(var(--primary) / 0.1) 100%
+                      rgb(var(--background) / 0.8), 
+                      rgb(var(--card) / 0.9), 
+                      rgb(var(--muted) / 0.8)
                     )
                   `,
-                  boxShadow: `
-                    0 20px 40px -12px hsl(var(--primary) / 0.3),
-                    inset 0 1px 0 hsl(var(--primary) / 0.2),
-                    inset 0 -1px 0 hsl(var(--primary) / 0.1),
-                    0 0 0 1px hsl(var(--primary) / 0.1)
-                  `,
                 }}
-                animate={{
-                  boxShadow: [
-                    "0 20px 40px -12px hsl(var(--primary) / 0.3), inset 0 1px 0 hsl(var(--primary) / 0.2), inset 0 -1px 0 hsl(var(--primary) / 0.1), 0 0 0 1px hsl(var(--primary) / 0.1)",
-                    "0 25px 60px -15px hsl(var(--primary) / 0.4), inset 0 2px 0 hsl(var(--primary) / 0.3), inset 0 -2px 0 hsl(var(--primary) / 0.15), 0 0 0 1px hsl(var(--primary) / 0.15)",
-                    "0 20px 40px -12px hsl(var(--primary) / 0.3), inset 0 1px 0 hsl(var(--primary) / 0.2), inset 0 -1px 0 hsl(var(--primary) / 0.1), 0 0 0 1px hsl(var(--primary) / 0.1)",
-                  ],
+                whileHover={{
+                  scale: 1.02,
+                  backdropFilter: "blur(20px) saturate(130%)",
                 }}
                 transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
+                  duration: 0.3,
+                  ease: "easeOut",
                 }}
               >
-                {/* Glassmorphism overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-3xl" />
-
-                {/* Subtle inner glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-primary/5 rounded-3xl" />
+                {/* Glass overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/5 to-transparent rounded-2xl" />
 
                 <Image
                   src="/foto.jpg"
                   alt="Isna Nur Amalia"
-                  width={112}
-                  height={112}
-                  className="rounded-2xl object-cover w-28 h-28 relative z-10"
+                  fill
+                  className="rounded-xl object-cover"
                 />
               </motion.div>
               <motion.div
                 className="absolute -top-2 -right-2"
-                animate={{
-                  rotate: [0, 15, -10, 5, 0],
-                  scale: [1, 1.2, 0.9, 1.1, 1],
-                }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
+                style={{ display: "none" }}
               >
                 <IsnaLogo size="sm" />
               </motion.div>
 
-              {/* Enhanced glow effect */}
+              {/* Simple shadow effect */}
               <motion.div
-                className="absolute inset-0 bg-primary/20 rounded-3xl blur-xl -z-10"
+                className="absolute inset-0 bg-muted/20 rounded-2xl blur-lg -z-10"
                 animate={{
-                  opacity: [0.2, 0.4, 0.2],
-                  scale: [1, 1.1, 1],
+                  opacity: [0.1, 0.15, 0.1],
                 }}
                 transition={{
-                  duration: 3,
+                  duration: 4,
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
@@ -158,7 +132,7 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            Frontend Developer based in Jakarta, Indonesia.
+            Frontend Developer based in Semarang, Indonesia.
           </motion.p>
 
           <motion.div

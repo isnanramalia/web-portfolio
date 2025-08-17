@@ -1,6 +1,51 @@
 import { Variants } from "framer-motion";
 
-// Advanced entrance animations
+// Text animations
+export const textReveal: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+    scale: 0.9,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+};
+
+export const letterByLetter: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+};
+
+export const letter: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 50,
+    rotateX: -90,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    transition: {
+      duration: 0.4,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+};
+
+// Basic animations
 export const fadeInUp: Variants = {
   hidden: {
     opacity: 0,
@@ -69,7 +114,7 @@ export const slideInRight: Variants = {
   },
 };
 
-// Stagger animations
+// Container animations
 export const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -100,7 +145,7 @@ export const staggerItem: Variants = {
   },
 };
 
-// Card hover animations
+// Hover animations
 export const cardHover: Variants = {
   rest: {
     scale: 1,
@@ -139,12 +184,30 @@ export const cardContent: Variants = {
   },
 };
 
+// Spring bounce animation
+export const springBounce: Variants = {
+  hidden: {
+    scale: 0,
+    opacity: 0,
+  },
+  visible: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 20,
+      duration: 0.8,
+    },
+  },
+};
+
 // Floating animations
 export const floatingY: Variants = {
   animate: {
-    y: [-10, 10, -10],
+    y: [0, -20, 0],
     transition: {
-      duration: 4,
+      duration: 6,
       repeat: Infinity,
       ease: "easeInOut",
     },
@@ -153,9 +216,9 @@ export const floatingY: Variants = {
 
 export const floatingX: Variants = {
   animate: {
-    x: [-5, 5, -5],
+    x: [0, 15, -15, 0],
     transition: {
-      duration: 3,
+      duration: 8,
       repeat: Infinity,
       ease: "easeInOut",
     },
@@ -173,82 +236,18 @@ export const floatingRotate: Variants = {
   },
 };
 
-// Morphing animations
 export const morphing: Variants = {
   initial: {
-    borderRadius: "20px",
     scale: 1,
+    opacity: 0.3,
   },
   animate: {
-    borderRadius: ["20px", "50px", "20px"],
-    scale: [1, 1.02, 1],
+    scale: [1, 1.5, 0.8, 1.2, 1],
+    opacity: [0.3, 0.6, 0.2, 0.5, 0.3],
     transition: {
-      duration: 4,
+      duration: 8,
       repeat: Infinity,
       ease: "easeInOut",
-    },
-  },
-};
-
-// Text animations
-export const textReveal: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 100,
-    skewY: 7,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    skewY: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.25, 0.46, 0.45, 0.94],
-    },
-  },
-};
-
-export const letterByLetter: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.05,
-    },
-  },
-};
-
-export const letter: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 50,
-    rotateX: -90,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    rotateX: 0,
-    transition: {
-      duration: 0.5,
-      ease: [0.25, 0.46, 0.45, 0.94],
-    },
-  },
-};
-
-// Spring physics animations
-export const springBounce: Variants = {
-  hidden: {
-    scale: 0,
-    opacity: 0,
-  },
-  visible: {
-    scale: 1,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      damping: 10,
-      stiffness: 100,
-      mass: 0.5,
     },
   },
 };
