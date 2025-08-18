@@ -209,7 +209,7 @@ export function HeroSection({ y, scrollToSection }: HeroSectionProps) {
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
                 <motion.div
-                  className="w-32 h-32 bg-gradient-to-br from-background/80 via-card/90 to-muted/80 backdrop-blur-lg border border-border/50 rounded-2xl flex items-center justify-center p-1 shadow-lg relative overflow-hidden"
+                  className="w-32 h-40 bg-gradient-to-br from-background/80 via-card/90 to-muted/80 backdrop-blur-lg border border-border/50 rounded-2xl flex items-center justify-center p-1 shadow-lg relative overflow-hidden"
                   style={{
                     backdropFilter: "blur(16px) saturate(120%)",
                     background: `
@@ -233,7 +233,7 @@ export function HeroSection({ y, scrollToSection }: HeroSectionProps) {
                   <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/5 to-transparent rounded-2xl" />
 
                   <Image
-                    src="/foto.jpg"
+                    src="/foto-removebg.png"
                     alt="Isna Nur Amalia"
                     fill
                     className="rounded-xl object-cover"

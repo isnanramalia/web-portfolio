@@ -2,7 +2,7 @@ export const education = [
   {
     degree: "Bachelor of Computer Science",
     institution: "Dian Nuswantoro University",
-    period: "2016 - 2020",
+    period: "2022 - expected 2026",
     description: "Focused on Software Engineering and Web Development",
   },
   // {
@@ -32,93 +32,87 @@ export const socialMedia = [
   },
   {
     name: "Instagram",
-    url: "https://medium.com/@isnanramalia",
+    url: "https://www.instagram.com/isnanramalia/",
     icon: "instagram",
   },
 ];
 
 export const workExperience = [
   {
-    title: "Senior Frontend Developer",
-    company: "TechCorp Indonesia",
-    period: "Feb 2023 - Present",
-    logo: "/placeholder.svg?height=40&width=40&text=TC",
+    title: "Frontend Web Developer (Internship)",
+    company: "Leolit Games",
+    period: "Jan 2025 - May 2025",
+    logo: "/logo/leolit-games.png?height=40&width=40&text=LG",
     shortDescription:
-      "Leading frontend development team and architecting scalable web applications.",
-    fullDescription: `As a Senior Frontend Developer at TechCorp Indonesia, I lead a team of 5 developers in creating cutting-edge web applications. My responsibilities include:
+      "Developed a responsive and modern company profile website using Next.js and Tailwind.",
+    fullDescription: `At Leolit Games, I worked as a Frontend Developer to build the company’s official profile website. My key responsibilities included:
 
-• Architecting and implementing scalable frontend solutions using React, Next.js, and TypeScript
-• Mentoring junior developers and conducting code reviews to maintain high code quality standards
-• Collaborating with UX/UI designers to translate complex designs into responsive, accessible web interfaces
-• Optimizing application performance, achieving 40% improvement in load times across all products
-• Leading the migration from legacy systems to modern tech stack, reducing technical debt by 60%
-• Implementing automated testing strategies, increasing code coverage from 45% to 85%
-• Working closely with backend teams to design and integrate RESTful APIs and GraphQL endpoints
-• Establishing frontend development best practices and coding standards across the organization`,
+• Developing the company profile website with Next.js, Tailwind CSS, Bun, ShadCN, and Framer Motion
+• Focusing on frontend development with server components for clean, fast, and SEO-friendly output
+• Collaborating with the backend developer to integrate APIs and ensure smooth data handling
+• Implementing modern animations and interactions to create an engaging user experience
+• Deploying the website to production: https://leolitgames.com`,
   },
   {
-    title: "Frontend Developer",
-    company: "Digital Solutions",
-    period: "Feb 2021 - Feb 2023",
-    logo: "/placeholder.svg?height=40&width=40&text=DS",
+    title: "Frontend Web Developer (Internship)",
+    company: "Bengkel Koding",
+    period: "Jan 2025 - Present",
+    logo: "/logo/bengkelkoding.png?height=40&width=40&text=BK",
     shortDescription:
-      "Developed responsive web applications and improved user experience across multiple projects.",
-    fullDescription: `During my time as a Frontend Developer at Digital Solutions, I was responsible for developing and maintaining multiple client-facing applications. Key achievements include:
+      "Built the alumni website for the Computer Science program at Dian Nuswantoro University.",
+    fullDescription: `As a Frontend Developer intern at Bengkel Koding, I developed the “Website for Computer Science Alumni” project. This platform was built to manage alumni data and support accreditation needs. My contributions included:
 
-• Built 15+ responsive web applications using React, Vue.js, and modern CSS frameworks
-• Collaborated with cross-functional teams to deliver projects 20% ahead of schedule
-• Implemented pixel-perfect designs with 99% accuracy to designer specifications
-• Developed reusable component libraries that reduced development time by 30%
-• Integrated third-party APIs and services including payment gateways, analytics, and CRM systems
-• Optimized SEO performance, improving organic traffic by 150% for client websites
-• Participated in agile development processes and sprint planning sessions
-• Conducted user testing sessions and implemented feedback to improve user experience`,
+• Developing the alumni website using Next.js, Tailwind CSS, Laravel, and ShadCN
+• Building responsive UI and implementing reusable components for scalability
+• Collaborating with backend developers to integrate APIs and manage alumni data effectively
+• Optimizing frontend performance to deliver fast load times and seamless user experience
+• Supporting features such as alumni CV generation, job postings, and alumni tracking`,
   },
   {
-    title: "Junior Frontend Developer",
-    company: "StartupHub",
-    period: "Feb 2020 - Feb 2021",
-    logo: "/placeholder.svg?height=40&width=40&text=SH",
+    title: "Web Developer Teaching Assistant – Career Guidance Program",
+    company: "Bengkel Koding",
+    period: "May 2025 - Jul 2025",
+    logo: "/logo/bengkelkoding.png?height=40&width=40&text=BK",
     shortDescription:
-      "Started my professional journey building modern web interfaces and learning industry best practices.",
-    fullDescription: `As a Junior Frontend Developer at StartupHub, I began my professional career in web development. During this foundational period, I:
+      "Mentored students in building a hospital appointment system as part of a project-based learning program.",
+    fullDescription: `As a teaching assistant, I supported students in developing a hospital appointment system project. My responsibilities included:
 
-• Developed proficiency in HTML5, CSS3, JavaScript ES6+, and React.js
-• Built responsive landing pages and web applications for startup clients
-• Learned version control with Git and collaborative development workflows
-• Participated in daily standups and agile development methodologies
-• Worked closely with senior developers to understand code architecture and best practices
-• Implemented basic SEO principles and web accessibility standards
-• Gained experience with design tools like Figma and Adobe XD for design-to-code conversion
-• Contributed to open-source projects and maintained personal portfolio projects
-• Attended tech meetups and workshops to stay updated with industry trends`,
+• Mentoring 25 students in frontend development using React.js
+• Conducting code reviews and providing feedback to improve project quality
+• Assisting in evaluating assignments and offering technical guidance in debugging and deployment`,
+  },
+  {
+    title: "Web Developer Teaching Assistant – Bengkel Koding",
+    company: "Bengkel Koding",
+    period: "Feb 2025 - Jul 2025",
+    logo: "/logo/bengkelkoding.png?height=40&width=40&text=BK",
+    shortDescription:
+      "Guided students in building a digital polyclinic system project and provided technical assistance.",
+    fullDescription: `As a teaching assistant, I collaborated with a team to guide students in developing a digital polyclinic system. My contributions included:
+
+• Supporting 24 students in small teams to build web applications
+• Assisting in frontend design and integration with backend systems
+• Providing technical support on coding practices, debugging, and project documentation`,
   },
 ];
+
 
 export const skillsData = [
   {
     name: "React",
-    logo: "/icons/react.svg",
+    logo: "/icons/react.png",
   },
   {
     name: "Next.js",
     logo: "/icons/next-js.svg",
   },
   {
-    name: "Vue.js",
-    logo: "/placeholder.svg?height=40&width=40&text=Vue",
-  },
-  {
-    name: "Angular",
-    logo: "/placeholder.svg?height=40&width=40&text=Angular",
-  },
-  {
     name: "TypeScript",
-    logo: "/placeholder.svg?height=40&width=40&text=TS",
+    logo: "/icons/typescript.png",
   },
   {
     name: "JavaScript",
-    logo: "/placeholder.svg?height=40&width=40&text=JS",
+    logo: "/icons/javascript.png",
   },
   {
     name: "Tailwind CSS",
@@ -134,129 +128,86 @@ export const skillsData = [
   },
   {
     name: "PHP",
-    logo: "/placeholder.svg?height=40&width=40&text=PHP",
-  },
-  {
-    name: "Node.js",
-    logo: "/placeholder.svg?height=40&width=40&text=Node",
+    logo: "/icons/php.png",
   },
   {
     name: "MySQL",
-    logo: "/placeholder.svg?height=40&width=40&text=MySQL",
+    logo: "/icons/mysql.webp",
   },
 ];
 
 export const projects = [
   {
-    title: "Akuntana",
+    title: "Website for Computer Science Alumni",
     description:
-      "This exploration showcases the homepage of the website, featuring sections designed to provide users with a clear understanding of the platform's offerings.",
+      "A web platform for alumni of Dian Nuswantoro University’s IT program, providing CV generation, job postings, and alumni tracking.",
     longDescription:
-      "Akuntana is a comprehensive accounting platform designed for small to medium businesses. The platform provides intuitive financial management tools, automated reporting, and seamless integration with popular payment gateways. Built with modern web technologies, it offers a responsive design and real-time data synchronization.",
-    image:
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-1rLqP4goWYIcqAegAbugIuunEbaWj5.png",
-    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Stripe", "MongoDB"],
+      "The Alumni Website is a sub-application of the School of Information Technology at Dian Nuswantoro University. It is designed to track alumni data for accreditation purposes, while also giving alumni benefits such as CV generation and access to job postings. Built with Next.js, Laravel, Tailwind CSS, and ShadCN, the website features a responsive interface, role-based access, and seamless integration with the backend.",
+    image: "/project/alumni.png",
+    techStack: ["Next.js", "Laravel", "Tailwind CSS", "ShadCN"],
     features: [
-      "Real-time financial dashboard",
-      "Automated invoice generation",
-      "Multi-currency support",
-      "Integration with payment gateways",
-      "Advanced reporting and analytics",
+      "Alumni CV generation system",
+      "Job posting and application module",
+      "Alumni tracking dashboard for coordinators",
+      "Role-based access for alumni, students, partners, and coordinators",
+      "Responsive and accessible UI design",
     ],
-    github: "https://github.com/isna/ecommerce-platform",
-    website: "https://ecommerce-demo.vercel.app",
+    github: "https://github.com/isna/alumni-website",
+    website: "https://dev-sti.dinus.id/alumni",
   },
   {
-    title: "Task Management Dashboard",
+    title: "Leolit Games - Company Profile Website",
     description:
-      "This exploration showcases the homepage of the website, featuring sections designed to provide users with a clear understanding of the application's features.",
+      "A modern and responsive company profile website for Leolit Games, showcasing services, games, and company updates.",
     longDescription:
-      "A comprehensive task management solution built for teams and individuals. Features include real-time collaboration, advanced filtering, deadline tracking, and productivity analytics. The application uses WebSocket for real-time updates and provides a seamless user experience across all devices.",
-    image:
-      "/placeholder.svg?height=400&width=500&text=Task+Management+Dashboard",
-    techStack: ["React", "Node.js", "Socket.io", "PostgreSQL"],
+      "The Leolit Games Company Profile Website was built to present the company’s identity, portfolio, and services in a professional and engaging way. Using Next.js with server components, Tailwind CSS, Bun, ShadCN, and Framer Motion, the website delivers a clean, fast, and SEO-friendly experience. The project was a collaboration with the backend developer to integrate APIs and ensure smooth data management, while the frontend emphasizes interactivity and modern design.",
+    image: "/project/leolit.png",
+    techStack: ["Next.js", "Tailwind CSS", "Bun", "ShadCN", "Framer Motion"],
     features: [
-      "Real-time collaboration",
-      "Advanced task filtering and sorting",
-      "Deadline notifications",
-      "Team productivity analytics",
-      "File attachments and comments",
+      "Responsive company profile website",
+      "Interactive animations using Framer Motion",
+      "Showcase of games, services, and news",
+      "Server components for SEO optimization and performance",
+      "Collaborative API integration with backend systems",
     ],
-    github: "https://github.com/isna/task-manager",
-    website: "https://taskmanager-demo.vercel.app",
+    github: "https://github.com/isna/leolit-profile",
+    website: "https://leolitgames.com",
   },
   {
-    title: "Weather Analytics Platform",
+    title: "DNCC Official Website",
     description:
-      "This exploration showcases the homepage of the website, featuring sections designed to provide users with a clear understanding of weather data visualization.",
+      "A comprehensive website for DNCC, providing information on events, organizational structure, and activities.",
     longDescription:
-      "An advanced weather analytics platform that provides detailed weather insights, forecasting, and historical data analysis. The platform integrates with multiple weather APIs to provide accurate and comprehensive weather information with beautiful data visualizations.",
-    image:
-      "/placeholder.svg?height=400&width=500&text=Weather+Analytics+Platform",
-    techStack: ["Vue.js", "Chart.js", "OpenWeather API"],
+      "The DNCC Official Website was developed to serve as the central hub for the Dian Nuswantoro Computer Club (DNCC). The platform provides details on events, organizational structure, and activities, with a strong focus on responsive design and user-friendly navigation. Built with CodeIgniter, the website ensures maintainability and scalability for the student organization.",
+    image: "/project/dncc.jpg",
+    techStack: ["CodeIgniter", "Bootstrap", "MySQL"],
     features: [
-      "7-day weather forecast",
-      "Historical weather data analysis",
-      "Interactive weather maps",
-      "Custom weather alerts",
-      "Data export functionality",
+      "Event and activity information management",
+      "Organizational structure display",
+      "Responsive and user-friendly design",
+      "Content management system for administrators",
+      "Deployed on dnccudinus.org",
     ],
-    github: "https://github.com/isna/weather-dashboard",
-    website: "https://weather-dashboard-demo.vercel.app",
+    github: "https://github.com/isna/dncc-website",
+    website: "https://dnccudinus.org",
   },
   {
-    title: "E-commerce Platform",
+    title: "Registration Web – BTNG 2023",
     description:
-      "A comprehensive e-commerce solution with modern design and seamless user experience for online shopping.",
+      "A registration platform for BTNG 2023, an event organized by DNCC to facilitate new student recruitment.",
     longDescription:
-      "A full-featured e-commerce platform with advanced product management, secure payment processing, and comprehensive admin dashboard. Built with scalability in mind, it supports multiple vendors, advanced search functionality, and mobile-first design.",
-    image: "/placeholder.svg?height=400&width=500&text=E-commerce+Platform",
-    techStack: ["React", "Redux", "Node.js", "Express", "MySQL"],
+      "The Registration Web for BTNG 2023 was developed to streamline the registration process for students joining DNCC during the annual recruitment event at UDINUS. Built with React.js, the platform emphasizes modern UI design, responsive navigation, and ease of use for new members. The project successfully supported hundreds of new student registrations during the event.",
+    image: "/project/btng-2023.jpg",
+    techStack: ["React.js", "Tailwind CSS", "Firebase"],
     features: [
-      "Multi-vendor marketplace",
-      "Advanced product search and filtering",
-      "Secure payment processing",
-      "Inventory management",
-      "Customer review system",
+      "Student registration management",
+      "Modern and responsive UI design",
+      "Smooth navigation and usability",
+      "Event-specific data handling",
+      "Deployed on btng.dnccudinus.org",
     ],
-    github: "https://github.com/isna/ecommerce-platform",
-    website: "https://ecommerce-platform-demo.vercel.app",
-  },
-  {
-    title: "Social Media Dashboard",
-    description:
-      "Analytics dashboard for social media management with real-time data visualization and reporting features.",
-    longDescription:
-      "A comprehensive social media management platform that helps businesses track their social media performance across multiple platforms. Features include automated posting, engagement analytics, competitor analysis, and detailed reporting.",
-    image: "/placeholder.svg?height=400&width=500&text=Social+Media+Dashboard",
-    techStack: ["Vue.js", "Vuex", "D3.js", "Firebase"],
-    features: [
-      "Multi-platform social media integration",
-      "Automated post scheduling",
-      "Engagement analytics and insights",
-      "Competitor analysis",
-      "Custom reporting dashboard",
-    ],
-    github: "https://github.com/isna/social-dashboard",
-    website: "https://social-dashboard-demo.vercel.app",
-  },
-  {
-    title: "Learning Management System",
-    description:
-      "Educational platform with course management, student tracking, and interactive learning features.",
-    longDescription:
-      "A modern learning management system designed for educational institutions and corporate training. Features include course creation tools, student progress tracking, interactive assessments, and comprehensive analytics for educators.",
-    image:
-      "/placeholder.svg?height=400&width=500&text=Learning+Management+System",
-    techStack: ["Next.js", "Prisma", "PostgreSQL", "Stripe"],
-    features: [
-      "Interactive course builder",
-      "Student progress tracking",
-      "Automated grading system",
-      "Video conferencing integration",
-      "Certificate generation",
-    ],
-    github: "https://github.com/isna/lms-platform",
-    website: "https://lms-platform-demo.vercel.app",
+    github: "https://github.com/isna/btng-registration",
+    website: "https://btng.dnccudinus.org",
   },
 ];
+

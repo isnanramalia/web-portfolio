@@ -59,13 +59,13 @@ export function ProjectsSection({
               <div className="mb-4 overflow-hidden rounded-2xl">
                 <motion.div
                   layoutId={`project-image-${project.title}`}
-                  className="w-full h-48 overflow-hidden rounded-2xl"
+                  className="w-full h-full overflow-hidden rounded-2xl"
                 >
                   <Image
                     src={project.image || "/placeholder.svg"}
                     alt={project.title}
                     width={400}
-                    height={250}
+                    height={350}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 rounded-2xl"
                   />
                 </motion.div>

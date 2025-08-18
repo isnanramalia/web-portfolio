@@ -184,13 +184,10 @@ export function FooterSection({}: FooterSectionProps) {
               <p className="text-sm text-muted-foreground">
                 © {currentYear} Isna Nur Amalia. All rights reserved.
               </p>
-              <p className="text-xs text-muted-foreground/70 mt-1">
-                Built with Next.js, TypeScript, and Tailwind CSS
-              </p>
             </div>
 
             <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-              <span>Made with ❤️ in Semarang</span>
+              <span>Made with ♥ in Semarang</span>
               <span>•</span>
               <span>Open to opportunities</span>
             </div>

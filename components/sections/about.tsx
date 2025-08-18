@@ -75,8 +75,8 @@ export function AboutSection({
 
         {/* Educational Background */}
         <div className="mb-12">
-          <motion.h3
-            className="text-lg font-medium mb-6 flex items-center text-foreground"
+          <motion.h2
+            className="text-2xl font-medium mb-6 flex items-center text-foreground"
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
@@ -84,7 +84,7 @@ export function AboutSection({
           >
             {/* <GraduationCap className="w-5 h-5 mr-2" /> */}
             Educational Background
-          </motion.h3>
+          </motion.h2>
           <div className="space-y-6">
             {education.map((edu, index) => (
               <motion.div
@@ -116,8 +116,8 @@ export function AboutSection({
 
         {/* Working Experience */}
         <div>
-          <motion.h3
-            className="text-lg font-medium mb-6 flex items-center text-foreground"
+          <motion.h2
+            className="text-2xl font-medium my-6 flex items-center text-foreground"
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
@@ -125,7 +125,7 @@ export function AboutSection({
           >
             {/* <Calendar className="w-5 h-5 mr-2" /> */}
             Working Experience
-          </motion.h3>
+          </motion.h2>
           <div className="space-y-4">
             {workExperience.map((job, index) => (
               <motion.div
