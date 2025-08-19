@@ -43,6 +43,7 @@ export const workExperience = [
     company: "Leolit Games",
     period: "Jan 2025 - May 2025",
     logo: "/logo/leolit-games.png?height=40&width=40&text=LG",
+    website: "https://leolitgames.com",
     shortDescription:
       "Developed a responsive and modern company profile website using Next.js and Tailwind.",
     fullDescription: `At Leolit Games, I worked as a Frontend Developer to build the company’s official profile website. My key responsibilities included:
@@ -50,14 +51,14 @@ export const workExperience = [
 • Developing the company profile website with Next.js, Tailwind CSS, Bun, ShadCN, and Framer Motion
 • Focusing on frontend development with server components for clean, fast, and SEO-friendly output
 • Collaborating with the backend developer to integrate APIs and ensure smooth data handling
-• Implementing modern animations and interactions to create an engaging user experience
-• Deploying the website to production: https://leolitgames.com`,
+• Implementing modern animations and interactions to create an engaging user experience`,
   },
   {
     title: "Frontend Web Developer (Internship)",
     company: "Bengkel Koding",
     period: "Jan 2025 - Present",
     logo: "/logo/bengkelkoding.png?height=40&width=40&text=BK",
+    website: "https://bengkelkoding.dinus.id/",
     shortDescription:
       "Built the alumni website for the Computer Science program at Dian Nuswantoro University.",
     fullDescription: `As a Frontend Developer intern at Bengkel Koding, I developed the “Website for Computer Science Alumni” project. This platform was built to manage alumni data and support accreditation needs. My contributions included:
@@ -73,6 +74,7 @@ export const workExperience = [
     company: "Bengkel Koding",
     period: "May 2025 - Jul 2025",
     logo: "/logo/bengkelkoding.png?height=40&width=40&text=BK",
+    website: "https://bengkelkoding.dinus.id/",
     shortDescription:
       "Mentored students in building a hospital appointment system as part of a project-based learning program.",
     fullDescription: `As a teaching assistant, I supported students in developing a hospital appointment system project. My responsibilities included:
@@ -86,6 +88,7 @@ export const workExperience = [
     company: "Bengkel Koding",
     period: "Feb 2025 - Jul 2025",
     logo: "/logo/bengkelkoding.png?height=40&width=40&text=BK",
+    website: "https://bengkelkoding.dinus.id/",
     shortDescription:
       "Guided students in building a digital polyclinic system project and provided technical assistance.",
     fullDescription: `As a teaching assistant, I collaborated with a team to guide students in developing a digital polyclinic system. My contributions included:
@@ -95,7 +98,6 @@ export const workExperience = [
 • Providing technical support on coding practices, debugging, and project documentation`,
   },
 ];
-
 
 export const skillsData = [
   {
@@ -152,7 +154,6 @@ export const projects = [
       "Role-based access for alumni, students, partners, and coordinators",
       "Responsive and accessible UI design",
     ],
-    github: "https://github.com/isna/alumni-website",
     website: "https://dev-sti.dinus.id/alumni",
   },
   {
@@ -170,7 +171,6 @@ export const projects = [
       "Server components for SEO optimization and performance",
       "Collaborative API integration with backend systems",
     ],
-    github: "https://github.com/isna/leolit-profile",
     website: "https://leolitgames.com",
   },
   {
@@ -188,7 +188,7 @@ export const projects = [
       "Content management system for administrators",
       "Deployed on dnccudinus.org",
     ],
-    github: "https://github.com/isna/dncc-website",
+    github: "https://github.com/dnccsemarang/dncc-apps",
     website: "https://dnccudinus.org",
   },
   {
@@ -206,8 +206,7 @@ export const projects = [
       "Event-specific data handling",
       "Deployed on btng.dnccudinus.org",
     ],
-    github: "https://github.com/isna/btng-registration",
+    github: "https://github.com/dnccsemarang/btng2023",
     website: "https://btng.dnccudinus.org",
   },
 ];
-

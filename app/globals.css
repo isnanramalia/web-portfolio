@@ -250,6 +250,7 @@
 .work-card:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px -2px rgba(42, 42, 42, 0.1);
+  border-color: var(--primary);
 }
 
 .dark .work-card:hover {

@@ -11,8 +11,8 @@ interface Project {
   description: string;
   image: string;
   techStack: string[];
-  github: string;
-  website: string;
+  github?: string;
+  website?: string;
   longDescription?: string;
   features?: string[];
 }
@@ -195,42 +195,52 @@ export function ProjectDialog({
                   </motion.div>
 
                   {/* Action Buttons */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6, duration: 0.25, ease: "easeOut" }}
-                    className="flex space-x-4 pt-4"
-                  >
-                    <Button
-                      asChild
-                      className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl smooth-hover"
+                  {(project.github || project.website) && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        delay: 0.6,
+                        duration: 0.25,
+                        ease: "easeOut",
+                      }}
+                      className="flex space-x-4 pt-4"
                     >
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center"
-                      >
-                        <Github className="w-4 h-4 mr-2" />
-                        View Code
-                      </a>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      asChild
-                      className="border-border text-foreground hover:bg-accent rounded-2xl bg-transparent smooth-hover"
-                    >
-                      <a
-                        href={project.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center"
-                      >
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        Live Demo
-                      </a>
-                    </Button>
-                  </motion.div>
+                      {project.github && (
+                        <Button
+                          asChild
+                          className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl smooth-hover"
+                        >
+                          <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center"
+                          >
+                            <Github className="w-4 h-4 mr-2" />
+                            View Code
+                          </a>
+                        </Button>
+                      )}
+                      {project.website && (
+                        <Button
+                          variant="outline"
+                          asChild
+                          className="border-border text-foreground hover:bg-accent rounded-2xl bg-transparent smooth-hover"
+                        >
+                          <a
+                            href={project.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center"
+                          >
+                            <ExternalLink className="w-4 h-4 mr-2" />
+                            Live Demo
+                          </a>
+                        </Button>
+                      )}
+                    </motion.div>
+                  )}
                 </motion.div>
               </div>
             </motion.div>

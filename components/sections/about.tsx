@@ -16,6 +16,7 @@ interface WorkExperience {
   company: string;
   period: string;
   logo: string;
+  website: string;
   shortDescription: string;
   fullDescription: string;
 }
@@ -130,13 +131,18 @@ export function AboutSection({
             {workExperience.map((job, index) => (
               <motion.div
                 key={index}
-                className={`work-card p-6 rounded-2xl border ${
+                className={`work-card p-6 rounded-2xl border cursor-pointer group ${
                   expandedJob === index ? "active" : ""
                 }`}
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
                 viewport={{ once: true }}
+                onClick={() => {
+                  if (job.website) {
+                    window.open(job.website, "_blank", "noopener,noreferrer");
+                  }
+                }}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-start space-x-4 flex-1">
@@ -152,10 +158,10 @@ export function AboutSection({
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <h4 className="text-lg font-medium text-card-foreground">
+                          <h4 className="text-lg font-medium text-card-foreground group-hover:text-primary transition-colors">
                             {job.title}
                           </h4>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-sm text-muted-foreground group-hover:text-primary/80 transition-colors">
                             {job.company}
                           </p>
                         </div>
@@ -182,7 +188,10 @@ export function AboutSection({
                       )}
 
                       <button
-                        onClick={() => handleJobExpand(index)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleJobExpand(index);
+                        }}
                         className="flex items-center text-sm text-primary hover:text-primary/80 transition-colors mt-2"
                       >
                         {expandedJob === index ? (
