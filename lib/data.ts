@@ -136,6 +136,18 @@ export const skillsData = [
     name: "MySQL",
     logo: "/icons/mysql.webp",
   },
+  {
+    name: "Postgres",
+    logo: "/icons/postgres.png",
+  },
+  {
+    name: "CodeIgniter",
+    logo: "/icons/codeigniter.png",
+  },
+  {
+    name: "Python",
+    logo: "/icons/python.png",
+  },
 ];
 
 export const projects = [
@@ -208,5 +220,77 @@ export const projects = [
     ],
     github: "https://github.com/dnccsemarang/btng2023",
     website: "https://btng.dnccudinus.org",
+  },
+  {
+    title: "DevLearn",
+    description:
+      "Contributed to the development of DevLearn, an educational platform built with Laravel and Tailwind CSS that helps users learn effectively through proven techniques such as the Pomodoro Technique and Feynman Technique.",
+    // longDescription:
+    //   "The Registration Web for BTNG 2023 was developed to streamline the registration process for students joining DNCC during the annual recruitment event at UDINUS. Built with React.js, the platform emphasizes modern UI design, responsive navigation, and ease of use for new members. The project successfully supported hundreds of new student registrations during the event.",
+    image: "/project/devlearn.png",
+    techStack: ["Laravel", "Tailwind"],
+    // features: [
+    //   "Student registration management",
+    //   "Modern and responsive UI design",
+    //   "Smooth navigation and usability",
+    //   "Event-specific data handling",
+    //   "Deployed on btng.dnccudinus.org",
+    // ],
+    // github: "https://github.com/dnccsemarang/devlearn",
+    // website: "https://dinacom.dnccudinus.org",
+  },
+  {
+    title: "DINACOM 2023",
+    description:
+      "Collaborated with the team to create a registration website for the Dinus Application Competition (DINACOM), a technology competition organized by DNCC. The platform allows participants to register their web, mobile, and desktop applications for the competition. Deploy on dinacom.dnccudinus.org.",
+    // longDescription:
+    //   "The Registration Web for BTNG 2023 was developed to streamline the registration process for students joining DNCC during the annual recruitment event at UDINUS. Built with React.js, the platform emphasizes modern UI design, responsive navigation, and ease of use for new members. The project successfully supported hundreds of new student registrations during the event.",
+    image: "/project/dinacom-2023.jpg",
+    techStack: ["Laravel", "Tailwind"],
+    // features: [
+    //   "Student registration management",
+    //   "Modern and responsive UI design",
+    //   "Smooth navigation and usability",
+    //   "Event-specific data handling",
+    //   "Deployed on btng.dnccudinus.org",
+    // ],
+    github: "https://github.com/dnccsemarang/dinacom2023",
+    website: "https://dinacom.dnccudinus.org",
+  },
+  {
+    title: "Registration Web – BTNG 2024",
+    description:
+      "Served as Project Manager for BTNG 2024, overseeing the project by adding details from the team leader, fixing bugs, monitoring the development team to prevent errors during GitHub pushes, and deploying the application to CPanel. Deploy on btng.dnccudinus.org",
+    // longDescription:
+    //   "The Registration Web for BTNG 2023 was developed to streamline the registration process for students joining DNCC during the annual recruitment event at UDINUS. Built with React.js, the platform emphasizes modern UI design, responsive navigation, and ease of use for new members. The project successfully supported hundreds of new student registrations during the event.",
+    image: "/project/btng-2024.jpg",
+    techStack: ["React.js", "Tailwind CSS"],
+    // features: [
+    //   "Student registration management",
+    //   "Modern and responsive UI design",
+    //   "Smooth navigation and usability",
+    //   "Event-specific data handling",
+    //   "Deployed on btng.dnccudinus.org",
+    // ],
+    github: "https://github.com/dnccsemarang/btng2024",
+    website: "https://btng.dnccudinus.org",
+  },
+  {
+    title: "SKINKER ECOMMERCE",
+    description:
+      "Developed Skinker, an e-commerce platform for skincare products, as an early college project. Initially built with vanilla HTML and CSS, then migrated and rebuilt using Laravel framework with Tailwind CSS. Integrated RajaOngkir API to provide real-time shipping cost calculations, enabling accurate delivery pricing based on user location across Indonesia.",
+    // longDescription:
+    //   "The Registration Web for BTNG 2023 was developed to streamline the registration process for students joining DNCC during the annual recruitment event at UDINUS. Built with React.js, the platform emphasizes modern UI design, responsive navigation, and ease of use for new members. The project successfully supported hundreds of new student registrations during the event.",
+    image: "/project/skinker.png",
+    techStack: ["Laravel", "CSS", "MySQL"],
+    // features: [
+    //   "Student registration management",
+    //   "Modern and responsive UI design",
+    //   "Smooth navigation and usability",
+    //   "Event-specific data handling",
+    //   "Deployed on btng.dnccudinus.org",
+    // ],
+    github: "https://github.com/isnanramalia/skinkerEcommerce",
+    // website: "https://btng.dnccudinus.org",
   },
 ];
