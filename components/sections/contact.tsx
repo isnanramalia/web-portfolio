@@ -63,7 +63,7 @@ export function ContactSection({}: ContactSectionProps) {
               className="border-primary text-primary dark:text-white hover:bg-primary/5 hover:border-primary/30 rounded-2xl px-8 py-2 smooth-hover transition-all duration-300 group"
             >
               <a
-                href="https://wa.me/6281234567890?text=Hi%20Isna,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20discuss..."
+                href="https://wa.me/+6283109191936?text=Hi%20Isna,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20discuss..."
                 target="_blank"
                 rel="noopener norefferer"
               >
