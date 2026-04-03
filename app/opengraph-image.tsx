@@ -315,7 +315,7 @@ export default function Image() {
           {(
             [
               { value: "10+", label: "Projects Delivered" },
-              { value: "50+", label: "Test Cases Written" },
+              { value: "100+", label: "Test Cases Written" },
               { value: "STLC", label: "Full Cycle QA" },
             ] as { value: string; label: string }[]
           ).map((stat) => (

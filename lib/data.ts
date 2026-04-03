@@ -110,7 +110,7 @@ export const workExperience: WorkExperience[] = [
     website: "https://bengkelkoding.dinus.id/",
     roles: [
       {
-        title: "Frontend Web Developer (Internship)",
+        title: "Frontend Web Developer",
         period: "Jan 2025 - Jul 2025",
         shortDescription:
           "Built the alumni website for the Computer Science program at Dian Nuswantoro University.",
@@ -123,7 +123,7 @@ export const workExperience: WorkExperience[] = [
 • Supporting features such as alumni CV generation, job postings, and alumni tracking`,
       },
       {
-        title: "Web Developer Teaching Assistant – Career Guidance Program",
+        title: "Web Developer Teaching Assistant – Bimbingan Karir",
         period: "May 2025 - Jul 2025",
         shortDescription:
           "Mentored students in building a hospital appointment system as part of a project-based learning program.",

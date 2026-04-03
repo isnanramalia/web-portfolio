@@ -2,7 +2,8 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { IsnaAnimatedLogo } from "@/components/isna-logo";
+
+const WORDS = ["Isna", "Nur", "Amalia"];
 
 export function Preloader() {
   const [loading, setLoading] = useState(true);
@@ -47,22 +48,40 @@ export function Preloader() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
-          <IsnaAnimatedLogo className="w-52 h-20 mb-5" />
+          {/* Typographic name — word by word */}
+          <div className="mb-2 flex items-baseline gap-2.5 select-none">
+            {WORDS.map((word, i) => (
+              <motion.span
+                key={i}
+                className="text-4xl font-bold tracking-wide text-foreground"
+                initial={{ opacity: 0, y: 18, filter: "blur(6px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{
+                  delay: 0.12 * i + 0.2,
+                  duration: 0.55,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
+              >
+                {word}
+              </motion.span>
+            ))}
+          </div>
 
           <motion.p
-            className="text-sm text-muted-foreground mb-10"
+            className="text-sm text-muted-foreground mb-10 tracking-wide"
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1, duration: 0.4, ease: "easeOut" }}
+            transition={{ delay: 0.72, duration: 0.4, ease: "easeOut" }}
           >
             Frontend Developer · QA Practitioner
           </motion.p>
 
+          {/* Progress bar */}
           <motion.div
             className="w-56 flex flex-col items-center gap-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.15, duration: 0.35 }}
+            transition={{ delay: 0.78, duration: 0.35 }}
           >
             <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
               <motion.div
