@@ -13,26 +13,24 @@ import {
   Code,
   Palette,
   Zap,
+  PenLine,
 } from "lucide-react";
 
-interface FooterSectionProps {
-  // Add any props if needed in the future
-}
-
-export function FooterSection({}: FooterSectionProps) {
+export function FooterSection() {
   const currentYear = new Date().getFullYear();
 
   const quickLinks = [
     { label: "About", href: "#about" },
     { label: "Skills", href: "#skills" },
     { label: "Projects", href: "#projects" },
+    { label: "Writing", href: "#writing" },
     { label: "Contact", href: "#contact" },
   ];
 
   const services = [
     { icon: Code, label: "Frontend Development" },
+    { icon: Zap, label: "Manual Testing & QA" },
     { icon: Palette, label: "UI/UX Design" },
-    { icon: Zap, label: "Performance Optimization" },
   ];
 
   const socialLinks = [
@@ -57,7 +55,6 @@ export function FooterSection({}: FooterSectionProps) {
   return (
     <footer className="px-4 sm:px-6 lg:px-12 pt-16 pb-8 bg-gradient-to-t from-muted/30 to-transparent">
       <div className="max-w-6xl mx-auto">
-        {/* Main Footer Content */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12"
           initial={{ opacity: 0, y: 20 }}
@@ -65,7 +62,6 @@ export function FooterSection({}: FooterSectionProps) {
           transition={{ duration: 0.6, staggerChildren: 0.1 }}
           viewport={{ once: true }}
         >
-          {/* About Me Column */}
           <motion.div
             className="lg:col-span-2"
             variants={{
@@ -79,17 +75,22 @@ export function FooterSection({}: FooterSectionProps) {
                 <h3 className="text-xl font-bold text-foreground">
                   Isna Nur Amalia
                 </h3>
-                <p className="text-primary font-medium">Frontend Developer</p>
+                <p className="text-primary font-medium text-sm">
+                  Frontend Dev{" "}
+                  <span className="text-muted-foreground/50 font-normal">
+                    ·
+                  </span>{" "}
+                  QA Practitioner
+                </p>
               </div>
             </div>
             <p className="text-muted-foreground leading-relaxed mb-6 max-w-md">
-              Passionate about crafting user-centered digital experiences with
-              React.js and Next.js. Based in Semarang, I enjoy building
-              responsive web applications and bringing creative ideas to life
-              through modern web technologies.
+              Frontend developer with hands-on QA practice. I build responsive
+              web apps with React.js and Next.js and write test plans, test
+              cases, and bug reports, bringing a developer's system-level
+              perspective to quality assurance.
             </p>
 
-            {/* Contact Info */}
             <div className="space-y-2 mb-6">
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <MapPin className="w-4 h-4" />
@@ -101,30 +102,11 @@ export function FooterSection({}: FooterSectionProps) {
               </div>
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Calendar className="w-4 h-4" />
-                <span>Available for opportunities</span>
+                <span>Seeking QA Internship · Open to Dev roles</span>
               </div>
-            </div>
-
-            {/* Social Links */}
-            <div className="flex items-center space-x-3">
-              {socialLinks.map((social, index) => (
-                <motion.a
-                  key={index}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 bg-muted rounded-xl flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all duration-300 group"
-                  title={social.label}
-                  whileHover={{ scale: 1.1, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <social.icon className="w-4 h-4" />
-                </motion.a>
-              ))}
             </div>
           </motion.div>
 
-          {/* Quick Links Column */}
           <motion.div
             variants={{
               hidden: { opacity: 0, y: 20 },
@@ -148,7 +130,6 @@ export function FooterSection({}: FooterSectionProps) {
             </ul>
           </motion.div>
 
-          {/* Services Column */}
           <motion.div
             variants={{
               hidden: { opacity: 0, y: 20 },
@@ -156,7 +137,7 @@ export function FooterSection({}: FooterSectionProps) {
             }}
           >
             <h4 className="text-lg font-semibold text-foreground mb-4">
-              Services
+              Focus Areas
             </h4>
             <ul className="space-y-3">
               {services.map((service, index) => (
@@ -171,7 +152,6 @@ export function FooterSection({}: FooterSectionProps) {
           </motion.div>
         </motion.div>
 
-        {/* Bottom Section with Enhanced Design */}
         <motion.div
           className="border-t border-border pt-8"
           initial={{ opacity: 0 }}
@@ -187,9 +167,12 @@ export function FooterSection({}: FooterSectionProps) {
             </div>
 
             <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-              <span>Made with ♥ in Semarang</span>
+              <span className="flex items-center gap-1">
+                <PenLine className="w-3 h-3" />
+                Writing on Medium
+              </span>
               <span>•</span>
-              <span>Open to opportunities</span>
+              <span>Seeking QA Internship</span>
             </div>
           </div>
         </motion.div>

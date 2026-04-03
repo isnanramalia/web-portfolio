@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import { useScroll, useTransform } from "framer-motion";
 import { useTheme } from "next-themes";
-import { User, Wrench, FolderOpen, MessageCircle } from "lucide-react";
+import { User, Wrench, FolderOpen, MessageCircle, PenLine } from "lucide-react";
 import { FloatingParticles } from "@/components/floating-particles";
+import { CustomCursor } from "@/components/custom-cursor";
 import { ProjectDialog } from "@/components/project-dialog";
 import { Preloader } from "@/components/preloader";
 import { Navigation } from "@/components/sections/navigation";
@@ -15,14 +16,23 @@ import { SkillsSection } from "@/components/sections/skills";
 import { ProjectsSection } from "@/components/sections/projects";
 import { ContactSection } from "@/components/sections/contact";
 import { FooterSection } from "@/components/sections/footer";
-import { education, workExperience, skillsData, projects } from "@/lib/data";
+import {
+  education,
+  workExperience,
+  skillsData,
+  projects,
+  certificates,
+  type Project,
+  type WorkExperience,
+} from "@/lib/data";
+import { MediumSection } from "@/components/sections/medium";
 import { useScrollDetection } from "@/hooks/use-scroll-detection";
 
 export default function Portfolio() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [projectDialogOpen, setProjectDialogOpen] = useState(false);
-  const [expandedJob, setExpandedJob] = useState<number | null>(null);
+  const [expandedJob, setExpandedJob] = useState<string | null>(null);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -55,20 +65,20 @@ export default function Portfolio() {
     setMobileMenuOpen(false);
   };
 
-  const handleProjectClick = (project: any) => {
+  const handleProjectClick = (project: Project) => {
     setSelectedProject(project);
     setProjectDialogOpen(true);
   };
 
-  const handleJobExpand = (index: number) => {
-    setExpandedJob(expandedJob === index ? null : index);
+  const handleJobExpand = (key: string) => {
+    setExpandedJob(expandedJob === key ? null : key);
   };
 
-  // Navigation items without Home
   const navigationItems = [
     { id: "about", label: "About", icon: User },
     { id: "skills", label: "Skills", icon: Wrench },
     { id: "projects", label: "Projects", icon: FolderOpen },
+    { id: "writing", label: "Writing", icon: PenLine },
     { id: "contact", label: "Contact", icon: MessageCircle },
   ];
 
@@ -80,6 +90,7 @@ export default function Portfolio() {
     <>
       <Preloader />
       <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+        <CustomCursor />
         <FloatingParticles />
 
         <Navigation
@@ -97,7 +108,6 @@ export default function Portfolio() {
         <div className="flex">
           <Sidebar scrollToSection={scrollToSection} />
 
-          {/* Main Content Area */}
           <div className="w-full lg:ml-[35%] lg:w-[65%] min-h-screen relative z-10">
             <div className="pt-16">
               <HeroSection y={y} scrollToSection={scrollToSection} />
@@ -107,6 +117,7 @@ export default function Portfolio() {
                 workExperience={workExperience}
                 expandedJob={expandedJob}
                 handleJobExpand={handleJobExpand}
+                certificates={certificates}
               />
 
               <SkillsSection skillsData={skillsData} />
@@ -115,6 +126,8 @@ export default function Portfolio() {
                 projects={projects}
                 handleProjectClick={handleProjectClick}
               />
+
+              <MediumSection />
 
               <ContactSection />
 

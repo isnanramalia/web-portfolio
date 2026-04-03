@@ -1,6 +1,5 @@
 import { Variants } from "framer-motion";
 
-// Text animations
 export const textReveal: Variants = {
   hidden: {
     opacity: 0,
@@ -31,13 +30,11 @@ export const letterByLetter: Variants = {
 export const letter: Variants = {
   hidden: {
     opacity: 0,
-    y: 50,
-    rotateX: -90,
+    y: 16,
   },
   visible: {
     opacity: 1,
     y: 0,
-    rotateX: 0,
     transition: {
       duration: 0.4,
       ease: [0.25, 0.46, 0.45, 0.94],
@@ -45,7 +42,6 @@ export const letter: Variants = {
   },
 };
 
-// Basic animations
 export const fadeInUp: Variants = {
   hidden: {
     opacity: 0,
@@ -83,15 +79,13 @@ export const fadeInDown: Variants = {
 export const slideInLeft: Variants = {
   hidden: {
     opacity: 0,
-    x: -100,
-    rotateY: -15,
+    x: -50,
   },
   visible: {
     opacity: 1,
     x: 0,
-    rotateY: 0,
     transition: {
-      duration: 0.8,
+      duration: 0.65,
       ease: [0.25, 0.46, 0.45, 0.94],
     },
   },
@@ -100,21 +94,18 @@ export const slideInLeft: Variants = {
 export const slideInRight: Variants = {
   hidden: {
     opacity: 0,
-    x: 100,
-    rotateY: 15,
+    x: 50,
   },
   visible: {
     opacity: 1,
     x: 0,
-    rotateY: 0,
     transition: {
-      duration: 0.8,
+      duration: 0.65,
       ease: [0.25, 0.46, 0.45, 0.94],
     },
   },
 };
 
-// Container animations
 export const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -129,23 +120,20 @@ export const staggerContainer: Variants = {
 export const staggerItem: Variants = {
   hidden: {
     opacity: 0,
-    y: 50,
-    scale: 0.8,
-    rotateX: -15,
+    y: 24,
+    scale: 0.96,
   },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    rotateX: 0,
     transition: {
-      duration: 0.6,
+      duration: 0.5,
       ease: [0.25, 0.46, 0.45, 0.94],
     },
   },
 };
 
-// Hover animations
 export const cardHover: Variants = {
   rest: {
     scale: 1,
@@ -184,7 +172,6 @@ export const cardContent: Variants = {
   },
 };
 
-// Spring bounce animation
 export const springBounce: Variants = {
   hidden: {
     scale: 0,
@@ -202,7 +189,6 @@ export const springBounce: Variants = {
   },
 };
 
-// Floating animations
 export const floatingY: Variants = {
   animate: {
     y: [0, -20, 0],

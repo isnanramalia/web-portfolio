@@ -12,7 +12,6 @@ interface SidebarProps {
   scrollToSection: (sectionId: string) => void;
 }
 
-// Medium Icon Component
 const MediumIcon = ({ className }: { className?: string }) => (
   <svg
     viewBox="0 0 1633.77 1150.51"
@@ -28,7 +27,6 @@ const MediumIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-// Social Media Icon Component
 const SocialIcon = ({ platform }: { platform: string }) => {
   switch (platform) {
     case "github":
@@ -69,9 +67,9 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
                 style={{
                   backdropFilter: "blur(16px) saturate(120%)",
                   background: `
-                    linear-gradient(135deg, 
-                      rgb(var(--background) / 0.8), 
-                      rgb(var(--card) / 0.9), 
+                    linear-gradient(135deg,
+                      rgb(var(--background) / 0.8),
+                      rgb(var(--card) / 0.9),
                       rgb(var(--muted) / 0.8)
                     )
                   `,
@@ -85,11 +83,10 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
                   ease: "easeOut",
                 }}
               >
-                {/* Glass overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/5 to-transparent rounded-2xl" />
 
                 <Image
-                  src="/foto-removebg.png"
+                  src="/foto.png"
                   alt="Isna Nur Amalia"
                   fill
                   className="rounded-xl object-cover"
@@ -102,7 +99,6 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
                 <IsnaLogo size="sm" />
               </motion.div>
 
-              {/* Simple shadow effect */}
               <motion.div
                 className="absolute inset-0 bg-muted/20 rounded-2xl blur-lg -z-10"
                 animate={{
@@ -126,14 +122,21 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
             I'm Isna Nur Amalia
           </motion.h1>
 
-          <motion.p
-            className="text-muted-foreground text-sm leading-relaxed mb-6"
+          <motion.div
+            className="mb-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            Frontend Developer based in Semarang, Indonesia.
-          </motion.p>
+            <p className="text-sm font-medium text-foreground">
+              Frontend Developer
+              <span className="mx-1.5 text-muted-foreground/50">·</span>
+              <span className="text-primary">QA Practitioner</span>
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Based in Semarang, Indonesia
+            </p>
+          </motion.div>
 
           <motion.div
             className="space-y-3"
@@ -142,28 +145,24 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
             transition={{ delay: 0.4 }}
           >
             <Button
+              asChild
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 group border border-primary/20"
-              onClick={() => {
-                const link = document.createElement("a");
-                link.href = "/IsnaNurAmalia_CV.pdf";
-                link.download = "CV-Isna-Nur-Amalia.pdf";
-                link.click();
-              }}
             >
-              <Download className="w-4 h-4 mr-2 group-hover:animate-bounce" />
-              Download CV
+              <a href="/IsnaNurAmalia_CV.pdf" download="CV-Isna-Nur-Amalia.pdf">
+                <Download className="w-4 h-4 mr-2 group-hover:animate-bounce" />
+                Download CV
+              </a>
             </Button>
 
             <Button
               variant="outline"
-              className="w-full border-border text-foreground hover:bg-primary/5 hover:border-primary/30 rounded-2xl bg-transparent backdrop-blur-sm transition-all duration-300 group"
+              className="w-full border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary rounded-2xl bg-transparent backdrop-blur-sm transition-all duration-300 group"
               onClick={() => scrollToSection("contact")}
             >
               <Send className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" />
               Get in Touch
             </Button>
 
-            {/* Social Media Buttons */}
             <motion.div
               className="flex justify-center gap-3 pt-4"
               initial={{ opacity: 0, y: 10 }}

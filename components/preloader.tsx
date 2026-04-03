@@ -1,74 +1,83 @@
-"use client"
+"use client";
 
-import { motion, AnimatePresence } from "framer-motion"
-import { useEffect, useState } from "react"
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
+import { IsnaAnimatedLogo } from "@/components/isna-logo";
 
 export function Preloader() {
-  const [loading, setLoading] = useState(true)
-  const [progress, setProgress] = useState(0)
+  const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(timer)
-          setTimeout(() => setLoading(false), 500)
-          return 100
-        }
-        return prev + Math.random() * 15
-      })
-    }, 150)
+    let cancelled = false;
+    let current = 0;
 
-    return () => clearInterval(timer)
-  }, [])
+    const step = () => {
+      if (cancelled) return;
+
+      const remaining = 100 - current;
+      const increment = Math.max(0.5, remaining * 0.08) + Math.random() * 2;
+      current = Math.min(current + increment, 100);
+      setProgress(current);
+
+      if (current >= 100) {
+        setTimeout(() => {
+          if (!cancelled) setLoading(false);
+        }, 450);
+        return;
+      }
+
+      setTimeout(step, 120 + Math.random() * 60);
+    };
+
+    const startTimer = setTimeout(step, 380);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(startTimer);
+    };
+  }, []);
 
   return (
     <AnimatePresence>
       {loading && (
         <motion.div
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-background"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
+          transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
-          <div className="text-center">
-            {/* Simple Logo */}
-            <motion.div
-              className="relative mb-8"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-            >
-              <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center mx-auto">
-                <span className="text-3xl font-bold text-primary-foreground">I</span>
-              </div>
-            </motion.div>
+          <IsnaAnimatedLogo className="w-52 h-20 mb-5" />
 
-            {/* Loading Text */}
-            <motion.h2
-              className="text-xl font-medium mb-6 text-foreground"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.4 }}
-            >
-              Loading Portfolio
-            </motion.h2>
+          <motion.p
+            className="text-sm text-muted-foreground mb-10"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1, duration: 0.4, ease: "easeOut" }}
+          >
+            Frontend Developer · QA Practitioner
+          </motion.p>
 
-            {/* Progress Bar */}
-            <div className="w-48 h-1 bg-muted rounded-full overflow-hidden mx-auto mb-4">
+          <motion.div
+            className="w-56 flex flex-col items-center gap-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.15, duration: 0.35 }}
+          >
+            <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-primary rounded-full"
-                initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
               />
             </div>
 
-            {/* Progress Text */}
-            <p className="text-muted-foreground text-sm">{Math.round(progress)}%</p>
-          </div>
+            <p className="text-xs text-muted-foreground tabular-nums">
+              {Math.round(progress)}%
+            </p>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
-  )
+  );
 }

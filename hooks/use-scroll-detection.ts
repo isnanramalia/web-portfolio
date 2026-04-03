@@ -10,7 +10,7 @@ export function useScrollDetection() {
       setScrolled(scrollY > 50);
 
       // Active section detection
-      const sections = ["about", "skills", "projects", "contact"];
+      const sections = ["about", "skills", "projects", "writing", "contact"];
       const scrollPosition = scrollY + 150; // Account for fixed nav height
 
       let currentSection = "about"; // default

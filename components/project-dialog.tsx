@@ -11,17 +11,19 @@ interface Project {
   description: string;
   image: string;
   techStack: string[];
-  github?: string;
+  githubFe?: string;
+  githubBe?: string;
   website?: string;
   longDescription?: string;
   features?: string[];
+  category?: string;
 }
 
 interface ProjectDialogProps {
   project: Project | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  layoutId?: string; // Add layoutId for shared element transition
+  layoutId?: string;
 }
 
 export function ProjectDialog({
@@ -36,7 +38,6 @@ export function ProjectDialog({
     <AnimatePresence mode="wait">
       {open && (
         <>
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -46,7 +47,6 @@ export function ProjectDialog({
             onClick={() => onOpenChange(false)}
           />
 
-          {/* Dialog */}
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div
               layoutId={layoutId || `project-${project.title}`}
@@ -59,7 +59,6 @@ export function ProjectDialog({
                 },
               }}
             >
-              {/* Header */}
               <div className="p-6 pb-4 border-b border-border">
                 <div className="flex items-start justify-between">
                   <motion.h2
@@ -82,7 +81,6 @@ export function ProjectDialog({
                 </div>
               </div>
 
-              {/* Scrollable Content */}
               <div className="overflow-y-auto max-h-[calc(90vh-80px)] px-6 pb-6">
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -91,7 +89,6 @@ export function ProjectDialog({
                   transition={{ delay: 0.15, duration: 0.3, ease: "easeOut" }}
                   className="space-y-6"
                 >
-                  {/* Project Image */}
                   <div className="relative overflow-hidden rounded-2xl">
                     <motion.div
                       layoutId={`project-image-${project.title}`}
@@ -107,7 +104,6 @@ export function ProjectDialog({
                     </motion.div>
                   </div>
 
-                  {/* Project Description */}
                   <motion.div
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -125,7 +121,6 @@ export function ProjectDialog({
                     </p>
                   </motion.div>
 
-                  {/* Key Features */}
                   {project.features && (
                     <motion.div
                       initial={{ opacity: 0, y: 5 }}
@@ -158,7 +153,6 @@ export function ProjectDialog({
                     </motion.div>
                   )}
 
-                  {/* Technologies */}
                   <motion.div
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -194,8 +188,9 @@ export function ProjectDialog({
                     </div>
                   </motion.div>
 
-                  {/* Action Buttons */}
-                  {(project.github || project.website) && (
+                  {(project.githubFe ||
+                    project.githubBe ||
+                    project.website) && (
                     <motion.div
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -204,21 +199,37 @@ export function ProjectDialog({
                         duration: 0.25,
                         ease: "easeOut",
                       }}
-                      className="flex space-x-4 pt-4"
+                      className="flex flex-wrap gap-3 pt-4"
                     >
-                      {project.github && (
+                      {project.githubFe && (
                         <Button
                           asChild
                           className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl smooth-hover"
                         >
                           <a
-                            href={project.github}
+                            href={project.githubFe}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center"
                           >
                             <Github className="w-4 h-4 mr-2" />
-                            View Code
+                            {project.githubBe ? "Frontend Repo" : "View Code"}
+                          </a>
+                        </Button>
+                      )}
+                      {project.githubBe && (
+                        <Button
+                          asChild
+                          className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl smooth-hover"
+                        >
+                          <a
+                            href={project.githubBe}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center"
+                          >
+                            <Github className="w-4 h-4 mr-2" />
+                            Backend API
                           </a>
                         </Button>
                       )}
@@ -235,7 +246,9 @@ export function ProjectDialog({
                             className="flex items-center"
                           >
                             <ExternalLink className="w-4 h-4 mr-2" />
-                            Live Demo
+                            {project.category === "qa"
+                              ? "View Documentation"
+                              : "Live Demo"}
                           </a>
                         </Button>
                       )}

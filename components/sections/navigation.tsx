@@ -37,6 +37,22 @@ export function Navigation({
 }: NavigationProps) {
   const toggleMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
+  const handleThemeToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+
+    document.documentElement.style.setProperty("--theme-x", `${e.clientX}px`);
+    document.documentElement.style.setProperty("--theme-y", `${e.clientY}px`);
+
+    if (!("startViewTransition" in document)) {
+      setTheme(nextTheme);
+      return;
+    }
+
+    (
+      document as Document & { startViewTransition: (cb: () => void) => void }
+    ).startViewTransition(() => setTheme(nextTheme));
+  };
+
   React.useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -89,7 +105,6 @@ export function Navigation({
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
             <motion.div
               variants={logoVariants}
               whileHover="hover"
@@ -99,7 +114,6 @@ export function Navigation({
               <IsnaLogo />
             </motion.div>
 
-            {/* Desktop Navigation */}
             <motion.div
               className="hidden md:flex items-center space-x-8"
               variants={{
@@ -149,7 +163,6 @@ export function Navigation({
               ))}
             </motion.div>
 
-            {/* Theme Toggle & Mobile Menu Button */}
             <div className="flex items-center space-x-4">
               <motion.div
                 variants={{
@@ -166,8 +179,13 @@ export function Navigation({
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  onClick={handleThemeToggle}
                   className="relative overflow-hidden"
+                  aria-label={
+                    theme === "dark"
+                      ? "Switch to light mode"
+                      : "Switch to dark mode"
+                  }
                 >
                   <motion.div
                     animate={{
@@ -192,7 +210,6 @@ export function Navigation({
                 </Button>
               </motion.div>
 
-              {/* Mobile Menu Button */}
               <motion.button
                 onClick={toggleMenu}
                 className="md:hidden relative p-2 rounded-lg hover:bg-muted/50 transition-colors"
@@ -228,11 +245,9 @@ export function Navigation({
         </div>
       </motion.nav>
 
-      {/* Mobile Menu - Floating Style */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -241,7 +256,6 @@ export function Navigation({
               onClick={() => setMobileMenuOpen(false)}
             />
 
-            {/* Floating Menu */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: -20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
