@@ -109,7 +109,6 @@ export function ProjectsSection({
               filteredProjects.map((project, index) => (
                 <motion.div
                   key={project.title}
-                  layoutId={`project-${project.title}`}
                   className="bg-card rounded-2xl p-6 border border-border smooth-hover cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   role="button"
                   tabIndex={0}
@@ -131,10 +130,7 @@ export function ProjectsSection({
                   }}
                 >
                   <div className="mb-4 overflow-hidden rounded-2xl">
-                    <motion.div
-                      layoutId={`project-image-${project.title}`}
-                      className="w-full h-full overflow-hidden rounded-2xl"
-                    >
+                    <div className="w-full h-full overflow-hidden rounded-2xl">
                       <Image
                         src={project.image || "/placeholder.svg"}
                         alt={project.title}
@@ -142,16 +138,13 @@ export function ProjectsSection({
                         height={350}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 rounded-2xl"
                       />
-                    </motion.div>
+                    </div>
                   </div>
 
                   <div>
-                    <motion.h3
-                      layoutId={`project-title-${project.title}`}
-                      className="text-lg font-medium mb-2 group-hover:text-primary transition-colors text-card-foreground"
-                    >
+                    <h3 className="text-lg font-medium mb-2 group-hover:text-primary transition-colors text-card-foreground">
                       {project.title}
-                    </motion.h3>
+                    </h3>
 
                     <p className="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-3">
                       {project.description}

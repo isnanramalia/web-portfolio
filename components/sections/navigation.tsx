@@ -60,7 +60,7 @@ export function Navigation({
       }
     };
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize, { passive: true });
     return () => window.removeEventListener("resize", handleResize);
   }, [setMobileMenuOpen]);
 
@@ -165,6 +165,7 @@ export function Navigation({
 
             <div className="flex items-center space-x-4">
               <motion.div
+                className="flex items-center"
                 variants={{
                   hidden: { opacity: 0, scale: 0.8 },
                   visible: { opacity: 1, scale: 1 },

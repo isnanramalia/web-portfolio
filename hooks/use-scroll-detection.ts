@@ -5,38 +5,45 @@ export function useScrollDetection() {
   const [activeSection, setActiveSection] = useState("about");
 
   useEffect(() => {
+    const SECTIONS = ["about", "skills", "projects", "writing", "contact"];
+
+    let sectionEls: Array<{ id: string; el: HTMLElement }> = [];
+
+    const cacheElements = () => {
+      sectionEls = SECTIONS.flatMap((id) => {
+        const el = document.getElementById(id);
+        return el ? [{ id, el }] : [];
+      });
+    };
+
     const handleScroll = () => {
+      // Lazily repopulate if empty — sections may not be in the DOM yet
+      // when the effect first runs (page.tsx defers render until after hydration)
+      if (sectionEls.length === 0) cacheElements();
+
       const scrollY = window.scrollY;
       setScrolled(scrollY > 50);
 
-      // Active section detection
-      const sections = ["about", "skills", "projects", "writing", "contact"];
-      const scrollPosition = scrollY + 150; // Account for fixed nav height
+      const scrollPosition = scrollY + 150;
+      let currentSection = "about";
 
-      let currentSection = "about"; // default
-
-      sections.forEach((sectionId) => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const offsetTop = element.offsetTop;
-          const offsetHeight = element.offsetHeight;
-
-          if (
-            scrollPosition >= offsetTop &&
-            scrollPosition < offsetTop + offsetHeight
-          ) {
-            currentSection = sectionId;
-          }
+      for (const { id, el } of sectionEls) {
+        if (
+          scrollPosition >= el.offsetTop &&
+          scrollPosition < el.offsetTop + el.offsetHeight
+        ) {
+          currentSection = id;
+          break;
         }
-      });
+      }
 
       setActiveSection(currentSection);
     };
 
-    // Set initial state
+    cacheElements();
     handleScroll();
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 

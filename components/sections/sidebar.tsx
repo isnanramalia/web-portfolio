@@ -99,17 +99,7 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
                 <IsnaLogo size="sm" />
               </motion.div>
 
-              <motion.div
-                className="absolute inset-0 bg-muted/20 rounded-2xl blur-lg -z-10"
-                animate={{
-                  opacity: [0.1, 0.15, 0.1],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
+              <div className="absolute inset-0 bg-muted/20 rounded-2xl blur-lg -z-10 opacity-[0.12]" />
             </motion.div>
           </motion.div>
 

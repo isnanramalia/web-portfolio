@@ -1,12 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useScroll, useTransform } from "framer-motion";
+import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 import { User, Wrench, FolderOpen, MessageCircle, PenLine } from "lucide-react";
-import { FloatingParticles } from "@/components/floating-particles";
-import { CustomCursor } from "@/components/custom-cursor";
-import { ProjectDialog } from "@/components/project-dialog";
 import { Preloader } from "@/components/preloader";
 import { Navigation } from "@/components/sections/navigation";
 import { Sidebar } from "@/components/sections/sidebar";
@@ -16,6 +13,7 @@ import { SkillsSection } from "@/components/sections/skills";
 import { ProjectsSection } from "@/components/sections/projects";
 import { ContactSection } from "@/components/sections/contact";
 import { FooterSection } from "@/components/sections/footer";
+import { MediumSection } from "@/components/sections/medium";
 import {
   education,
   workExperience,
@@ -23,10 +21,33 @@ import {
   projects,
   certificates,
   type Project,
-  type WorkExperience,
 } from "@/lib/data";
-import { MediumSection } from "@/components/sections/medium";
 import { useScrollDetection } from "@/hooks/use-scroll-detection";
+
+// Heavy client-only components — loaded after hydration, not in initial bundle
+const FloatingParticles = dynamic(
+  () =>
+    import("@/components/floating-particles").then((m) => ({
+      default: m.FloatingParticles,
+    })),
+  { ssr: false },
+);
+
+const CustomCursor = dynamic(
+  () =>
+    import("@/components/custom-cursor").then((m) => ({
+      default: m.CustomCursor,
+    })),
+  { ssr: false },
+);
+
+const ProjectDialog = dynamic(
+  () =>
+    import("@/components/project-dialog").then((m) => ({
+      default: m.ProjectDialog,
+    })),
+  { ssr: false },
+);
 
 export default function Portfolio() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -37,8 +58,6 @@ export default function Portfolio() {
   const [mounted, setMounted] = useState(false);
 
   const { scrolled, activeSection } = useScrollDetection();
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
 
   useEffect(() => {
     setMounted(true);
@@ -49,19 +68,13 @@ export default function Portfolio() {
     if (element) {
       const navHeight = 80;
       const elementPosition = element.offsetTop - navHeight;
-      window.scrollTo({
-        top: elementPosition,
-        behavior: "smooth",
-      });
+      window.scrollTo({ top: elementPosition, behavior: "smooth" });
     }
     setMobileMenuOpen(false);
   };
 
   const scrollToHero = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setMobileMenuOpen(false);
   };
 
@@ -82,8 +95,11 @@ export default function Portfolio() {
     { id: "contact", label: "Contact", icon: MessageCircle },
   ];
 
+  // Before hydration: show a plain background-colored screen so the
+  // Preloader in the main render is the ONE and ONLY instance — no double
+  // mount and no duplicate animation start.
   if (!mounted) {
-    return <Preloader />;
+    return <div className="fixed inset-0 bg-background" />;
   }
 
   return (
@@ -110,7 +126,7 @@ export default function Portfolio() {
 
           <div className="w-full lg:ml-[35%] lg:w-[65%] min-h-screen relative z-10">
             <div className="pt-16">
-              <HeroSection y={y} scrollToSection={scrollToSection} />
+              <HeroSection scrollToSection={scrollToSection} />
 
               <AboutSection
                 education={education}
@@ -140,9 +156,6 @@ export default function Portfolio() {
           project={selectedProject}
           open={projectDialogOpen}
           onOpenChange={setProjectDialogOpen}
-          layoutId={
-            selectedProject ? `project-${selectedProject.title}` : undefined
-          }
         />
       </div>
     </>

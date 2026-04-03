@@ -23,7 +23,6 @@ import {
 import { socialMedia } from "@/lib/data";
 
 interface HeroSectionProps {
-  y: any;
   scrollToSection: (sectionId: string) => void;
 }
 
@@ -59,11 +58,11 @@ const SocialIcon = ({ platform }: { platform: string }) => {
 
 const STATS = [
   { value: "10+", label: "Projects Delivered" },
-  { value: "50+", label: "Test Cases Written" },
+  { value: "100+", label: "Test Cases Written" },
   { value: "STLC", label: "Full Cycle QA" },
 ];
 
-export function HeroSection({ y, scrollToSection }: HeroSectionProps) {
+export function HeroSection({ scrollToSection }: HeroSectionProps) {
   return (
     <motion.section
       id="hero"
@@ -74,11 +73,13 @@ export function HeroSection({ y, scrollToSection }: HeroSectionProps) {
     >
       <motion.div
         className="absolute top-1/3 right-1/4 w-80 h-80 bg-primary/5 rounded-full blur-3xl pointer-events-none"
+        style={{ willChange: "transform" }}
         animate={{ scale: [1, 1.12, 1], opacity: [0.25, 0.45, 0.25] }}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute bottom-1/4 left-1/3 w-56 h-56 bg-accent/10 rounded-full blur-3xl pointer-events-none"
+        style={{ willChange: "transform" }}
         animate={{ scale: [1.1, 1, 1.1], opacity: [0.15, 0.3, 0.15] }}
         transition={{
           duration: 16,

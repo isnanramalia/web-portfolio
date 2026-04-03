@@ -94,6 +94,7 @@ export function AnimatedWords({
   return (
     <motion.div
       className={`inline ${className}`}
+      style={{ perspective: "800px" }}
       initial="hidden"
       whileInView="visible"
       viewport={{ once }}
@@ -106,6 +107,7 @@ export function AnimatedWords({
         <motion.span
           key={index}
           className="inline-block mr-1"
+          style={{ willChange: "transform" }}
           variants={{
             hidden: {
               opacity: 0,

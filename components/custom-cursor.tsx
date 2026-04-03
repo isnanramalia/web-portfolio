@@ -22,9 +22,24 @@ export function CustomCursor() {
     if (!window.matchMedia("(pointer: fine)").matches) return;
     setMounted(true);
 
+    let rafId: number | null = null;
+    let latestX = -300;
+    let latestY = -300;
+
+    const flushPosition = () => {
+      mouseX.set(latestX);
+      mouseY.set(latestY);
+      rafId = null;
+    };
+
     const onMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
+      latestX = e.clientX;
+      latestY = e.clientY;
+
+      if (rafId === null) {
+        rafId = requestAnimationFrame(flushPosition);
+      }
+
       setState((prev) => (prev === "idle" ? "default" : prev));
     };
 
@@ -43,12 +58,13 @@ export function CustomCursor() {
       }
     };
 
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseleave", onMouseLeave);
-    document.addEventListener("mouseenter", onMouseEnter);
-    document.addEventListener("mouseover", onMouseOver);
+    document.addEventListener("mousemove", onMouseMove, { passive: true });
+    document.addEventListener("mouseleave", onMouseLeave, { passive: true });
+    document.addEventListener("mouseenter", onMouseEnter, { passive: true });
+    document.addEventListener("mouseover", onMouseOver, { passive: true });
 
     return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseleave", onMouseLeave);
       document.removeEventListener("mouseenter", onMouseEnter);
@@ -64,6 +80,7 @@ export function CustomCursor() {
 
   return (
     <>
+      {/* Dot — snappy, follows cursor tightly */}
       <motion.div
         aria-hidden
         className="fixed top-0 left-0 pointer-events-none z-[10001]"
@@ -72,6 +89,7 @@ export function CustomCursor() {
           y: dotY,
           translateX: "-50%",
           translateY: "-50%",
+          willChange: "transform",
         }}
       >
         <motion.div
@@ -90,6 +108,7 @@ export function CustomCursor() {
         />
       </motion.div>
 
+      {/* Ring — lags slightly behind for elegant trail */}
       <motion.div
         aria-hidden
         className="fixed top-0 left-0 pointer-events-none z-[10000]"
@@ -98,6 +117,7 @@ export function CustomCursor() {
           y: ringY,
           translateX: "-50%",
           translateY: "-50%",
+          willChange: "transform",
         }}
       >
         <motion.div

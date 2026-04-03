@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // revalidate every 5 minutes
 
 interface MediumArticle {
   title: string;
@@ -178,13 +178,8 @@ function parseRSSItems(xml: string): MediumArticle[] {
 
 export async function GET() {
   try {
-    // `cache: "no-store"` bypasses Next.js's fetch data-cache entirely.
-    // This is the key fix: previously `next: { revalidate: 3600 }` cached the
-    // raw RSS XML for an hour, so newly-added article images were invisible
-    // until the fetch-cache expired — even though the route itself would
-    // re-execute sooner.
     const response = await fetch("https://medium.com/feed/@isnanramalia", {
-      cache: "no-store",
+      next: { revalidate: 300 },
       headers: {
         "User-Agent": "Mozilla/5.0 (compatible; Portfolio RSS Reader/1.0)",
         Accept: "application/rss+xml, application/xml, text/xml, */*",

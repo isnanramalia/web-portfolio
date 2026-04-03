@@ -54,8 +54,8 @@ export function Preloader() {
               <motion.span
                 key={i}
                 className="text-4xl font-bold tracking-wide text-foreground"
-                initial={{ opacity: 0, y: 18, filter: "blur(6px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{
                   delay: 0.12 * i + 0.2,
                   duration: 0.55,

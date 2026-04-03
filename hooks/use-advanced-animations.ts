@@ -3,7 +3,7 @@ import { useMotionValue, useSpring, MotionValue } from "framer-motion";
 
 // Hook for magnetic effect on elements
 export const useMagneticEffect = (
-  strength: number = 0.3
+  strength: number = 0.3,
 ): {
   ref: React.RefObject<HTMLElement>;
   x: MotionValue<number>;
@@ -20,16 +20,22 @@ export const useMagneticEffect = (
     const element = ref.current;
     if (!element) return;
 
+    let latestEvent: MouseEvent | null = null;
+    let rafId: number | null = null;
+
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = element.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-
-      const offsetX = (e.clientX - centerX) * strength;
-      const offsetY = (e.clientY - centerY) * strength;
-
-      x.set(offsetX);
-      y.set(offsetY);
+      latestEvent = e;
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        if (latestEvent) {
+          const rect = element.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          x.set((latestEvent.clientX - centerX) * strength);
+          y.set((latestEvent.clientY - centerY) * strength);
+        }
+        rafId = null;
+      });
     };
 
     const handleMouseLeave = () => {
@@ -37,10 +43,11 @@ export const useMagneticEffect = (
       y.set(0);
     };
 
-    element.addEventListener("mousemove", handleMouseMove);
-    element.addEventListener("mouseleave", handleMouseLeave);
+    element.addEventListener("mousemove", handleMouseMove, { passive: true });
+    element.addEventListener("mouseleave", handleMouseLeave, { passive: true });
 
     return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
       element.removeEventListener("mousemove", handleMouseMove);
       element.removeEventListener("mouseleave", handleMouseLeave);
     };
@@ -55,17 +62,19 @@ export const useParallaxScroll = (offset: number = 0.5) => {
 
   useEffect(() => {
     const updateScrollY = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", updateScrollY);
+    window.addEventListener("scroll", updateScrollY, { passive: true });
     return () => window.removeEventListener("scroll", updateScrollY);
   }, []);
 
   return scrollY * offset;
 };
 
-// Hook for element intersection with advanced options
+// Hook for element intersection with advanced options.
+// Automatically disconnects after the first intersection (once semantics)
+// so the observer does not keep running for the lifetime of the component.
 export const useIntersectionObserver = (
   threshold: number = 0.1,
-  rootMargin: string = "0px"
+  rootMargin: string = "0px",
 ) => {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasIntersected, setHasIntersected] = useState(false);
@@ -80,9 +89,12 @@ export const useIntersectionObserver = (
         setIsIntersecting(entry.isIntersecting);
         if (entry.isIntersecting) {
           setHasIntersected(true);
+          // Disconnect immediately after the first trigger — no need to keep
+          // observing since hasIntersected is a one-way flag.
+          observer.disconnect();
         }
       },
-      { threshold, rootMargin }
+      { threshold, rootMargin },
     );
 
     observer.observe(element);
