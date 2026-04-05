@@ -277,6 +277,22 @@ export const skillsData = [
     name: "Python",
     logo: "/icons/python.png",
   },
+  {
+    name: "Postman",
+    logo: "/icons/postman.webp",
+  },
+  {
+    name: "Notion",
+    logo: "/icons/notion.png",
+  },
+  {
+    name: "Trello",
+    logo: "/icons/trello.jpg",
+  },
+  {
+    name: "Excel",
+    logo: "/icons/excel.png",
+  },
 ];
 
 export type ProjectCategory = "web" | "mobile" | "qa";

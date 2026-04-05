@@ -3,7 +3,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { MoonIcon, SunIcon, Menu } from "lucide-react";
+import { MoonIcon, SunIcon, Menu, Search } from "lucide-react";
 import { IsnaLogo } from "../isna-logo";
 
 interface NavigationItem {
@@ -22,6 +22,7 @@ interface NavigationProps {
   navigationItems: NavigationItem[];
   scrollToSection: (sectionId: string) => void;
   scrollToHero: () => void;
+  onOpenCommand?: () => void;
 }
 
 export function Navigation({
@@ -34,6 +35,7 @@ export function Navigation({
   navigationItems,
   scrollToSection,
   scrollToHero,
+  onOpenCommand,
 }: NavigationProps) {
   const toggleMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
@@ -164,6 +166,27 @@ export function Navigation({
             </motion.div>
 
             <div className="flex items-center space-x-4">
+              {/* Command palette hint — desktop only */}
+              {onOpenCommand && (
+                <motion.button
+                  onClick={onOpenCommand}
+                  className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border text-xs text-muted-foreground hover:text-foreground hover:border-foreground/30 hover:bg-muted/40 transition-colors duration-150"
+                  variants={{
+                    hidden: { opacity: 0, scale: 0.9 },
+                    visible: { opacity: 1, scale: 1 },
+                  }}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  aria-label="Open command palette"
+                >
+                  <Search className="w-3.5 h-3.5 shrink-0" />
+                  <span className="hidden lg:inline">Search</span>
+                  <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border border-border bg-muted/60 font-mono text-[9px] leading-none">
+                    ⌘K
+                  </kbd>
+                </motion.button>
+              )}
+
               <motion.div
                 className="flex items-center"
                 variants={{

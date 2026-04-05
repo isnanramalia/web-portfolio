@@ -65,10 +65,7 @@ export function ContactSection() {
                 experience.
               </motion.p>
 
-              <motion.p
-                className="text-xs text-muted-foreground mb-8"
-                variants={staggerItem}
-              ></motion.p>
+              <div className="mb-8" />
 
               <motion.div
                 className="flex flex-col sm:flex-row gap-3 justify-center mb-8"

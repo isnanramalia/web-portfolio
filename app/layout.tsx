@@ -15,27 +15,46 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
 });
 
-const BASE_URL = "https://isnanramalia.vercel.app"; // update to your actual domain
+const BASE_URL = "https://isnanramalia.vercel.app";
 
 export const metadata: Metadata = {
-  title: "Isna Nur Amalia - Frontend Developer & QA Engineer",
+  title: "Isna Nur Amalia | Frontend Developer & Quality Assurance",
   description:
-    "Frontend Developer transitioning into Quality Assurance. I build responsive web apps with React & Next.js, and write test plans, test cases, and bug reports to make sure software works as it should.",
+    "Quality Assurance who builds and breaks software. Skilled in manual testing, STLC, and structured bug reporting — backed by hands-on experience building web apps with React & Next.js.",
+  keywords: [
+    "Quality Assurance",
+    "Quality Assurance Engineer",
+    "Software Tester",
+    "Manual Testing",
+    "STLC",
+    "Test Cases",
+    "Bug Reporting",
+    "Test Planning",
+    "Frontend Developer",
+    "React Developer",
+    "Next.js Developer",
+    "TypeScript",
+    "JavaScript",
+    "Web Developer",
+    "Isna Nur Amalia",
+    "Semarang",
+    "Indonesia",
+  ],
   metadataBase: new URL(BASE_URL),
   openGraph: {
-    title: "Isna Nur Amalia - Frontend Developer & QA Engineer",
+    title: "Isna Nur Amalia | Quality Assurance & Frontend Developer",
     description:
-      "Frontend Developer transitioning into QA. Building web apps with React & Next.js, and ensuring quality through structured manual testing.",
+      "Quality Assurance with a developer's eye for defects. I write test plans, test cases & bug reports — and I actually understand the code I'm testing.",
     url: BASE_URL,
-    siteName: "Isna Nur Amalia Portfolio",
+    siteName: "Isna Nur Amalia — Portfolio",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Isna Nur Amalia - Frontend Developer & QA Engineer",
+    title: "Isna Nur Amalia | Quality Assurance & Frontend Developer",
     description:
-      "Frontend Developer transitioning into QA. Building web apps with React & Next.js, and ensuring quality through structured manual testing.",
+      "Quality Assurance with frontend roots. Structured testing, clear bug reports, and a developer's intuition for why software breaks.",
     creator: "@isnanramalia",
   },
   icons: {
@@ -66,7 +85,9 @@ const jsonLd = {
     "https://medium.com/@isnanramalia",
     "https://instagram.com/isnanramalia",
   ],
-  jobTitle: "Frontend Developer & QA Engineer",
+  jobTitle: "Quality Assurance & Frontend Developer",
+  description:
+    "Quality Assurance with hands-on frontend development experience. Skilled in manual testing, STLC, test case design, and bug reporting — with a developer's intuition for where and why software fails.",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Semarang",
@@ -74,15 +95,19 @@ const jsonLd = {
   },
   email: "isnanuramalia13@gmail.com",
   knowsAbout: [
+    "Quality Assurance",
+    "Manual Testing",
+    "STLC",
+    "Test Planning",
+    "Test Case Design",
+    "Bug Reporting",
+    "Software Testing",
     "Frontend Development",
     "React",
     "Next.js",
     "TypeScript",
-    "Quality Assurance",
-    "Manual Testing",
-    "Test Planning",
-    "Bug Reporting",
-    "STLC",
+    "JavaScript",
+    "Responsive Web Design",
   ],
 };
 

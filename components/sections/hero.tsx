@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import {
@@ -12,18 +13,144 @@ import {
   Instagram,
 } from "lucide-react";
 import Image from "next/image";
-import { AnimatedText, AnimatedWords } from "@/components/animated-text";
-import {
-  fadeInUp,
-  slideInLeft,
-  slideInRight,
-  staggerContainer,
-  staggerItem,
-} from "@/lib/animations";
+import { AnimatedText } from "@/components/animated-text";
+import { fadeInUp, staggerContainer, staggerItem } from "@/lib/animations";
 import { socialMedia } from "@/lib/data";
 
+// ── Typewriter constants ───────────────────────────────────────────────────
+const LINE1 = "I Build It.";
+const LINE2 = "Then I Break It.";
+const TYPE_SPEED = 62;
+const LINE1_DELAY_MS = 850;
+const LINE2_DELAY_MS = LINE1_DELAY_MS + LINE1.length * TYPE_SPEED + 150;
+
+// ── TypewriterLine ─────────────────────────────────────────────────────────
+function TypewriterLine({
+  text,
+  delayMs,
+  start,
+}: {
+  text: string;
+  delayMs: number;
+  start: boolean;
+}) {
+  const [count, setCount] = useState(0);
+  const done = count >= text.length;
+
+  useEffect(() => {
+    if (!start) {
+      setCount(0);
+      return;
+    }
+
+    let interval: ReturnType<typeof setInterval>;
+
+    const timeoutId = setTimeout(() => {
+      interval = setInterval(() => {
+        setCount((c) => {
+          if (c >= text.length) {
+            clearInterval(interval);
+            return c;
+          }
+          return c + 1;
+        });
+      }, TYPE_SPEED);
+    }, delayMs);
+
+    return () => {
+      clearTimeout(timeoutId);
+      clearInterval(interval);
+    };
+  }, [text, delayMs, start]);
+
+  return (
+    <>
+      {text.slice(0, count)}
+      {start && !done && (
+        <motion.span
+          className="inline-block w-[3px] h-[0.82em] bg-current align-middle ml-0.5 rounded-full"
+          animate={{ opacity: [1, 1, 0, 0] }}
+          transition={{
+            duration: 0.9,
+            repeat: Infinity,
+            times: [0, 0.45, 0.45, 1],
+          }}
+        />
+      )}
+    </>
+  );
+}
+
+// ── CountUpStat ────────────────────────────────────────────────────────────
+function CountUpStat({
+  value,
+  label,
+  index,
+  start,
+}: {
+  value: string;
+  label: string;
+  index: number;
+  start: boolean;
+}) {
+  const match = value.match(/^(\d+)(\+?)$/);
+  const isNum = !!match;
+  const target = match ? parseInt(match[1], 10) : 0;
+  const suffix = match ? match[2] : "";
+
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!isNum) return;
+    if (!start) {
+      setCount(0);
+      return;
+    }
+
+    const startDelay = (0.85 + index * 0.12 + 0.35) * 1000;
+    let raf: number;
+
+    const t = setTimeout(() => {
+      const origin = performance.now();
+      const duration = 1400;
+
+      const tick = (now: number) => {
+        const p = Math.min((now - origin) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        setCount(Math.round(eased * target));
+        if (p < 1) raf = requestAnimationFrame(tick);
+      };
+
+      raf = requestAnimationFrame(tick);
+    }, startDelay);
+
+    return () => {
+      clearTimeout(t);
+      cancelAnimationFrame(raf);
+    };
+  }, [isNum, target, index, start]);
+
+  return (
+    <motion.div
+      className="px-4 py-2.5 bg-card border border-border rounded-2xl text-center min-w-[96px]"
+      initial={{ opacity: 0, y: 14 }}
+      animate={start ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+      transition={{ delay: 0.85 + index * 0.12, duration: 0.4 }}
+    >
+      <div className="text-xl font-bold text-foreground tabular-nums">
+        {isNum ? `${count}${suffix}` : value}
+      </div>
+      <div className="text-xs text-muted-foreground mt-0.5 leading-tight">
+        {label}
+      </div>
+    </motion.div>
+  );
+}
+
+// ── Data ───────────────────────────────────────────────────────────────────
 interface HeroSectionProps {
   scrollToSection: (sectionId: string) => void;
+  startAnimations: boolean;
 }
 
 const MediumIcon = ({ className }: { className?: string }) => (
@@ -58,19 +185,24 @@ const SocialIcon = ({ platform }: { platform: string }) => {
 
 const STATS = [
   { value: "10+", label: "Projects Delivered" },
-  { value: "100+", label: "Test Cases Written" },
+  { value: "50+", label: "Test Cases Written" },
   { value: "STLC", label: "Full Cycle QA" },
 ];
 
-export function HeroSection({ scrollToSection }: HeroSectionProps) {
+// ── HeroSection ────────────────────────────────────────────────────────────
+export function HeroSection({
+  scrollToSection,
+  startAnimations,
+}: HeroSectionProps) {
   return (
     <motion.section
       id="hero"
       className="px-4 sm:px-6 lg:px-12 py-8 lg:py-20 relative overflow-hidden min-h-[85vh] lg:min-h-[90vh] flex items-center"
       variants={staggerContainer}
       initial="hidden"
-      animate="visible"
+      animate={startAnimations ? "visible" : "hidden"}
     >
+      {/* Decorative background blobs */}
       <motion.div
         className="absolute top-1/3 right-1/4 w-80 h-80 bg-primary/5 rounded-full blur-3xl pointer-events-none"
         style={{ willChange: "transform" }}
@@ -128,6 +260,7 @@ export function HeroSection({ scrollToSection }: HeroSectionProps) {
           className="text-center lg:text-left"
           variants={staggerContainer}
         >
+          {/* Open-to-work badge */}
           <motion.div
             className="inline-flex items-center gap-2 px-4 py-1.5 bg-green-500/10 border border-green-500/20 rounded-full mb-8"
             variants={staggerItem}
@@ -138,21 +271,28 @@ export function HeroSection({ scrollToSection }: HeroSectionProps) {
             </span>
           </motion.div>
 
+          {/* Tagline — typewriter effect */}
           <motion.h1
             className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 leading-tight"
             variants={staggerItem}
           >
-            <motion.span
-              className="block text-foreground"
-              variants={slideInLeft}
-            >
-              <AnimatedWords text="I Build It." />
-            </motion.span>
-            <motion.span className="block text-primary" variants={slideInRight}>
-              <AnimatedWords text="Then I Break It." />
-            </motion.span>
+            <span className="block text-foreground min-h-[1.25em]">
+              <TypewriterLine
+                text={LINE1}
+                delayMs={LINE1_DELAY_MS}
+                start={startAnimations}
+              />
+            </span>
+            <span className="block text-primary min-h-[1.25em]">
+              <TypewriterLine
+                text={LINE2}
+                delayMs={LINE2_DELAY_MS}
+                start={startAnimations}
+              />
+            </span>
           </motion.h1>
 
+          {/* Description */}
           <motion.p
             className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0"
             variants={fadeInUp}
@@ -164,28 +304,23 @@ export function HeroSection({ scrollToSection }: HeroSectionProps) {
             />
           </motion.p>
 
+          {/* Stats — count-up animation */}
           <motion.div
             className="flex flex-wrap gap-3 justify-center lg:justify-start mb-8"
             variants={staggerItem}
           >
             {STATS.map((stat, i) => (
-              <motion.div
+              <CountUpStat
                 key={stat.label}
-                className="px-4 py-2.5 bg-card border border-border rounded-2xl text-center min-w-[96px]"
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.85 + i * 0.12, duration: 0.4 }}
-              >
-                <div className="text-xl font-bold text-foreground">
-                  {stat.value}
-                </div>
-                <div className="text-xs text-muted-foreground mt-0.5 leading-tight">
-                  {stat.label}
-                </div>
-              </motion.div>
+                value={stat.value}
+                label={stat.label}
+                index={i}
+                start={startAnimations}
+              />
             ))}
           </motion.div>
 
+          {/* Mobile CTAs */}
           <motion.div
             className="lg:hidden flex flex-wrap gap-3 justify-center mb-6"
             variants={staggerItem}
@@ -209,6 +344,7 @@ export function HeroSection({ scrollToSection }: HeroSectionProps) {
             </Button>
           </motion.div>
 
+          {/* Mobile social links */}
           <motion.div
             className="lg:hidden flex justify-center gap-3 mb-10"
             variants={staggerItem}
@@ -229,6 +365,7 @@ export function HeroSection({ scrollToSection }: HeroSectionProps) {
             ))}
           </motion.div>
 
+          {/* Desktop scroll hint */}
           <motion.button
             className="hidden lg:flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors duration-200 group"
             onClick={() => {

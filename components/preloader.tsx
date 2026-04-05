@@ -5,7 +5,11 @@ import { useEffect, useState } from "react";
 
 const WORDS = ["Isna", "Nur", "Amalia"];
 
-export function Preloader() {
+interface PreloaderProps {
+  onComplete?: () => void;
+}
+
+export function Preloader({ onComplete }: PreloaderProps) {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
 
@@ -23,7 +27,10 @@ export function Preloader() {
 
       if (current >= 100) {
         setTimeout(() => {
-          if (!cancelled) setLoading(false);
+          if (!cancelled) {
+            setLoading(false);
+            onComplete?.();
+          }
         }, 450);
         return;
       }
@@ -37,7 +44,7 @@ export function Preloader() {
       cancelled = true;
       clearTimeout(startTimer);
     };
-  }, []);
+  }, [onComplete]);
 
   return (
     <AnimatePresence>

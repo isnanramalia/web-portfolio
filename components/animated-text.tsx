@@ -21,7 +21,7 @@ export function AnimatedText({
 }: AnimatedTextProps) {
   if (variant === "letterByLetter") {
     return (
-      <motion.div
+      <motion.span
         className={`inline-block ${className}`}
         variants={letterByLetter}
         initial="hidden"
@@ -39,16 +39,16 @@ export function AnimatedText({
             {char}
           </motion.span>
         ))}
-      </motion.div>
+      </motion.span>
     );
   }
 
   if (variant === "typewriter") {
     return (
-      <motion.div
+      <motion.span
         className={`inline-block ${className}`}
-        initial={{ width: 0 }}
-        whileInView={{ width: "auto" }}
+        initial={{ clipPath: "inset(0 100% 0 0)" }}
+        whileInView={{ clipPath: "inset(0 0% 0 0)" }}
         viewport={{ once }}
         transition={{
           duration: text.length * 0.05,
@@ -58,12 +58,12 @@ export function AnimatedText({
         style={{ overflow: "hidden", whiteSpace: "nowrap" }}
       >
         {text}
-      </motion.div>
+      </motion.span>
     );
   }
 
   return (
-    <motion.div
+    <motion.span
       className={`inline-block ${className}`}
       variants={textReveal}
       initial="hidden"
@@ -72,7 +72,7 @@ export function AnimatedText({
       transition={{ delay }}
     >
       {text}
-    </motion.div>
+    </motion.span>
   );
 }
 
@@ -92,7 +92,7 @@ export function AnimatedWords({
   const words = text.split(" ");
 
   return (
-    <motion.div
+    <motion.span
       className={`inline ${className}`}
       style={{ perspective: "800px" }}
       initial="hidden"
@@ -128,7 +128,7 @@ export function AnimatedWords({
           {word}
         </motion.span>
       ))}
-    </motion.div>
+    </motion.span>
   );
 }
 
