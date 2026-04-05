@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown, ChevronUp, ExternalLink, Award } from "lucide-react";
 import Image from "next/image";
@@ -15,8 +16,6 @@ interface Education {
 interface AboutSectionProps {
   education: Education[];
   workExperience: WorkExperience[];
-  expandedJob: string | null;
-  handleJobExpand: (key: string) => void;
   certificates: Certificate[];
 }
 
@@ -71,10 +70,14 @@ const CERT_CATEGORY: Record<
 export function AboutSection({
   education,
   workExperience,
-  expandedJob,
-  handleJobExpand,
   certificates,
 }: AboutSectionProps) {
+  const [expandedJob, setExpandedJob] = useState<string | null>(null);
+
+  const handleJobExpand = useCallback((key: string) => {
+    setExpandedJob((prev) => (prev === key ? null : key));
+  }, []);
+
   return (
     <motion.section
       id="about"
