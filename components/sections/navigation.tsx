@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { MoonIcon, SunIcon, Menu, Search } from "lucide-react";
 import { IsnaLogo } from "../isna-logo";
+import { useNavigationScrollState } from "@/hooks/use-navigation-scroll-state";
 
 interface NavigationItem {
   id: string;
@@ -13,10 +14,8 @@ interface NavigationItem {
 }
 
 interface NavigationProps {
-  scrolled: boolean;
   mobileMenuOpen: boolean;
   setMobileMenuOpen: (open: boolean) => void;
-  activeSection: string;
   theme: string | undefined;
   setTheme: (theme: string) => void;
   navigationItems: NavigationItem[];
@@ -26,10 +25,8 @@ interface NavigationProps {
 }
 
 export function Navigation({
-  scrolled,
   mobileMenuOpen,
   setMobileMenuOpen,
-  activeSection,
   theme,
   setTheme,
   navigationItems,
@@ -37,6 +34,7 @@ export function Navigation({
   scrollToHero,
   onOpenCommand,
 }: NavigationProps) {
+  const { scrolled, activeSection } = useNavigationScrollState();
   const toggleMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
   const handleThemeToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -57,14 +55,14 @@ export function Navigation({
 
   React.useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
+      if (window.innerWidth >= 768 && mobileMenuOpen) {
         setMobileMenuOpen(false);
       }
     };
 
     window.addEventListener("resize", handleResize, { passive: true });
     return () => window.removeEventListener("resize", handleResize);
-  }, [setMobileMenuOpen]);
+  }, [mobileMenuOpen, setMobileMenuOpen]);
 
   const navigationVariants = {
     hidden: { opacity: 0, y: -20 },

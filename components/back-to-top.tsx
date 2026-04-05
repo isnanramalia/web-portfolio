@@ -10,17 +10,33 @@ export function BackToTop() {
   const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => {
+    let rafId: number | null = null;
+
+    const readProgress = () => {
       const scrollTop = window.scrollY;
       const maxScroll =
         document.documentElement.scrollHeight - window.innerHeight;
-      const p = maxScroll > 0 ? Math.min(scrollTop / maxScroll, 1) : 0;
-      setProgress(p);
-      setVisible(p > 0.08);
+      const nextProgress = maxScroll > 0 ? Math.min(scrollTop / maxScroll, 1) : 0;
+      const nextVisible = nextProgress > 0.08;
+
+      setProgress((prev) =>
+        Math.abs(prev - nextProgress) < 0.001 ? prev : nextProgress,
+      );
+      setVisible((prev) => (prev === nextVisible ? prev : nextVisible));
+      rafId = null;
     };
 
+    const onScroll = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(readProgress);
+    };
+
+    readProgress();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   const r = 20;

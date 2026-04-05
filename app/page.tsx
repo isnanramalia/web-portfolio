@@ -25,7 +25,6 @@ import {
   certificates,
   type Project,
 } from "@/lib/data";
-import { useScrollDetection } from "@/hooks/use-scroll-detection";
 
 const FloatingParticles = dynamic(
   () =>
@@ -78,9 +77,6 @@ export default function Portfolio() {
 
   const [cmdOpen, setCmdOpen] = useState(false);
   const [cmdLoaded, setCmdLoaded] = useState(false);
-
-  const { scrolled, activeSection } = useScrollDetection();
-
   const openCommand = useCallback(() => {
     setCmdLoaded(true);
     setCmdOpen((prev) => !prev);
@@ -183,10 +179,8 @@ export default function Portfolio() {
         )}
 
         <Navigation
-          scrolled={scrolled}
           mobileMenuOpen={mobileMenuOpen}
           setMobileMenuOpen={setMobileMenuOpen}
-          activeSection={activeSection}
           theme={theme}
           setTheme={setTheme}
           navigationItems={navigationItems}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Clock, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
@@ -184,8 +184,29 @@ const FALLBACK_ARTICLES: MediumArticle[] = [
 export function MediumSection() {
   const [articles, setArticles] = useState<MediumArticle[]>([]);
   const [loading, setLoading] = useState(true);
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
+    const sectionEl = sectionRef.current;
+    if (!sectionEl) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setShouldLoad(true);
+        observer.disconnect();
+      },
+      { rootMargin: "400px 0px" },
+    );
+
+    observer.observe(sectionEl);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!shouldLoad) return;
+
     let cancelled = false;
 
     async function load() {
@@ -207,11 +228,12 @@ export function MediumSection() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [shouldLoad]);
 
   return (
     <motion.section
       id="writing"
+      ref={sectionRef}
       className="px-4 sm:px-6 lg:px-12 py-8 lg:py-16"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
@@ -256,7 +278,7 @@ export function MediumSection() {
           </motion.a>
         </div>
 
-        {loading ? (
+        {!shouldLoad || loading ? (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {[0, 1, 2].map((i) => (
               <ArticleSkeleton key={i} />
