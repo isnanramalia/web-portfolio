@@ -123,10 +123,7 @@ export function CommandPalette({
         icon: Download,
         group: "action",
         action: () => {
-          const a = document.createElement("a");
-          a.href = "/IsnaNurAmalia_CV.pdf";
-          a.download = "CV-Isna-Nur-Amalia.pdf";
-          a.click();
+          window.open("/Isna Nur Amalia - CV.pdf", "_blank", "noopener,noreferrer");
           onClose();
         },
       },
