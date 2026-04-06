@@ -15,16 +15,26 @@ export function CustomCursor() {
   const dotX = useSpring(mouseX, { stiffness: 800, damping: 40, mass: 0.4 });
   const dotY = useSpring(mouseY, { stiffness: 800, damping: 40, mass: 0.4 });
 
-  const ringX = useSpring(mouseX, { stiffness: 180, damping: 22, mass: 0.8 });
-  const ringY = useSpring(mouseY, { stiffness: 180, damping: 22, mass: 0.8 });
+  const ringX = useSpring(mouseX, { stiffness: 260, damping: 28, mass: 0.7 });
+  const ringY = useSpring(mouseY, { stiffness: 260, damping: 28, mass: 0.7 });
 
   useEffect(() => {
     if (!window.matchMedia("(pointer: fine)").matches) return;
     setMounted(true);
 
+    const root = document.documentElement;
     let rafId: number | null = null;
     let latestX = -300;
     let latestY = -300;
+    let cursorVisible = false;
+
+    const setNativeCursorHidden = (hidden: boolean) => {
+      if (hidden) {
+        root.setAttribute("data-custom-cursor", "true");
+      } else {
+        root.removeAttribute("data-custom-cursor");
+      }
+    };
 
     const flushPosition = () => {
       mouseX.set(latestX);
@@ -32,43 +42,106 @@ export function CustomCursor() {
       rafId = null;
     };
 
-    const onMouseMove = (e: MouseEvent) => {
+    const showCursor = () => {
+      if (cursorVisible) return;
+      cursorVisible = true;
+      setNativeCursorHidden(true);
+      setState("default");
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (e.pointerType && e.pointerType !== "mouse") return;
+
       latestX = e.clientX;
       latestY = e.clientY;
+      showCursor();
 
       if (rafId === null) {
         rafId = requestAnimationFrame(flushPosition);
       }
-
-      setState((prev) => (prev === "idle" ? "default" : prev));
     };
 
-    const onMouseLeave = () => setState("idle");
-    const onMouseEnter = () => setState("default");
+    const resolveState = (target: EventTarget | null): CursorState => {
+      if (!(target instanceof HTMLElement)) {
+        return "default";
+      }
 
-    const onMouseOver = (e: MouseEvent) => {
-      const el = e.target as HTMLElement;
+      if (
+        target.closest(
+          "a, button, [role='button'], label, summary, select, input[type='checkbox'], input[type='radio'], [tabindex]:not([tabindex='-1'])",
+        )
+      ) {
+        return "link";
+      }
 
-      if (el.closest("a, button, [role='button'], label, [tabindex]")) {
-        setState("link");
-      } else if (el.closest("h1, h2, h3, h4, h5, h6, p, li, blockquote")) {
-        setState("text");
-      } else {
-        setState("default");
+      if (target.closest("input, textarea, [contenteditable='true']")) {
+        return "text";
+      }
+
+      if (target.closest("h1, h2, h3, h4, h5, h6, p, li, blockquote")) {
+        return "text";
+      }
+
+      return "default";
+    };
+
+    const onPointerOver = (e: PointerEvent) => {
+      if (e.pointerType && e.pointerType !== "mouse") return;
+
+      if (!cursorVisible) {
+        return;
+      }
+
+      setState(resolveState(e.target));
+    };
+
+    const hideCursor = () => {
+      cursorVisible = false;
+      setNativeCursorHidden(false);
+      setState("idle");
+    };
+
+    const onPointerLeaveWindow = (e: MouseEvent) => {
+      if (e.relatedTarget === null) {
+        hideCursor();
       }
     };
 
-    document.addEventListener("mousemove", onMouseMove, { passive: true });
-    document.addEventListener("mouseleave", onMouseLeave, { passive: true });
-    document.addEventListener("mouseenter", onMouseEnter, { passive: true });
-    document.addEventListener("mouseover", onMouseOver, { passive: true });
+    const onWindowBlur = () => {
+      hideCursor();
+    };
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState !== "visible") {
+        hideCursor();
+      }
+    };
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.pointerType && e.pointerType !== "mouse") return;
+
+      const nextState = resolveState(e.target);
+      if (nextState === "link") {
+        setState("link");
+      }
+    };
+
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("mouseout", onPointerLeaveWindow, { passive: true });
+    window.addEventListener("blur", onWindowBlur);
+    window.addEventListener("pointerdown", onPointerDown, { passive: true });
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    document.addEventListener("pointerover", onPointerOver, { passive: true });
 
     return () => {
       if (rafId !== null) cancelAnimationFrame(rafId);
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseleave", onMouseLeave);
-      document.removeEventListener("mouseenter", onMouseEnter);
-      document.removeEventListener("mouseover", onMouseOver);
+      setNativeCursorHidden(false);
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("mouseout", onPointerLeaveWindow);
+      window.removeEventListener("blur", onWindowBlur);
+      window.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      document.removeEventListener("pointerover", onPointerOver);
     };
   }, [mouseX, mouseY]);
 

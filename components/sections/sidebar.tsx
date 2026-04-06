@@ -138,7 +138,11 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
               asChild
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 group border border-primary/20"
             >
-              <a href="/IsnaNurAmalia_CV.pdf" download="CV-Isna-Nur-Amalia.pdf">
+              <a
+                href="/Isna Nur Amalia - CV.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Download className="w-4 h-4 mr-2 group-hover:animate-bounce" />
                 Download CV
               </a>

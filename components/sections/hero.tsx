@@ -185,7 +185,7 @@ const SocialIcon = ({ platform }: { platform: string }) => {
 
 const STATS = [
   { value: "10+", label: "Projects Delivered" },
-  { value: "50+", label: "Test Cases Written" },
+  { value: "100+", label: "Test Cases Written" },
   { value: "STLC", label: "Full Cycle QA" },
 ];
 
@@ -329,7 +329,11 @@ export function HeroSection({
               asChild
               className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl shadow-md group"
             >
-              <a href="/IsnaNurAmalia_CV.pdf" download="CV-Isna-Nur-Amalia.pdf">
+              <a
+                href="/Isna Nur Amalia - CV.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Download className="w-4 h-4 mr-2 group-hover:animate-bounce" />
                 Download CV
               </a>
