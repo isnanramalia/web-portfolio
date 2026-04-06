@@ -285,9 +285,9 @@
 }
 
 @media (pointer: fine) {
-    html,
-    body,
-    body * {
+    html[data-custom-cursor="true"],
+    html[data-custom-cursor="true"] body,
+    html[data-custom-cursor="true"] body * {
         cursor: none !important;
     }
 }

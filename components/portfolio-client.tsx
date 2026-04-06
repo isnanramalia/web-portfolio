@@ -112,6 +112,13 @@ export function PortfolioClient({
   useEffect(() => {
     setMounted(true);
 
+    const media = window.matchMedia("(pointer: fine)");
+    const syncPointerDecorations = () => {
+      setPointerDecorationsReady(media.matches);
+    };
+
+    syncPointerDecorations();
+
     if (!_consolePrinted) {
       _consolePrinted = true;
       /* eslint-disable no-console */
@@ -133,6 +140,14 @@ export function PortfolioClient({
       );
       /* eslint-enable no-console */
     }
+
+    if (typeof media.addEventListener === "function") {
+      media.addEventListener("change", syncPointerDecorations);
+      return () => media.removeEventListener("change", syncPointerDecorations);
+    }
+
+    media.addListener(syncPointerDecorations);
+    return () => media.removeListener(syncPointerDecorations);
   }, []);
 
   useEffect(() => {
@@ -155,7 +170,6 @@ export function PortfolioClient({
 
     const enableDecorations = () => {
       setDecorationsReady(true);
-      setPointerDecorationsReady(window.matchMedia("(pointer: fine)").matches);
     };
 
     if (typeof win.requestIdleCallback === "function") {
@@ -207,7 +221,7 @@ export function PortfolioClient({
         {decorationsReady && <FloatingParticles />}
         {decorationsReady && <BackToTop />}
         {pointerDecorationsReady && <CustomCursor />}
-        {pointerDecorationsReady && <BugHunt />}
+        {decorationsReady && pointerDecorationsReady && <BugHunt />}
 
         {cmdLoaded && (
           <CommandPalette
