@@ -102,7 +102,7 @@ export function FooterSection() {
               </div>
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Calendar className="w-4 h-4" />
-                <span>Seeking QA Internship · Open to Dev roles</span>
+                <span>Seeking QA roles · Open to Dev roles</span>
               </div>
             </div>
           </motion.div>
@@ -172,7 +172,7 @@ export function FooterSection() {
                 Writing on Medium
               </span>
               <span>•</span>
-              <span>Seeking QA Internship</span>
+              <span>Seeking QA roles</span>
             </div>
           </div>
         </motion.div>
