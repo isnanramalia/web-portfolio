@@ -317,7 +317,7 @@ export const projects: Project[] = [
       "A web platform for alumni of Dian Nuswantoro University's IT program, providing CV generation, job postings, and alumni tracking.",
     longDescription:
       "The Alumni Website is a sub-application of the School of Information Technology at Dian Nuswantoro University. It is designed to track alumni data for accreditation purposes, while also giving alumni benefits such as CV generation and access to job postings. Built with Next.js, Laravel, Tailwind CSS, and ShadCN, the website features a responsive interface, role-based access, and seamless integration with the backend.",
-    image: "/project/alumni.png",
+    image: "/project/alumni.jpg",
     techStack: ["Next.js", "Laravel", "Tailwind CSS", "ShadCN"],
     features: [
       "Alumni CV generation system",
@@ -485,6 +485,31 @@ export const projects: Project[] = [
     ],
     website:
       "https://docs.google.com/spreadsheets/d/1tjPYjxccj84tfwsshMwptOSUyIUZo1tYta4Eaul9mrI/edit?usp=sharing",
+    category: "qa",
+  },
+  {
+    title: "UAT Testing – STI Alumni Website",
+    description:
+      "Conducted User Acceptance Testing (UAT) on the STI Alumni Website with 75 respondents, achieving 84% satisfaction categorized as 'Sangat Memuaskan'.",
+    longDescription:
+      "This project focuses on User Acceptance Testing (UAT) for the STI Alumni Website to evaluate system usability, performance, and user satisfaction. The testing involved 75 respondents to gather real user feedback. The result showed an overall satisfaction rate of 84%, which falls into the 'Sangat Memuaskan' category.\n\nUsers highlighted that the system is easy to use, well-structured, and has a modern, user-friendly interface. Navigation is clear, the dashboard is informative, and core processes such as login and data management run smoothly.\n\nThe most appreciated features include job vacancy listings, bookmark functionality, CV generator, and PDF export, which significantly help users in preparing for their careers. Additionally, features like tracer study, profile dashboard, and integrated services provide convenience by eliminating the need to switch between platforms.\n\nOverall, the system delivers real value, improves efficiency, and demonstrates significant progress in both features and user experience.",
+    image: "/project/alumni.jpg",
+    techStack: [
+      "Manual Testing",
+      "User Acceptance Testing",
+      "Usability Testing",
+      "Google Forms",
+      "Data Analysis",
+    ],
+    features: [
+      "Conducted UAT with 75 real users",
+      "Achieved 84% satisfaction score (Sangat Memuaskan category)",
+      "User feedback analysis for usability and system performance",
+      "Evaluation of navigation, dashboard, and core user flows",
+      "Identification of high-value features (job vacancy, bookmark, CV generator, PDF export)",
+      "Insight-driven recommendations for product improvement",
+    ],
+    website: "https://docs.google.com/spreadsheets/d/1piSwBLaDNsxcTMxo6NKqNM8BhsZ91_sZlf772INq5BY/edit?gid=88393121#gid=88393121",
     category: "qa",
   },
 ];
