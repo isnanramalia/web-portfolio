@@ -1,12 +1,13 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Github, ExternalLink, X } from "lucide-react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { createPortal } from "react-dom";
 
 interface Project {
   title: string;
@@ -134,21 +135,37 @@ export function ProjectDialog({
   open,
   onOpenChange,
 }: ProjectDialogProps) {
+  const [mounted, setMounted] = useState(false);
   const isMobile = useIsMobile();
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted || !open) return;
+    // Prevent background scrolling while dialog is open.
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [mounted, open]);
+
   if (!project) return null;
+  if (!mounted) return null;
 
   const hasLinks = !!(project.githubFe || project.githubBe || project.website);
   const featuresDelay = project.features ? 0.3 : 0.24;
 
-  return (
+  const content = (
     <AnimatePresence mode="wait">
       {open && (
         <>
           {/* ── Backdrop ── */}
           <motion.div
             key="backdrop"
-            className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -159,7 +176,7 @@ export function ProjectDialog({
           {/* ── Container ── */}
           <div
             className={cn(
-              "fixed inset-0 z-50 pointer-events-none",
+              "fixed inset-0 z-[10000] pointer-events-none",
               isMobile
                 ? "flex flex-col justify-end"
                 : "flex items-center justify-center p-4",
@@ -335,4 +352,8 @@ export function ProjectDialog({
       )}
     </AnimatePresence>
   );
+
+  // Portal ensures the fixed dialog layer is not affected by stacking contexts
+  // from parent wrappers (e.g. `relative z-10` in the page).
+  return createPortal(content, document.body);
 }
