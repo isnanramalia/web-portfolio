@@ -147,7 +147,7 @@ export function AboutSection({
             <div className="space-y-6">
               {workExperience.map((company, companyIdx) => {
                 const isCompanyActive = company.roles.some((r) =>
-                  r.period.toLowerCase().includes("present"),
+                  r.period.toLowerCase().includes("present")
                 );
                 const isMultiRole = company.roles.length > 1;
 
@@ -236,7 +236,11 @@ export function AboutSection({
                                     role="button"
                                     tabIndex={0}
                                     aria-expanded={isExpanded}
-                                    aria-label={`${isExpanded ? "Collapse" : "Expand"} details for ${role.title} at ${company.company}`}
+                                    aria-label={`${
+                                      isExpanded ? "Collapse" : "Expand"
+                                    } details for ${role.title} at ${
+                                      company.company
+                                    }`}
                                     className="flex-1 p-4 rounded-2xl border cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                                     initial={{ opacity: 0, x: -10 }}
                                     whileInView={{ opacity: 1, x: 0 }}
@@ -322,7 +326,11 @@ export function AboutSection({
                               role="button"
                               tabIndex={0}
                               aria-expanded={isExpanded}
-                              aria-label={`${isExpanded ? "Collapse" : "Expand"} details for ${role.title} at ${company.company}`}
+                              aria-label={`${
+                                isExpanded ? "Collapse" : "Expand"
+                              } details for ${role.title} at ${
+                                company.company
+                              }`}
                               className={`work-card flex-1 p-6 rounded-2xl border cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                                 isExpanded ? "active" : ""
                               }`}

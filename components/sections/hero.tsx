@@ -267,7 +267,7 @@ export function HeroSection({
           >
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shrink-0" />
             <span className="text-sm font-medium text-green-600 dark:text-green-400">
-              Seeking QA Internship
+              Seeking QA Roles
             </span>
           </motion.div>
 
