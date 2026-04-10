@@ -464,7 +464,7 @@ export const projects: Project[] = [
   {
     title: "Manual Testing – Saucedemo (Swag Labs)",
     description:
-      "Full-cycle manual QA on a demo e-commerce app: Test Plan, 30+ test cases across Login/Product/Cart/Checkout flows, and 4 formal bug reports with Severity & Priority classification.",
+      "Full-cycle manual QA on a demo e-commerce app: Test Plan, 30+ test cases across Login/Product/Cart/Checkout flows, and 9 formal bug reports with Severity & Priority classification.",
     longDescription:
       "As part of my SQA learning journey, I conducted comprehensive manual testing on Saucedemo — a demo e-commerce platform built for QA practice. The project follows a complete STLC cycle: Test Plan with scope, objectives, and entry/exit criteria; Test Scenarios and 30+ Test Cases executed across three user types (standard_user, problem_user, locked_out_user); and a formal Defect List. Key findings include a Critical ID-mapping bug causing wrong product images and broken navigation, a High-severity 'Remove' button failure, and multiple UI issues. All documentation is structured to meet professional QA standards.",
     image: "/project/saucedemo-tc.png",
@@ -479,7 +479,7 @@ export const projects: Project[] = [
       "Test Plan with scope, objectives, and entry/exit criteria",
       "Multi-user testing: standard_user, problem_user, locked_out_user",
       "30+ test cases covering Login, Product, Cart, and Checkout flows",
-      "4 formal bug reports (1 Critical, 2 High, 1 Low) with full documentation",
+      "9 formal bug reports (2 Critical, 4 High, 1 Medium, 2 Low) with full documentation",
       "Risk-based test prioritization using Severity & Priority matrix",
       "Defect tracking: Steps to Reproduce, Expected vs Actual Results, Notes/Evidence",
     ],
