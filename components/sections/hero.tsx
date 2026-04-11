@@ -16,6 +16,7 @@ import Image from "next/image";
 import { AnimatedText } from "@/components/animated-text";
 import { fadeInUp, staggerContainer, staggerItem } from "@/lib/animations";
 import { socialMedia } from "@/lib/data";
+import { FloatingElement } from "@/components/effects/parallax";
 
 // ── Typewriter constants ───────────────────────────────────────────────────
 const LINE1 = "I Build It.";
@@ -136,7 +137,7 @@ function CountUpStat({
 
   return (
     <motion.div
-      className="px-4 py-2.5 bg-card border border-border rounded-2xl text-center min-w-[96px]"
+      className="px-4 py-2.5 glass-card glass-card-hover rounded-2xl text-center min-w-[96px]"
       initial={{ opacity: 0, y: 14 }}
       animate={start ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
       transition={{ delay: 0.85 + index * 0.12, duration: 0.4 }}
@@ -207,23 +208,27 @@ export function HeroSection({
       animate={startAnimations ? "visible" : "hidden"}
     >
       {/* Decorative background blobs */}
-      <motion.div
-        className="absolute top-1/3 right-1/4 w-80 h-80 bg-primary/5 rounded-full blur-3xl pointer-events-none"
-        style={{ willChange: "transform" }}
-        animate={{ scale: [1, 1.12, 1], opacity: [0.25, 0.45, 0.25] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute bottom-1/4 left-1/3 w-56 h-56 bg-accent/10 rounded-full blur-3xl pointer-events-none"
-        style={{ willChange: "transform" }}
-        animate={{ scale: [1.1, 1, 1.1], opacity: [0.15, 0.3, 0.15] }}
-        transition={{
-          duration: 16,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 4,
-        }}
-      />
+      <FloatingElement speed={0.3} direction="up" amplitude={30}>
+        <motion.div
+          className="absolute top-1/3 right-1/4 w-80 h-80 bg-primary/5 rounded-full blur-3xl pointer-events-none"
+          style={{ willChange: "transform" }}
+          animate={{ scale: [1, 1.12, 1], opacity: [0.25, 0.45, 0.25] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </FloatingElement>
+      <FloatingElement speed={0.4} direction="down" amplitude={40}>
+        <motion.div
+          className="absolute bottom-1/4 left-1/3 w-56 h-56 bg-accent/10 rounded-full blur-3xl pointer-events-none"
+          style={{ willChange: "transform" }}
+          animate={{ scale: [1.1, 1, 1.1], opacity: [0.15, 0.3, 0.15] }}
+          transition={{
+            duration: 16,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 4,
+          }}
+        />
+      </FloatingElement>
 
       <div className="max-w-4xl mx-auto relative z-10 w-full">
         <motion.div

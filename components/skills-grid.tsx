@@ -26,7 +26,7 @@ function SkillCard({ skill }: { skill: Skill }) {
       animate={hasIntersected ? "visible" : "hidden"}
     >
       <motion.div
-        className="flex flex-col items-center p-6 bg-background/50 border border-border rounded-3xl"
+        className="flex flex-col items-center p-6 glass-card glass-card-hover rounded-3xl"
         whileHover={{ scale: 1.06 }}
         transition={{ duration: 0.2, ease: "easeOut" }}
       >

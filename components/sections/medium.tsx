@@ -30,7 +30,7 @@ const CARD_ICON_GRADIENTS = [
 
 function ArticleSkeleton() {
   return (
-    <div className="bg-card rounded-2xl border border-border overflow-hidden animate-pulse">
+    <div className="glass-card rounded-2xl overflow-hidden animate-pulse">
       <div className="h-44 bg-muted" />
       <div className="p-5 space-y-3">
         <div className="flex gap-2">
@@ -69,7 +69,7 @@ function ArticleCard({
   return (
     <motion.article
       variants={staggerItem}
-      className="group flex flex-col bg-card rounded-2xl border border-border overflow-hidden smooth-hover cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="group flex flex-col glass-card glass-card-hover rounded-2xl overflow-hidden smooth-hover cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       role="button"
       tabIndex={0}
       aria-label={`Read article: ${article.title}`}

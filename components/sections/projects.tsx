@@ -109,7 +109,7 @@ export function ProjectsSection({
               filteredProjects.map((project, index) => (
                 <motion.div
                   key={project.title}
-                  className="bg-card rounded-2xl p-6 border border-border smooth-hover cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  className="glass-card glass-card-hover rounded-2xl p-6 smooth-hover cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   role="button"
                   tabIndex={0}
                   aria-label={`View details for ${project.title}`}

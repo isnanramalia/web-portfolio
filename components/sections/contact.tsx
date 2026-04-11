@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Mail, Linkedin } from "lucide-react";
 import { staggerContainer, staggerItem, fadeInUp } from "@/lib/animations";
+import { FloatingElement } from "@/components/effects/parallax";
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg
@@ -29,14 +30,18 @@ export function ContactSection() {
     >
       <div className="max-w-4xl mx-auto">
         <motion.div
-          className="relative bg-card border border-border rounded-3xl p-8 lg:p-12 overflow-hidden"
+          className="relative glass-strong rounded-3xl p-8 lg:p-12 overflow-hidden"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent/10 rounded-full blur-2xl pointer-events-none" />
+          <FloatingElement speed={0.2} direction="right" amplitude={20}>
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+          </FloatingElement>
+          <FloatingElement speed={0.25} direction="left" amplitude={25}>
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent/10 rounded-full blur-2xl pointer-events-none" />
+          </FloatingElement>
 
           <div className="relative z-10 text-center max-w-2xl mx-auto">
             <motion.div

@@ -1,10 +1,9 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, ExternalLink, Award } from "lucide-react";
-import Image from "next/image";
+import { motion } from "framer-motion";
+import { ExternalLink, Award } from "lucide-react";
 import type { WorkExperience, Certificate } from "@/lib/data";
+import { InteractiveTimeline } from "@/components/effects/interactive-timeline";
 
 interface Education {
   degree: string;
@@ -17,29 +16,6 @@ interface AboutSectionProps {
   education: Education[];
   workExperience: WorkExperience[];
   certificates: Certificate[];
-}
-
-function ActiveDot({ small = false }: { small?: boolean }) {
-  const sz = small ? "h-2.5 w-2.5" : "h-3 w-3";
-  return (
-    <span className={`relative flex ${sz}`}>
-      <span
-        className={`animate-ping absolute inline-flex ${sz} rounded-full bg-primary opacity-40`}
-      />
-      <span
-        className={`relative inline-flex ${sz} rounded-full bg-primary ring-2 ring-background`}
-      />
-    </span>
-  );
-}
-
-function InactiveDot({ small = false }: { small?: boolean }) {
-  const sz = small ? "h-2.5 w-2.5" : "h-3 w-3";
-  return (
-    <div
-      className={`${sz} rounded-full border-2 border-muted-foreground/30 bg-background`}
-    />
-  );
 }
 
 const CERT_CATEGORY: Record<
@@ -72,12 +48,6 @@ export function AboutSection({
   workExperience,
   certificates,
 }: AboutSectionProps) {
-  const [expandedJob, setExpandedJob] = useState<string | null>(null);
-
-  const handleJobExpand = useCallback((key: string) => {
-    setExpandedJob((prev) => (prev === key ? null : key));
-  }, []);
-
   return (
     <motion.section
       id="about"
@@ -102,7 +72,7 @@ export function AboutSection({
             {education.map((edu, index) => (
               <motion.div
                 key={index}
-                className="p-6 bg-card rounded-2xl border border-border smooth-hover"
+                className="p-6 glass-card glass-card-hover rounded-2xl smooth-hover"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
@@ -138,333 +108,7 @@ export function AboutSection({
             Working Experience
           </motion.h2>
 
-          <div className="relative">
-            <motion.div
-              className="absolute left-[5px] top-8 bottom-8 w-px pointer-events-none bg-gradient-to-b from-transparent via-muted-foreground/25 to-transparent"
-              aria-hidden
-              initial={{ scaleY: 0 }}
-              whileInView={{ scaleY: 1 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              viewport={{ once: true, margin: "-100px" }}
-              style={{ transformOrigin: "top" }}
-            />
-
-            <div className="space-y-6">
-              {workExperience.map((company, companyIdx) => {
-                const isCompanyActive = company.roles.some((r) =>
-                  r.period.toLowerCase().includes("present"),
-                );
-                const isMultiRole = company.roles.length > 1;
-
-                return (
-                  <div
-                    key={companyIdx}
-                    className="relative flex items-start gap-5"
-                  >
-                    <div className="relative z-10 flex-shrink-0 mt-7">
-                      {isCompanyActive ? <ActiveDot /> : <InactiveDot />}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      {isMultiRole ? (
-                        <>
-                          <motion.div
-                            className="p-4 bg-card rounded-2xl border border-border"
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{
-                              duration: 0.4,
-                              delay: companyIdx * 0.1,
-                            }}
-                            viewport={{ once: true }}
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 flex-shrink-0 rounded-xl bg-card border border-border shadow-sm overflow-hidden flex items-center justify-center">
-                                <Image
-                                  src={company.logo || "/placeholder.svg"}
-                                  alt={`${company.company} logo`}
-                                  width={40}
-                                  height={40}
-                                  className="w-full h-full object-contain p-1"
-                                />
-                              </div>
-                              <div className="min-w-0">
-                                {company.website ? (
-                                  <a
-                                    href={company.website}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 text-base font-semibold text-card-foreground hover:text-primary transition-colors"
-                                  >
-                                    {company.company}
-                                    <ExternalLink className="w-3.5 h-3.5 opacity-60" />
-                                  </a>
-                                ) : (
-                                  <p className="text-base font-semibold text-card-foreground">
-                                    {company.company}
-                                  </p>
-                                )}
-                                <p className="text-xs text-muted-foreground">
-                                  {company.roles.length} roles
-                                </p>
-                              </div>
-                            </div>
-                          </motion.div>
-
-                          <div className="relative mt-3 ml-5 space-y-3">
-                            <motion.div
-                              className="absolute left-[4px] top-4 bottom-4 w-px pointer-events-none bg-muted-foreground/20"
-                              aria-hidden
-                              initial={{ scaleY: 0 }}
-                              whileInView={{ scaleY: 1 }}
-                              transition={{
-                                duration: 0.6,
-                                ease: "easeOut",
-                                delay: 0.2,
-                              }}
-                              viewport={{ once: true, margin: "-50px" }}
-                              style={{ transformOrigin: "top" }}
-                            />
-
-                            {company.roles.map((role, roleIdx) => {
-                              const roleKey = `${companyIdx}-${roleIdx}`;
-                              const isRoleActive = role.period
-                                .toLowerCase()
-                                .includes("present");
-                              const isExpanded = expandedJob === roleKey;
-
-                              return (
-                                <div
-                                  key={roleIdx}
-                                  className="relative flex items-start gap-3"
-                                >
-                                  <div className="relative z-10 flex-shrink-0 mt-[18px]">
-                                    {isRoleActive ? (
-                                      <ActiveDot small />
-                                    ) : (
-                                      <InactiveDot small />
-                                    )}
-                                  </div>
-
-                                  <motion.div
-                                    role="button"
-                                    tabIndex={0}
-                                    aria-expanded={isExpanded}
-                                    aria-label={`${
-                                      isExpanded ? "Collapse" : "Expand"
-                                    } details for ${role.title} at ${
-                                      company.company
-                                    }`}
-                                    className="flex-1 p-4 rounded-2xl border cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                                    initial={{ opacity: 0, x: -10 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    transition={{
-                                      duration: 0.3,
-                                      delay: companyIdx * 0.1 + roleIdx * 0.08,
-                                    }}
-                                    viewport={{ once: true }}
-                                    onClick={() => handleJobExpand(roleKey)}
-                                    onKeyDown={(e) => {
-                                      if (e.key === "Enter" || e.key === " ") {
-                                        e.preventDefault();
-                                        handleJobExpand(roleKey);
-                                      }
-                                    }}
-                                  >
-                                    <div className="flex items-start justify-between gap-2 mb-2">
-                                      <h4 className="text-sm font-semibold text-card-foreground group-hover:text-primary transition-colors leading-snug">
-                                        {role.title}
-                                      </h4>
-                                      <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground font-medium bg-accent px-2.5 py-1 rounded-xl whitespace-nowrap flex-shrink-0">
-                                        {isRoleActive && (
-                                          <span className="h-1.5 w-1.5 rounded-full bg-primary flex-shrink-0" />
-                                        )}
-                                        {role.period}
-                                      </span>
-                                    </div>
-
-                                    <p className="text-sm text-muted-foreground">
-                                      {role.shortDescription}
-                                    </p>
-
-                                    <AnimatePresence initial={false}>
-                                      {isExpanded && (
-                                        <motion.div
-                                          initial={{ opacity: 0, height: 0 }}
-                                          animate={{
-                                            opacity: 1,
-                                            height: "auto",
-                                          }}
-                                          exit={{ opacity: 0, height: 0 }}
-                                          transition={{
-                                            duration: 0.3,
-                                            ease: "easeInOut",
-                                          }}
-                                          className="mt-3 pt-3 border-t border-border overflow-hidden"
-                                        >
-                                          <div className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
-                                            {role.fullDescription}
-                                          </div>
-                                        </motion.div>
-                                      )}
-                                    </AnimatePresence>
-
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleJobExpand(roleKey);
-                                      }}
-                                      className="flex items-center text-xs text-primary hover:text-primary/80 transition-colors mt-2"
-                                    >
-                                      {isExpanded ? (
-                                        <>
-                                          <ChevronUp className="w-3 h-3 mr-1" />
-                                          Read less
-                                        </>
-                                      ) : (
-                                        <>
-                                          <ChevronDown className="w-3 h-3 mr-1" />
-                                          Read more
-                                        </>
-                                      )}
-                                    </button>
-                                  </motion.div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </>
-                      ) : (
-                        (() => {
-                          const role = company.roles[0];
-                          const roleKey = `${companyIdx}-0`;
-                          const isExpanded = expandedJob === roleKey;
-
-                          return (
-                            <motion.div
-                              role="button"
-                              tabIndex={0}
-                              aria-expanded={isExpanded}
-                              aria-label={`${
-                                isExpanded ? "Collapse" : "Expand"
-                              } details for ${role.title} at ${
-                                company.company
-                              }`}
-                              className={`work-card flex-1 p-6 rounded-2xl border cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
-                                isExpanded ? "active" : ""
-                              }`}
-                              initial={{ opacity: 0, x: -20 }}
-                              whileInView={{ opacity: 1, x: 0 }}
-                              transition={{
-                                duration: 0.4,
-                                delay: companyIdx * 0.1,
-                              }}
-                              viewport={{ once: true }}
-                              onClick={() => handleJobExpand(roleKey)}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter" || e.key === " ") {
-                                  e.preventDefault();
-                                  handleJobExpand(roleKey);
-                                }
-                              }}
-                            >
-                              <div className="flex items-start space-x-4">
-                                <div className="w-12 h-12 flex-shrink-0 rounded-2xl bg-card border border-border shadow-sm overflow-hidden flex items-center justify-center">
-                                  <Image
-                                    src={company.logo || "/placeholder.svg"}
-                                    alt={`${company.company} logo`}
-                                    width={48}
-                                    height={48}
-                                    className="w-full h-full object-contain p-1.5"
-                                  />
-                                </div>
-
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-start justify-between mb-2 gap-2">
-                                    <div className="min-w-0">
-                                      <h4 className="text-lg font-medium text-card-foreground group-hover:text-primary transition-colors leading-snug">
-                                        {role.title}
-                                      </h4>
-                                      {company.website ? (
-                                        <a
-                                          href={company.website}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors w-fit"
-                                          onClick={(e) => e.stopPropagation()}
-                                        >
-                                          {company.company}
-                                          <ExternalLink className="w-3 h-3 opacity-60" />
-                                        </a>
-                                      ) : (
-                                        <p className="text-sm text-muted-foreground">
-                                          {company.company}
-                                        </p>
-                                      )}
-                                    </div>
-
-                                    <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground font-medium bg-accent px-3 py-1 rounded-xl whitespace-nowrap flex-shrink-0">
-                                      {isCompanyActive && (
-                                        <span className="h-1.5 w-1.5 rounded-full bg-primary flex-shrink-0" />
-                                      )}
-                                      {role.period}
-                                    </span>
-                                  </div>
-
-                                  <p className="text-sm text-muted-foreground mb-3">
-                                    {role.shortDescription}
-                                  </p>
-
-                                  <AnimatePresence initial={false}>
-                                    {isExpanded && (
-                                      <motion.div
-                                        initial={{ opacity: 0, height: 0 }}
-                                        animate={{ opacity: 1, height: "auto" }}
-                                        exit={{ opacity: 0, height: 0 }}
-                                        transition={{
-                                          duration: 0.3,
-                                          ease: "easeInOut",
-                                        }}
-                                        className="mt-4 pt-4 border-t border-border overflow-hidden"
-                                      >
-                                        <div className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
-                                          {role.fullDescription}
-                                        </div>
-                                      </motion.div>
-                                    )}
-                                  </AnimatePresence>
-
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleJobExpand(roleKey);
-                                    }}
-                                    className="flex items-center text-sm text-primary hover:text-primary/80 transition-colors mt-2"
-                                  >
-                                    {isExpanded ? (
-                                      <>
-                                        <ChevronUp className="w-4 h-4 mr-1" />
-                                        Read less
-                                      </>
-                                    ) : (
-                                      <>
-                                        <ChevronDown className="w-4 h-4 mr-1" />
-                                        Read more
-                                      </>
-                                    )}
-                                  </button>
-                                </div>
-                              </div>
-                            </motion.div>
-                          );
-                        })()
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <InteractiveTimeline workExperience={workExperience} />
         </div>
 
         {certificates.length > 0 && (
@@ -501,7 +145,7 @@ export function AboutSection({
                 return (
                   <motion.div
                     key={idx}
-                    className="flex items-start gap-4 p-5 bg-card rounded-2xl border border-border smooth-hover"
+                    className="flex items-start gap-4 p-5 glass-card glass-card-hover rounded-2xl smooth-hover"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: idx * 0.08 }}
