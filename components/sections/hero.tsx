@@ -35,21 +35,24 @@ function TypewriterLine({
   start: boolean;
 }) {
   const [count, setCount] = useState(0);
-  const done = count >= text.length;
+  const [showCursor, setShowCursor] = useState(false);
 
   useEffect(() => {
     if (!start) {
       setCount(0);
+      setShowCursor(false);
       return;
     }
 
     let interval: ReturnType<typeof setInterval>;
 
     const timeoutId = setTimeout(() => {
+      setShowCursor(true);
       interval = setInterval(() => {
         setCount((c) => {
           if (c >= text.length) {
             clearInterval(interval);
+            setShowCursor(false);
             return c;
           }
           return c + 1;
@@ -60,13 +63,14 @@ function TypewriterLine({
     return () => {
       clearTimeout(timeoutId);
       clearInterval(interval);
+      setShowCursor(false);
     };
   }, [text, delayMs, start]);
 
   return (
     <>
       {text.slice(0, count)}
-      {start && !done && (
+      {showCursor && (
         <motion.span
           className="inline-block w-[3px] h-[0.82em] bg-current align-middle ml-0.5 rounded-full"
           animate={{ opacity: [1, 1, 0, 0] }}
