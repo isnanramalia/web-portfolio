@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp, ExternalLink, Award } from "lucide-react";
 import Image from "next/image";
 import type { WorkExperience, Certificate } from "@/lib/data";
@@ -139,15 +139,20 @@ export function AboutSection({
           </motion.h2>
 
           <div className="relative">
-            <div
+            <motion.div
               className="absolute left-[5px] top-8 bottom-8 w-px pointer-events-none bg-gradient-to-b from-transparent via-muted-foreground/25 to-transparent"
               aria-hidden
+              initial={{ scaleY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              viewport={{ once: true, margin: "-100px" }}
+              style={{ transformOrigin: "top" }}
             />
 
             <div className="space-y-6">
               {workExperience.map((company, companyIdx) => {
                 const isCompanyActive = company.roles.some((r) =>
-                  r.period.toLowerCase().includes("present")
+                  r.period.toLowerCase().includes("present"),
                 );
                 const isMultiRole = company.roles.length > 1;
 
@@ -207,9 +212,18 @@ export function AboutSection({
                           </motion.div>
 
                           <div className="relative mt-3 ml-5 space-y-3">
-                            <div
+                            <motion.div
                               className="absolute left-[4px] top-4 bottom-4 w-px pointer-events-none bg-muted-foreground/20"
                               aria-hidden
+                              initial={{ scaleY: 0 }}
+                              whileInView={{ scaleY: 1 }}
+                              transition={{
+                                duration: 0.6,
+                                ease: "easeOut",
+                                delay: 0.2,
+                              }}
+                              viewport={{ once: true, margin: "-50px" }}
+                              style={{ transformOrigin: "top" }}
                             />
 
                             {company.roles.map((role, roleIdx) => {
@@ -273,22 +287,27 @@ export function AboutSection({
                                       {role.shortDescription}
                                     </p>
 
-                                    {isExpanded && (
-                                      <motion.div
-                                        initial={{ opacity: 0, height: 0 }}
-                                        animate={{
-                                          opacity: 1,
-                                          height: "auto",
-                                        }}
-                                        exit={{ opacity: 0, height: 0 }}
-                                        transition={{ duration: 0.3 }}
-                                        className="mt-3 pt-3 border-t border-border overflow-hidden"
-                                      >
-                                        <div className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
-                                          {role.fullDescription}
-                                        </div>
-                                      </motion.div>
-                                    )}
+                                    <AnimatePresence initial={false}>
+                                      {isExpanded && (
+                                        <motion.div
+                                          initial={{ opacity: 0, height: 0 }}
+                                          animate={{
+                                            opacity: 1,
+                                            height: "auto",
+                                          }}
+                                          exit={{ opacity: 0, height: 0 }}
+                                          transition={{
+                                            duration: 0.3,
+                                            ease: "easeInOut",
+                                          }}
+                                          className="mt-3 pt-3 border-t border-border overflow-hidden"
+                                        >
+                                          <div className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                                            {role.fullDescription}
+                                          </div>
+                                        </motion.div>
+                                      )}
+                                    </AnimatePresence>
 
                                     <button
                                       onClick={(e) => {
@@ -396,19 +415,24 @@ export function AboutSection({
                                     {role.shortDescription}
                                   </p>
 
-                                  {isExpanded && (
-                                    <motion.div
-                                      initial={{ opacity: 0, height: 0 }}
-                                      animate={{ opacity: 1, height: "auto" }}
-                                      exit={{ opacity: 0, height: 0 }}
-                                      transition={{ duration: 0.3 }}
-                                      className="mt-4 pt-4 border-t border-border overflow-hidden"
-                                    >
-                                      <div className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
-                                        {role.fullDescription}
-                                      </div>
-                                    </motion.div>
-                                  )}
+                                  <AnimatePresence initial={false}>
+                                    {isExpanded && (
+                                      <motion.div
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: "auto" }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        transition={{
+                                          duration: 0.3,
+                                          ease: "easeInOut",
+                                        }}
+                                        className="mt-4 pt-4 border-t border-border overflow-hidden"
+                                      >
+                                        <div className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                                          {role.fullDescription}
+                                        </div>
+                                      </motion.div>
+                                    )}
+                                  </AnimatePresence>
 
                                   <button
                                     onClick={(e) => {
