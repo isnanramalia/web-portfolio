@@ -24,7 +24,7 @@ export function SkillsSection({ skillsData }: SkillsSectionProps) {
     >
       <div className="max-w-4xl mx-auto">
         <motion.h2
-          className="text-2xl font-medium mb-8 text-foreground"
+          className="text-2xl font-medium mb-10 text-foreground doodle-section-heading"
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4 }}

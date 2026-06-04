@@ -101,6 +101,21 @@
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
         font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        /* Paper dot-grid pattern */
+        background-image:
+            radial-gradient(
+                circle at 1px 1px,
+                rgb(var(--foreground) / 0.055) 1px,
+                transparent 0
+            ),
+            radial-gradient(
+                circle at 1px 1px,
+                rgb(var(--foreground) / 0.022) 1px,
+                transparent 0
+            );
+        background-size:
+            24px 24px,
+            72px 72px;
     }
 }
 
@@ -406,12 +421,10 @@ h3,
 h4,
 h5,
 h6 {
-    font-family:
-        "Quicksand", var(--font-quicksand), ui-sans-serif, system-ui, sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 600;
+    font-family: var(--font-kalam), "Kalam", cursive;
+    font-weight: 700;
     font-style: normal;
-    letter-spacing: -0.025em;
+    letter-spacing: 0.01em;
 }
 
 .dark .text-primary {
@@ -638,4 +651,457 @@ code,
 pre {
     font-family: var(--font-mono);
     font-feature-settings: "liga" 0;
+}
+
+/* ==========================================================
+   DOODLE & HAND-DRAWN THEME
+   ========================================================== */
+
+/* --- Handwritten font utility --- */
+.font-handwritten {
+    font-family: var(--font-kalam), "Kalam", cursive;
+}
+
+/* --- Organic border-radius on all glass cards --- */
+.glass-card {
+    border-radius: 22px 5px 20px 5px / 5px 20px 5px 22px;
+    box-shadow:
+        4px 4px 0 rgb(var(--foreground) / 0.04),
+        0 8px 32px 0 rgba(31, 38, 135, 0.12);
+}
+
+.dark .glass-card {
+    box-shadow:
+        4px 4px 0 rgb(var(--foreground) / 0.08),
+        0 8px 32px 0 rgba(0, 0, 0, 0.28);
+}
+
+.glass-card-hover:hover {
+    border-radius: 18px 8px 22px 4px / 4px 22px 8px 18px;
+    transform: translateY(-3px) rotate(0.2deg) translateZ(0);
+}
+
+/* --- Sketchy border utility (adds organic radius) --- */
+.sketchy-border {
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+.sketchy-card {
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    border: 2px solid rgb(var(--border));
+    box-shadow:
+        4px 4px 0 rgb(var(--foreground) / 0.06),
+        9px 9px 0 rgb(var(--foreground) / 0.025);
+    transition: all 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.sketchy-card:hover {
+    transform: translateY(-4px) rotate(0.3deg);
+    box-shadow:
+        6px 6px 0 rgb(var(--foreground) / 0.09),
+        12px 12px 0 rgb(var(--foreground) / 0.04);
+}
+
+/* --- Marker highlight hover (red marker pen effect) --- */
+.marker-link {
+    position: relative;
+    display: inline;
+}
+
+.marker-link::before {
+    content: "";
+    position: absolute;
+    inset: -2px -5px;
+    background: rgba(239, 68, 68, 0.18);
+    border-radius: 2px 7px 4px 3px / 4px 3px 7px 2px;
+    transform: scaleX(0) rotate(-0.4deg);
+    transform-origin: left center;
+    transition: transform 0.22s ease;
+    z-index: -1;
+}
+
+.marker-link:hover::before,
+.marker-link:focus-visible::before {
+    transform: scaleX(1) rotate(-0.4deg);
+}
+
+/* --- Doodle section heading (wavy SVG underline) --- */
+.doodle-section-heading {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.doodle-section-heading::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 6px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'%3E%3Cpath d='M0,3 C8,1 16,5 24,3 C32,1 40,5 48,3 C56,1 64,5 72,3 C80,1 88,5 96,3 C98,2 100,3.5 100,3' fill='none' stroke='%230b1957' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    opacity: 0.3;
+}
+
+.dark .doodle-section-heading::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'%3E%3Cpath d='M0,3 C8,1 16,5 24,3 C32,1 40,5 48,3 C56,1 64,5 72,3 C80,1 88,5 96,3 C98,2 100,3.5 100,3' fill='none' stroke='%239eccfa' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+    opacity: 0.4;
+}
+
+/* --- Sticky Note cards (project investigation board) --- */
+.sticky-note {
+    position: relative;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow:
+        3px 4px 0 rgba(0, 0, 0, 0.12),
+        7px 9px 18px rgba(0, 0, 0, 0.07);
+    transition: all 0.3s cubic-bezier(0.34, 1.5, 0.64, 1);
+    overflow: visible !important;
+}
+
+/* Tape decoration — centered strip above card */
+.sticky-note::before {
+    content: "";
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-1.5deg);
+    width: 52px;
+    height: 19px;
+    background: rgba(255, 255, 255, 0.58);
+    border-radius: 1px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.09);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.dark .sticky-note::before {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.sticky-note:hover {
+    transform: translateY(-8px) rotate(0.6deg);
+    box-shadow:
+        5px 12px 0 rgba(0, 0, 0, 0.13),
+        14px 20px 28px rgba(0, 0, 0, 0.1);
+    z-index: 5;
+}
+
+/* Color variants */
+.sticky-note-yellow {
+    background-color: #fef9c3;
+    color: #3d3000;
+}
+.sticky-note-green {
+    background-color: #dcfce7;
+    color: #052e16;
+}
+.sticky-note-blue {
+    background-color: #dbeafe;
+    color: #1e3a5f;
+}
+.sticky-note-pink {
+    background-color: #fce7f3;
+    color: #4a0020;
+}
+
+.dark .sticky-note-yellow {
+    background-color: #2f2a0e;
+    color: #fef9c3;
+}
+.dark .sticky-note-green {
+    background-color: #0b2716;
+    color: #dcfce7;
+}
+.dark .sticky-note-blue {
+    background-color: #0d1e35;
+    color: #dbeafe;
+}
+.dark .sticky-note-pink {
+    background-color: #2f0e1c;
+    color: #fce7f3;
+}
+
+/* --- Case number badge (investigation journal) --- */
+.case-badge {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono), monospace;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border: 1.5px dashed currentColor;
+    border-radius: 3px;
+    opacity: 0.55;
+    white-space: nowrap;
+}
+
+/* --- QA stamp decoration --- */
+.qa-stamp {
+    display: inline-block;
+    font-family: var(--font-kalam), cursive;
+    font-weight: 700;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 1px 5px;
+    border: 2px solid currentColor;
+    border-radius: 2px;
+    transform: rotate(-8deg);
+    opacity: 0.55;
+    white-space: nowrap;
+    line-height: 1.4;
+}
+
+/* --- Polaroid image frame (inside sticky notes) --- */
+.polaroid {
+    background: white;
+    padding: 4px 4px 20px 4px;
+    box-shadow:
+        1px 1px 3px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba(0, 0, 0, 0.06);
+    display: block;
+}
+
+.dark .polaroid {
+    background: rgba(255, 255, 255, 0.07);
+}
+
+/* --- Navigation active indicator — slightly sketchy --- */
+.nav-item::after {
+    height: 3px !important;
+    border-radius: 3px 7px 3px 7px !important;
+}
+
+/* --- Scrollbar — doodle style --- */
+::-webkit-scrollbar-thumb {
+    border-radius: 3px 7px 3px 7px;
+}
+
+/* --- Preloader pencil progress bar --- */
+.pencil-track {
+    border-radius: 2px 8px 2px 8px;
+    background: rgb(var(--muted));
+    border: 1.5px solid rgb(var(--border));
+}
+
+.pencil-fill {
+    border-radius: 2px 6px 2px 6px;
+    background: rgb(var(--primary));
+    border-right: 2px solid rgb(var(--primary) / 0.6);
+    position: relative;
+}
+
+.pencil-fill::after {
+    content: "";
+    position: absolute;
+    right: -3px;
+    top: -1px;
+    width: 6px;
+    height: calc(100% + 2px);
+    background: rgb(var(--foreground) / 0.5);
+    border-radius: 0 2px 2px 0;
+    clip-path: polygon(0 0, 100% 30%, 100% 70%, 0 100%);
+}
+
+/* === DOODLE ART V2 — Pastel System & Sticker Buttons =================== */
+
+/* --- Extended sticky note variants --- */
+.sticky-note-lavender {
+    background-color: #f3e8ff;
+    color: #2d1a4a;
+}
+.sticky-note-peach {
+    background-color: #ffedd5;
+    color: #4a2200;
+}
+.dark .sticky-note-lavender {
+    background-color: #1a0e2f;
+    color: #f3e8ff;
+}
+.dark .sticky-note-peach {
+    background-color: #2f1a0e;
+    color: #ffedd5;
+}
+
+/* --- Sticker Button Treatment ---
+   Overrides rounded-2xl because this rule appears after @tailwind utilities */
+.btn-sticker-apply {
+    border-radius: 255px 12px 255px 12px / 12px 255px 12px 255px;
+    border-width: 2px;
+    box-shadow: 3px 3px 0 rgb(var(--foreground) / 0.16);
+    font-family: var(--font-kalam), cursive;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    transform: rotate(-0.5deg);
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+    will-change: transform;
+}
+
+.btn-sticker-apply:hover {
+    transform: rotate(0.5deg) translateY(-3px);
+    box-shadow: 4px 5px 0 rgb(var(--foreground) / 0.2);
+}
+
+.btn-sticker-apply:active {
+    transform: rotate(0deg) translateY(1px);
+    box-shadow: 1px 1px 0 rgb(var(--foreground) / 0.1);
+}
+
+/* Primary variant: navy offset shadow */
+.btn-sticker-primary-apply {
+    box-shadow: 3px 3px 0 rgb(var(--primary) / 0.5);
+}
+.btn-sticker-primary-apply:hover {
+    box-shadow: 4px 5px 0 rgb(var(--primary) / 0.6);
+}
+
+/* --- Skill Sticky Note Card --- */
+.skill-sticky {
+    position: relative;
+    padding: 16px 10px 12px;
+    border-radius: 2px;
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    box-shadow:
+        2px 2px 0 rgba(0, 0, 0, 0.08),
+        5px 6px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.25s cubic-bezier(0.34, 1.5, 0.64, 1);
+    cursor: default;
+    width: 92px;
+    text-align: center;
+}
+
+.skill-sticky::before {
+    content: "";
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-0.8deg);
+    width: 30px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.62);
+    border-radius: 1px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.dark .skill-sticky::before {
+    background: rgba(255, 255, 255, 0.09);
+}
+
+.skill-sticky:hover {
+    transform: translateY(-7px) rotate(1.8deg);
+    box-shadow:
+        3px 8px 0 rgba(0, 0, 0, 0.1),
+        9px 15px 20px rgba(0, 0, 0, 0.08);
+    z-index: 3;
+}
+
+/* --- Stat Sticker (hero stats) --- */
+.stat-sticker {
+    position: relative;
+    padding: 10px 16px;
+    border-radius: 2px;
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    box-shadow:
+        2px 2px 0 rgba(0, 0, 0, 0.09),
+        4px 5px 10px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    min-width: 96px;
+    transition: all 0.25s cubic-bezier(0.34, 1.5, 0.64, 1);
+}
+
+.stat-sticker::before {
+    content: "";
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-1deg);
+    width: 36px;
+    height: 13px;
+    background: rgba(255, 255, 255, 0.62);
+    border-radius: 1px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.dark .stat-sticker::before {
+    background: rgba(255, 255, 255, 0.09);
+}
+
+.stat-sticker:hover {
+    transform: translateY(-4px) rotate(0.6deg);
+    box-shadow:
+        3px 5px 0 rgba(0, 0, 0, 0.11),
+        7px 9px 16px rgba(0, 0, 0, 0.07);
+}
+
+/* --- Nav marker highlight (behind active item) --- */
+.nav-marker-pill {
+    background: rgba(254, 249, 195, 0.7);
+    border-radius: 4px 12px 4px 12px / 12px 4px 12px 4px;
+}
+
+.dark .nav-marker-pill {
+    background: rgb(var(--primary) / 0.12);
+}
+
+/* --- Sidebar decorative star --- */
+.sidebar-star-doodle {
+    position: absolute;
+    pointer-events: none;
+    color: rgb(var(--primary));
+    opacity: 0.22;
+}
+
+/* --- Section tag label (before headings) --- */
+.section-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-kalam), cursive;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 10px;
+    border: 1.5px dashed rgb(var(--primary) / 0.5);
+    border-radius: 3px 10px 3px 10px / 10px 3px 10px 3px;
+    color: rgb(var(--primary) / 0.7);
+    margin-bottom: 6px;
+}
+
+/* --- Doodle divider line --- */
+.doodle-divider {
+    width: 100%;
+    height: 6px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 6' preserveAspectRatio='none'%3E%3Cpath d='M0,3 C15,1 30,5 45,3 C60,1 75,5 90,3 C105,1 120,5 135,3 C150,1 165,5 180,3 C190,1 200,4 200,3' fill='none' stroke='currentColor' stroke-width='1.2' stroke-linecap='round' stroke-opacity='0.18'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    margin: 2rem 0;
+}
+
+/* --- Reduced motion overrides --- */
+@media (prefers-reduced-motion: reduce) {
+    .sticky-note,
+    .sticky-note:hover,
+    .skill-sticky,
+    .skill-sticky:hover,
+    .stat-sticker,
+    .stat-sticker:hover,
+    .glass-card-hover:hover,
+    .sketchy-card:hover,
+    .btn-sticker-apply,
+    .btn-sticker-apply:hover {
+        transform: none;
+        transition: none;
+    }
 }

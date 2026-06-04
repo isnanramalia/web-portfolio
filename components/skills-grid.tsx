@@ -14,8 +14,23 @@ interface SkillsGridProps {
   skills: Skill[];
 }
 
-function SkillCard({ skill }: { skill: Skill }) {
+// Six pastel sticky-note colors — cycles per skill card
+const SKILL_PASTEL_CLASSES = [
+  "sticky-note-yellow",
+  "sticky-note-green",
+  "sticky-note-blue",
+  "sticky-note-pink",
+  "sticky-note-lavender",
+  "sticky-note-peach",
+] as const;
+
+// Slight varied rotations to feel hand-pinned
+const SKILL_ROTATIONS = [-1.2, 0.8, -0.6, 1.4, -1.0, 0.5, -1.8, 0.9];
+
+function SkillCard({ skill, index }: { skill: Skill; index: number }) {
   const { ref, hasIntersected } = useIntersectionObserver(0.15);
+  const pastelClass = SKILL_PASTEL_CLASSES[index % SKILL_PASTEL_CLASSES.length];
+  const baseRotation = SKILL_ROTATIONS[index % SKILL_ROTATIONS.length];
 
   return (
     <motion.div
@@ -24,23 +39,28 @@ function SkillCard({ skill }: { skill: Skill }) {
       variants={staggerItem}
       initial="hidden"
       animate={hasIntersected ? "visible" : "hidden"}
+      style={{ paddingTop: "10px" }} // room for tape decoration
     >
       <motion.div
-        className="flex flex-col items-center p-6 glass-card glass-card-hover rounded-3xl"
-        whileHover={{ scale: 1.06 }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
+        className={`skill-sticky ${pastelClass}`}
+        initial={{ rotate: baseRotation }}
+        animate={{ rotate: baseRotation }}
+        whileHover={{ rotate: 0, scale: 1.08, y: -6 }}
+        transition={{ duration: 0.22, ease: [0.34, 1.5, 0.64, 1] }}
       >
-        <div className="w-16 h-16 mb-4 flex items-center justify-center">
+        {/* Icon */}
+        <div className="w-11 h-11 mb-3 flex items-center justify-center mx-auto">
           <Image
             src={skill.logo}
             alt={skill.name}
-            width={40}
-            height={40}
-            className="w-10 h-10 object-contain"
+            width={36}
+            height={36}
+            className="w-9 h-9 object-contain"
           />
         </div>
 
-        <span className="text-sm font-medium text-center text-foreground">
+        {/* Name */}
+        <span className="text-[11px] font-bold text-center leading-tight font-handwritten block">
           {skill.name}
         </span>
       </motion.div>
@@ -52,14 +72,14 @@ export function SkillsGrid({ skills }: SkillsGridProps) {
   return (
     <div className="mb-16">
       <motion.div
-        className="flex flex-wrap justify-center gap-6 w-fit mx-auto"
+        className="flex flex-wrap justify-center gap-5 w-fit mx-auto"
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
       >
-        {skills.map((skill) => (
-          <SkillCard key={skill.name} skill={skill} />
+        {skills.map((skill, index) => (
+          <SkillCard key={skill.name} skill={skill} index={index} />
         ))}
       </motion.div>
     </div>

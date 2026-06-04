@@ -149,7 +149,7 @@ export function Navigation({
                   {item.label}
                   {activeSection === item.id && (
                     <motion.div
-                      className="absolute inset-x-0 -bottom-1 h-0.5 bg-primary rounded-full"
+                      className="absolute inset-0 -z-10 nav-marker-pill"
                       layoutId="activeSection"
                       initial={false}
                       transition={{
@@ -169,6 +169,9 @@ export function Navigation({
                 <motion.button
                   onClick={onOpenCommand}
                   className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border text-xs text-muted-foreground hover:text-foreground hover:border-foreground/30 hover:bg-muted/40 transition-colors duration-150"
+                  style={{
+                    borderRadius: "10px 3px 10px 3px / 3px 10px 3px 10px",
+                  }}
                   variants={{
                     hidden: { opacity: 0, scale: 0.9 },
                     visible: { opacity: 1, scale: 1 },
@@ -287,6 +290,9 @@ export function Navigation({
             >
               <motion.div
                 className="bg-background/95 backdrop-blur-lg border border-border rounded-2xl shadow-2xl p-4 w-56"
+                style={{
+                  borderRadius: "22px 6px 20px 6px / 6px 20px 6px 22px",
+                }}
                 initial={{ y: -10 }}
                 animate={{ y: 0 }}
               >
@@ -300,6 +306,9 @@ export function Navigation({
                           ? "text-primary bg-primary/10"
                           : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                       }`}
+                      style={{
+                        borderRadius: "16px 4px 16px 4px / 4px 16px 4px 16px",
+                      }}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05, duration: 0.2 }}

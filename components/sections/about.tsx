@@ -60,7 +60,7 @@ export function AboutSection({
       <div className="max-w-4xl mx-auto">
         <div className="mb-12">
           <motion.h2
-            className="text-2xl font-medium mb-6 flex items-center text-foreground"
+            className="text-2xl font-medium mb-6 flex items-center text-foreground doodle-section-heading"
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
@@ -99,7 +99,7 @@ export function AboutSection({
 
         <div className="mb-12">
           <motion.h2
-            className="text-2xl font-medium mb-6 flex items-center text-foreground"
+            className="text-2xl font-medium mb-6 flex items-center text-foreground doodle-section-heading"
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
@@ -115,7 +115,7 @@ export function AboutSection({
           <div>
             <div className="flex items-end justify-between mb-6">
               <motion.h2
-                className="text-2xl font-medium text-foreground"
+                className="text-2xl font-medium text-foreground doodle-section-heading"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.4 }}
@@ -128,7 +128,7 @@ export function AboutSection({
                 href="https://www.linkedin.com/in/isnanramalia/details/certifications/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors shrink-0 group"
+                className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors shrink-0 group marker-link"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.1 }}
@@ -194,7 +194,7 @@ export function AboutSection({
                           href={cert.credentialUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 mt-2 transition-colors"
+                          className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 mt-2 transition-colors marker-link"
                         >
                           View Certificate
                           <ExternalLink className="w-3 h-3" />

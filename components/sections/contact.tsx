@@ -30,7 +30,7 @@ export function ContactSection() {
     >
       <div className="max-w-4xl mx-auto">
         <motion.div
-          className="relative glass-strong rounded-3xl p-8 lg:p-12 overflow-hidden"
+          className="relative glass-strong rounded-3xl p-8 lg:p-12 overflow-hidden sketchy-border"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -50,8 +50,12 @@ export function ContactSection() {
               whileInView="visible"
               viewport={{ once: true }}
             >
+              <motion.div variants={fadeInUp} className="mb-2">
+                <span className="section-eyebrow">📨 Let&apos;s Connect</span>
+              </motion.div>
+
               <motion.h2
-                className="text-2xl sm:text-3xl font-bold mb-5 text-foreground"
+                className="text-2xl sm:text-3xl font-bold mb-5 text-foreground doodle-section-heading"
                 variants={fadeInUp}
               >
                 Let's Work Together
@@ -78,7 +82,7 @@ export function ContactSection() {
               >
                 <Button
                   asChild
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl px-6 smooth-hover"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl px-6 smooth-hover btn-sticker-apply btn-sticker-primary-apply"
                 >
                   <a
                     href="mailto:isnanuramalia13@gmail.com?subject=Hello from your portfolio!&body=Hi Isna, I would like to discuss..."
@@ -93,7 +97,7 @@ export function ContactSection() {
                 <Button
                   asChild
                   variant="outline"
-                  className="border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary rounded-2xl px-6 bg-transparent smooth-hover transition-colors duration-200"
+                  className="border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary rounded-2xl px-6 bg-transparent smooth-hover transition-colors duration-200 btn-sticker-apply"
                 >
                   <a
                     href="https://wa.me/+6283109191936?text=Hi%20Isna,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20discuss..."
@@ -108,7 +112,7 @@ export function ContactSection() {
                 <Button
                   asChild
                   variant="outline"
-                  className="border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary rounded-2xl px-6 bg-transparent smooth-hover transition-colors duration-200"
+                  className="border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary rounded-2xl px-6 bg-transparent smooth-hover transition-colors duration-200 btn-sticker-apply"
                 >
                   <a
                     href="https://linkedin.com/in/isnanramalia"
@@ -129,7 +133,7 @@ export function ContactSection() {
                   Prefer a quick chat?{" "}
                   <a
                     href="https://linkedin.com/in/isnanramalia"
-                    className="text-primary hover:underline underline-offset-2"
+                    className="text-primary hover:underline underline-offset-2 marker-link"
                     target="_blank"
                     rel="noopener noreferrer"
                   >

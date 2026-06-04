@@ -22,6 +22,7 @@ const config: Config = {
           "ui-monospace",
           "monospace",
         ],
+        handwritten: ["var(--font-kalam)", "Kalam", "cursive"],
       },
       colors: {
         background: "rgb(var(--background))",

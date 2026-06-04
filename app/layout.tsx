@@ -1,6 +1,6 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Quicksand, JetBrains_Mono } from "next/font/google";
+import { Quicksand, JetBrains_Mono, Kalam } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
@@ -8,6 +8,13 @@ const quicksand = Quicksand({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-quicksand",
+});
+
+const kalam = Kalam({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-kalam",
+  display: "swap",
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -119,7 +126,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${quicksand.variable} ${jetbrainsMono.variable} font-sans`}
+        className={`${quicksand.variable} ${jetbrainsMono.variable} ${kalam.variable} font-sans`}
       >
         <script
           type="application/ld+json"

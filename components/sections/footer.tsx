@@ -55,6 +55,7 @@ export function FooterSection() {
   return (
     <footer className="px-4 sm:px-6 lg:px-12 pt-16 pb-8 bg-gradient-to-t from-muted/30 to-transparent">
       <div className="max-w-6xl mx-auto">
+        <div className="doodle-divider" aria-hidden="true" />
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12"
           initial={{ opacity: 0, y: 20 }}
@@ -72,7 +73,7 @@ export function FooterSection() {
             <div className="flex items-center space-x-3 mb-4">
               <IsnaLogo size="md" />
               <div>
-                <h3 className="text-xl font-bold text-foreground">
+                <h3 className="text-xl font-bold text-foreground font-handwritten">
                   Isna Nur Amalia
                 </h3>
                 <p className="text-primary font-medium text-sm">
@@ -113,7 +114,7 @@ export function FooterSection() {
               visible: { opacity: 1, y: 0 },
             }}
           >
-            <h4 className="text-lg font-semibold text-foreground mb-4">
+            <h4 className="text-lg font-semibold text-foreground mb-4 font-handwritten">
               Quick Links
             </h4>
             <ul className="space-y-3">
@@ -121,7 +122,7 @@ export function FooterSection() {
                 <li key={index}>
                   <a
                     href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors duration-200 text-sm"
+                    className="text-muted-foreground hover:text-primary transition-colors duration-200 text-sm marker-link"
                   >
                     {link.label}
                   </a>
@@ -136,7 +137,7 @@ export function FooterSection() {
               visible: { opacity: 1, y: 0 },
             }}
           >
-            <h4 className="text-lg font-semibold text-foreground mb-4">
+            <h4 className="text-lg font-semibold text-foreground mb-4 font-handwritten">
               Focus Areas
             </h4>
             <ul className="space-y-3">
@@ -163,6 +164,9 @@ export function FooterSection() {
             <div className="text-center md:text-left">
               <p className="text-sm text-muted-foreground">
                 © {currentYear} Isna Nur Amalia. All rights reserved.
+              </p>
+              <p className="text-xs text-muted-foreground/50 mt-0.5 font-handwritten">
+                Made with ☕ + 🐛 curiosity
               </p>
             </div>
 

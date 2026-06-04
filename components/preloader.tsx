@@ -66,11 +66,50 @@ export function Preloader({ onComplete }: PreloaderProps) {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
-          <div className="mb-2 flex select-none items-baseline gap-2.5">
+          {/* Doodle decorations in loading screen */}
+          <svg
+            className="absolute top-8 right-12 opacity-[0.08] text-foreground pointer-events-none"
+            width="60"
+            height="60"
+            viewBox="0 0 80 80"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <circle cx="32" cy="32" r="19" strokeWidth="3.5" />
+            <line
+              x1="46"
+              y1="46"
+              x2="70"
+              y2="70"
+              strokeWidth="5"
+              strokeLinecap="round"
+            />
+          </svg>
+          <svg
+            className="absolute bottom-10 left-10 opacity-[0.07] text-foreground pointer-events-none"
+            width="48"
+            height="48"
+            viewBox="0 0 60 60"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <circle cx="30" cy="30" r="25" strokeWidth="2.5" />
+            <polyline points="17,30 25,40 44,20" strokeWidth="3.8" />
+          </svg>
+
+          <div className="mb-2 flex select-none items-baseline gap-3">
             {WORDS.map((word, i) => (
               <motion.span
                 key={i}
-                className="text-4xl font-bold tracking-wide text-foreground"
+                className="text-4xl font-bold tracking-wide text-foreground font-handwritten"
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -85,7 +124,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
           </div>
 
           <motion.p
-            className="mb-10 text-sm tracking-wide text-muted-foreground"
+            className="mb-10 text-sm tracking-wide text-muted-foreground font-handwritten"
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.34, duration: 0.28, ease: "easeOut" }}
@@ -94,20 +133,20 @@ export function Preloader({ onComplete }: PreloaderProps) {
           </motion.p>
 
           <motion.div
-            className="flex w-56 flex-col items-center gap-2"
+            className="flex w-64 flex-col items-center gap-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.28, duration: 0.24 }}
           >
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+            <div className="pencil-track h-2 w-full overflow-hidden">
               <motion.div
-                className="h-full rounded-full bg-primary"
+                className="pencil-fill h-full"
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.12, ease: "easeOut" }}
               />
             </div>
 
-            <p className="text-xs tabular-nums text-muted-foreground">
+            <p className="text-xs tabular-nums text-muted-foreground font-handwritten">
               {Math.round(progress)}%
             </p>
           </motion.div>

@@ -124,7 +124,7 @@ function ArticleCard({
           </span>
         </div>
 
-        <h3 className="text-base font-semibold leading-snug text-card-foreground group-hover:text-primary transition-colors duration-200 line-clamp-2">
+        <h3 className="text-base font-semibold leading-snug text-card-foreground group-hover:text-primary transition-colors duration-200 line-clamp-2 font-handwritten">
           {article.title}
         </h3>
 
@@ -244,7 +244,7 @@ export function MediumSection() {
         <div className="flex items-end justify-between mb-8">
           <div>
             <motion.h2
-              className="text-2xl font-medium text-foreground"
+              className="text-2xl font-medium text-foreground doodle-section-heading"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4 }}
@@ -267,7 +267,7 @@ export function MediumSection() {
             href="https://medium.com/@isnanramalia"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors shrink-0 group"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors shrink-0 group marker-link"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.1 }}

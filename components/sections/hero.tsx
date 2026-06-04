@@ -18,6 +18,117 @@ import { fadeInUp, staggerContainer, staggerItem } from "@/lib/animations";
 import { socialMedia } from "@/lib/data";
 import { FloatingElement } from "@/components/effects/parallax";
 
+// ── QA Doodle SVG components ──────────────────────────────────────────────
+const DoodleMagnifier = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 80 80"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <circle cx="32" cy="32" r="19" strokeWidth="3.5" />
+    <line
+      x1="46"
+      y1="46"
+      x2="70"
+      y2="70"
+      strokeWidth="5"
+      strokeLinecap="round"
+    />
+    <line
+      x1="26"
+      y1="32"
+      x2="38"
+      y2="32"
+      strokeWidth="1.8"
+      strokeOpacity="0.45"
+    />
+    <line
+      x1="32"
+      y1="26"
+      x2="32"
+      y2="38"
+      strokeWidth="1.8"
+      strokeOpacity="0.45"
+    />
+  </svg>
+);
+
+const DoodleCheck = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 60 60"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <circle cx="30" cy="30" r="25" strokeWidth="2.5" />
+    <polyline points="17,30 25,40 44,20" strokeWidth="3.8" />
+  </svg>
+);
+
+const DoodleBug = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 80 80"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <ellipse cx="40" cy="46" rx="13" ry="16" strokeWidth="2.5" />
+    <ellipse cx="40" cy="30" rx="9" ry="10" strokeWidth="2.5" />
+    <line x1="27" y1="40" x2="13" y2="33" strokeWidth="2" />
+    <line x1="27" y1="47" x2="11" y2="47" strokeWidth="2" />
+    <line x1="27" y1="54" x2="13" y2="61" strokeWidth="2" />
+    <line x1="53" y1="40" x2="67" y2="33" strokeWidth="2" />
+    <line x1="53" y1="47" x2="69" y2="47" strokeWidth="2" />
+    <line x1="53" y1="54" x2="67" y2="61" strokeWidth="2" />
+    <circle cx="35" cy="27" r="1.5" fill="currentColor" strokeWidth="0" />
+    <circle cx="45" cy="27" r="1.5" fill="currentColor" strokeWidth="0" />
+  </svg>
+);
+
+const DoodleSmallCheck = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <polyline points="3,12 9,19 21,6" strokeWidth="3" />
+  </svg>
+);
+
+const DoodleArrow = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 50 30"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <path d="M2,15 C10,8 25,22 42,10" strokeWidth="2" />
+    <polyline points="36,5 42,10 38,17" strokeWidth="2" />
+  </svg>
+);
+
 // ── Typewriter constants ───────────────────────────────────────────────────
 const LINE1 = "I Build It.";
 const LINE2 = "Then I Break It.";
@@ -86,7 +197,14 @@ function TypewriterLine({
   );
 }
 
-// ── CountUpStat ────────────────────────────────────────────────────────────
+// Pastel color per stat sticker
+const STAT_STICKY_CLASSES = [
+  "sticky-note-yellow",
+  "sticky-note-green",
+  "sticky-note-blue",
+] as const;
+
+// ── CountUpStat ─────────────────────────────────────────────────────
 function CountUpStat({
   value,
   label,
@@ -135,19 +253,20 @@ function CountUpStat({
     };
   }, [isNum, target, index, start]);
 
+  const stickyClass = STAT_STICKY_CLASSES[index % STAT_STICKY_CLASSES.length];
+
   return (
     <motion.div
-      className="px-4 py-2.5 glass-card glass-card-hover rounded-2xl text-center min-w-[96px]"
+      className={`stat-sticker ${stickyClass}`}
+      style={{ paddingTop: "14px" }}
       initial={{ opacity: 0, y: 14 }}
       animate={start ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
       transition={{ delay: 0.85 + index * 0.12, duration: 0.4 }}
     >
-      <div className="text-xl font-bold text-foreground tabular-nums">
+      <div className="text-xl font-bold tabular-nums font-handwritten">
         {isNum ? `${count}${suffix}` : value}
       </div>
-      <div className="text-xs text-muted-foreground mt-0.5 leading-tight">
-        {label}
-      </div>
+      <div className="text-[10px] mt-0.5 leading-tight opacity-65">{label}</div>
     </motion.div>
   );
 }
@@ -230,6 +349,67 @@ export function HeroSection({
         />
       </FloatingElement>
 
+      {/* ── QA Doodle Decorations (desktop only) ─────────────────────────── */}
+      {/* Magnifying glass — bottom-right */}
+      <motion.div
+        className="absolute right-6 bottom-16 hidden lg:block text-primary/20 pointer-events-none select-none"
+        animate={{ rotate: [0, 7, -4, 0], y: [0, -10, 5, 0] }}
+        transition={{
+          duration: 9,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 0.5,
+        }}
+      >
+        <DoodleMagnifier className="w-24 h-24" />
+      </motion.div>
+
+      {/* Checkmark circle — top-right */}
+      <motion.div
+        className="absolute right-16 top-10 hidden lg:block text-green-500/25 pointer-events-none select-none"
+        animate={{ rotate: [-6, 4, -6], scale: [1, 1.06, 1] }}
+        transition={{
+          duration: 7,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 1,
+        }}
+      >
+        <DoodleCheck className="w-16 h-16" />
+      </motion.div>
+
+      {/* Bug — bottom-left */}
+      <motion.div
+        className="absolute left-4 bottom-20 hidden xl:block text-primary/15 pointer-events-none select-none"
+        animate={{ y: [0, -7, 0], rotate: [0, -4, 3, 0] }}
+        transition={{
+          duration: 11,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2.5,
+        }}
+      >
+        <DoodleBug className="w-20 h-20" />
+      </motion.div>
+
+      {/* Scattered small checks */}
+      <motion.div
+        className="absolute right-4 top-1/2 hidden lg:block text-green-600/20 pointer-events-none select-none"
+        animate={{ opacity: [0.25, 0.65, 0.25] }}
+        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <DoodleSmallCheck className="w-7 h-7" />
+      </motion.div>
+
+      {/* Doodle arrow near scroll hint */}
+      <motion.div
+        className="absolute left-6 bottom-8 hidden lg:block text-primary/15 pointer-events-none select-none"
+        animate={{ x: [0, 4, 0], opacity: [0.4, 0.7, 0.4] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <DoodleArrow className="w-12 h-8" />
+      </motion.div>
+
       <div className="max-w-4xl mx-auto relative z-10 w-full">
         <motion.div
           className="lg:hidden mb-10 text-center"
@@ -271,12 +451,15 @@ export function HeroSection({
         >
           {/* Open-to-work badge */}
           <motion.div
-            className="inline-flex items-center gap-2 px-4 py-1.5 bg-green-500/10 border border-green-500/20 rounded-full mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 bg-green-500/10 border border-green-500/30 mb-8 font-handwritten"
+            style={{
+              borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px",
+            }}
             variants={staggerItem}
           >
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shrink-0" />
             <span className="text-sm font-medium text-green-600 dark:text-green-400">
-              Seeking QA Roles
+              ✓ Seeking QA Roles
             </span>
           </motion.div>
 
@@ -315,7 +498,7 @@ export function HeroSection({
 
           {/* Stats — count-up animation */}
           <motion.div
-            className="flex flex-wrap gap-3 justify-center lg:justify-start mb-8"
+            className="flex flex-wrap gap-4 justify-center lg:justify-start mb-8 pt-3"
             variants={staggerItem}
           >
             {STATS.map((stat, i) => (
@@ -336,7 +519,7 @@ export function HeroSection({
           >
             <Button
               asChild
-              className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl shadow-md group"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl shadow-md group btn-sticker-apply btn-sticker-primary-apply"
             >
               <a
                 href="/Isna Nur Amalia - CV.pdf"
@@ -349,7 +532,7 @@ export function HeroSection({
             </Button>
             <Button
               variant="outline"
-              className="border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary rounded-2xl bg-transparent group"
+              className="border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary rounded-2xl bg-transparent group btn-sticker-apply"
               onClick={() => scrollToSection("contact")}
             >
               <Send className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-200" />
