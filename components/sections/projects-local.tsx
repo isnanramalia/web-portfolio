@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Github, ExternalLink } from "lucide-react";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
+import { Github, ExternalLink, Bug, CheckCircle } from "lucide-react";
 import Image from "next/image";
 import { ProjectDialog } from "@/components/project-dialog";
 import type { Project, ProjectCategory } from "@/lib/data";
@@ -55,6 +55,21 @@ function getCaseNumber(projects: Project[], project: Project): string {
   return `#${String(idx + 1).padStart(3, "0")}`;
 }
 
+// QA metric badges — shown only on QA-category cards
+const QA_CARD_METRICS: Record<
+  string,
+  { testCases: string; bugsFound: string } | undefined
+> = {
+  "Manual Testing – Saucedemo (Swag Labs)": {
+    testCases: "30+",
+    bugsFound: "9",
+  },
+  "UAT Testing – STI Alumni Website": {
+    testCases: "UAT",
+    bugsFound: "75 users",
+  },
+};
+
 // ── Filter categories ──────────────────────────────────────────────────────
 
 interface FilterCategory {
@@ -81,6 +96,8 @@ export function ProjectsSectionLocal({ projects }: ProjectsSectionLocalProps) {
   );
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [projectDialogOpen, setProjectDialogOpen] = useState(false);
+  // Spotlight: track which card is hovered
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const filteredProjects =
     activeFilter === "all"
@@ -105,8 +122,17 @@ export function ProjectsSectionLocal({ projects }: ProjectsSectionLocalProps) {
         <div className="max-w-4xl mx-auto">
           {/* Section heading */}
           <div className="mb-8">
+            <motion.span
+              className="section-eyebrow"
+              initial={{ opacity: 0, y: -8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              viewport={{ once: true }}
+            >
+              🗂️ Proof of Work
+            </motion.span>
             <motion.h2
-              className="text-2xl font-medium text-foreground doodle-section-heading"
+              className="text-2xl font-medium mt-2 text-foreground doodle-section-heading"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4 }}
@@ -144,12 +170,15 @@ export function ProjectsSectionLocal({ projects }: ProjectsSectionLocalProps) {
                 <button
                   key={cat.id}
                   onClick={() => setActiveFilter(cat.id)}
-                  className={`relative px-4 py-1.5 text-sm transition-all duration-200 font-handwritten ${
+                  className={`relative px-4 py-1.5 text-sm font-handwritten overflow-hidden ${
                     isActive
-                      ? "bg-primary text-primary-foreground shadow-sm"
-                      : "bg-transparent text-muted-foreground hover:text-foreground"
+                      ? "text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                   style={{
+                    /* The button shape always matches the active style when
+                       active, and the dashed style when inactive.
+                       CSS transition handles the border-radius morph. */
                     borderRadius: isActive
                       ? "255px 15px 225px 15px / 15px 225px 15px 255px"
                       : "18px 4px 18px 4px / 4px 18px 4px 18px",
@@ -157,23 +186,28 @@ export function ProjectsSectionLocal({ projects }: ProjectsSectionLocalProps) {
                       ? "2px solid transparent"
                       : "2px dashed currentColor",
                     opacity: isActive ? 1 : 0.7,
+                    transition:
+                      "border-radius 0.25s ease, border-color 0.2s ease, opacity 0.2s ease",
                   }}
                 >
-                  {isActive && (
-                    <motion.span
-                      layoutId="filter-pill"
-                      className="absolute inset-0 bg-primary -z-10"
-                      style={{
-                        borderRadius:
-                          "255px 15px 225px 15px / 15px 225px 15px 255px",
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 30,
-                      }}
-                    />
-                  )}
+                  {/* Background — per-tab AnimatePresence so shape never
+                      morphs through a circular intermediate value */}
+                  <AnimatePresence>
+                    {isActive && (
+                      <motion.span
+                        key="bg"
+                        className="absolute inset-0 bg-primary -z-10"
+                        style={{
+                          borderRadius:
+                            "255px 15px 225px 15px / 15px 225px 15px 255px",
+                        }}
+                        initial={{ opacity: 0, scale: 0.82 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.82 }}
+                        transition={{ duration: 0.22, ease: "easeOut" }}
+                      />
+                    )}
+                  </AnimatePresence>
                   {cat.label}
                   <span
                     className={`ml-1.5 text-xs font-mono ${
@@ -189,10 +223,11 @@ export function ProjectsSectionLocal({ projects }: ProjectsSectionLocalProps) {
             })}
           </motion.div>
 
-          {/* Cards grid — sticky notes with top padding for tape */}
+          {/* Cards grid — spotlight container */}
           <div
             className="grid grid-cols-1 lg:grid-cols-3 gap-6"
             style={{ paddingTop: "16px" }}
+            onMouseLeave={() => setHoveredIndex(null)}
           >
             <AnimatePresence mode="popLayout">
               {filteredProjects.length > 0 ? (
@@ -203,6 +238,12 @@ export function ProjectsSectionLocal({ projects }: ProjectsSectionLocalProps) {
                   const stamp = getStamp(project.category);
                   const stampColor = getStampColor(project.category);
                   const caseNum = getCaseNumber(projects, project);
+                  const qaMetrics = QA_CARD_METRICS[project.title];
+
+                  // Spotlight: dim other cards when one is hovered
+                  const isHovered = hoveredIndex === index;
+                  const isOtherHovered =
+                    hoveredIndex !== null && hoveredIndex !== index;
 
                   return (
                     <motion.div
@@ -217,18 +258,32 @@ export function ProjectsSectionLocal({ projects }: ProjectsSectionLocalProps) {
                         scale: 0.95,
                         rotate: rotation,
                       }}
-                      animate={{ opacity: 1, y: 0, scale: 1, rotate: rotation }}
+                      animate={{
+                        opacity: isOtherHovered ? 0.5 : 1,
+                        y: 0,
+                        scale: isHovered ? 1.03 : isOtherHovered ? 0.97 : 1,
+                        rotate: isHovered ? 0 : rotation,
+                        filter: isOtherHovered
+                          ? "saturate(0.7)"
+                          : "saturate(1)",
+                        zIndex: isHovered ? 10 : 1,
+                        boxShadow: isHovered
+                          ? "6px 8px 0 rgba(0,0,0,0.18), 12px 16px 32px rgba(0,0,0,0.12)"
+                          : undefined,
+                      }}
                       exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                      whileHover={{
-                        rotate: 0,
-                        zIndex: 10,
-                        transition: { duration: 0.2 },
-                      }}
                       transition={{
-                        duration: 0.35,
-                        delay: index * 0.06,
-                        ease: [0.25, 0.46, 0.45, 0.94],
+                        opacity: { duration: 0.2 },
+                        scale: { duration: 0.2 },
+                        filter: { duration: 0.2 },
+                        // Entry animation: staggered
+                        y: {
+                          duration: 0.35,
+                          delay: index * 0.06,
+                          ease: [0.25, 0.46, 0.45, 0.94],
+                        },
                       }}
+                      onMouseEnter={() => setHoveredIndex(index)}
                       onClick={() => handleProjectClick(project)}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {
@@ -258,6 +313,26 @@ export function ProjectsSectionLocal({ projects }: ProjectsSectionLocalProps) {
                           {stamp}
                         </span>
                       </div>
+
+                      {/* QA metrics — shown only for QA projects */}
+                      {qaMetrics && (
+                        <div className="flex gap-1.5 mb-2">
+                          <span
+                            className="inline-flex items-center gap-1 text-[10px] font-mono font-bold px-1.5 py-0.5 bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-400 border border-green-300/50 dark:border-green-700/50"
+                            style={{ borderRadius: "2px 5px 2px 5px" }}
+                          >
+                            <CheckCircle className="w-2.5 h-2.5" />
+                            {qaMetrics.testCases} TCs
+                          </span>
+                          <span
+                            className="inline-flex items-center gap-1 text-[10px] font-mono font-bold px-1.5 py-0.5 bg-red-100 dark:bg-red-950/50 text-red-700 dark:text-red-400 border border-red-300/50 dark:border-red-700/50"
+                            style={{ borderRadius: "2px 5px 2px 5px" }}
+                          >
+                            <Bug className="w-2.5 h-2.5" />
+                            {qaMetrics.bugsFound}
+                          </span>
+                        </div>
+                      )}
 
                       {/* Title */}
                       <h3

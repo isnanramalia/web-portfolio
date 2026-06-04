@@ -3,7 +3,15 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Github, ExternalLink, X } from "lucide-react";
+import {
+  Github,
+  ExternalLink,
+  X,
+  Bug,
+  CheckCircle,
+  Users,
+  BarChart3,
+} from "lucide-react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
@@ -72,6 +80,87 @@ function getCategoryBorderDark(category?: string): string {
       return "#92400e";
   }
 }
+
+// ── QA Project Metadata ───────────────────────────────────────────────────
+// Per-project QA stats shown in the dialog for qa-category projects
+const QA_PROJECT_META: Record<
+  string,
+  {
+    stats: Array<{
+      value: string;
+      label: string;
+      icon: React.ComponentType<{ className?: string }>;
+    }>;
+    bugBreakdown?: {
+      critical: number;
+      high: number;
+      medium: number;
+      low: number;
+    };
+    process?: string[];
+  }
+> = {
+  "Manual Testing – Saucedemo (Swag Labs)": {
+    stats: [
+      { value: "30+", label: "Test Cases", icon: CheckCircle },
+      { value: "9", label: "Bugs Found", icon: Bug },
+      { value: "3", label: "User Types", icon: Users },
+      { value: "STLC", label: "Methodology", icon: BarChart3 },
+    ],
+    bugBreakdown: { critical: 2, high: 4, medium: 1, low: 2 },
+    process: [
+      "Test Plan",
+      "Test Scenarios",
+      "Test Cases",
+      "Execution",
+      "Bug Reports",
+      "Summary",
+    ],
+  },
+  "UAT Testing – STI Alumni Website": {
+    stats: [
+      { value: "75", label: "Respondents", icon: Users },
+      { value: "84%", label: "Satisfaction", icon: BarChart3 },
+      { value: "UAT", label: "Test Type", icon: CheckCircle },
+      { value: "5★", label: "Usability", icon: Bug },
+    ],
+    process: [
+      "Survey Design",
+      "User Recruitment",
+      "Testing Sessions",
+      "Data Collection",
+      "Analysis",
+      "Report",
+    ],
+  },
+};
+
+const BUG_SEV_COLORS = {
+  critical: {
+    bg: "#fef2f2",
+    text: "#b91c1c",
+    darkBg: "#3f0f0f",
+    darkText: "#fca5a5",
+  },
+  high: {
+    bg: "#fff7ed",
+    text: "#c2410c",
+    darkBg: "#3f1800",
+    darkText: "#fdba74",
+  },
+  medium: {
+    bg: "#fefce8",
+    text: "#a16207",
+    darkBg: "#3f2c00",
+    darkText: "#fcd34d",
+  },
+  low: {
+    bg: "#eff6ff",
+    text: "#1d4ed8",
+    darkBg: "#0f1f3f",
+    darkText: "#93c5fd",
+  },
+};
 
 // ── Animation variants ─────────────────────────────────────────────────────
 
@@ -337,6 +426,7 @@ export function ProjectDialog({
                     }}
                   >
                     <div
+                      className="relative overflow-hidden"
                       style={{
                         background: "white",
                         padding: "5px 5px 22px 5px",
@@ -349,10 +439,114 @@ export function ProjectDialog({
                         alt={project.title}
                         width={600}
                         height={300}
-                        className="w-full h-full object-cover block"
+                        className="w-full h-full object-cover block transition-transform duration-500 hover:scale-105"
                       />
                     </div>
                   </motion.div>
+
+                  {/* QA Project Stats — shown only for QA category */}
+                  {project.category === "qa" &&
+                    QA_PROJECT_META[project.title] &&
+                    (() => {
+                      const meta = QA_PROJECT_META[project.title]!;
+                      return (
+                        <motion.div
+                          variants={CONTENT_VARIANTS}
+                          initial="hidden"
+                          animate="visible"
+                          custom={0.14}
+                        >
+                          {/* Stats grid */}
+                          <div className="grid grid-cols-4 gap-2 mb-3">
+                            {meta.stats.map((stat) => (
+                              <div
+                                key={stat.label}
+                                className="text-center p-2 rounded-lg"
+                                style={{
+                                  background: isDark
+                                    ? "rgba(255,255,255,0.06)"
+                                    : "rgba(0,0,0,0.04)",
+                                  borderRadius:
+                                    "8px 3px 8px 3px / 3px 8px 3px 8px",
+                                }}
+                              >
+                                <stat.icon className="w-4 h-4 mx-auto mb-0.5 text-primary opacity-70" />
+                                <div
+                                  className="text-base font-bold"
+                                  style={{
+                                    fontFamily: "var(--font-kalam), cursive",
+                                  }}
+                                >
+                                  {stat.value}
+                                </div>
+                                <div className="text-[10px] text-muted-foreground">
+                                  {stat.label}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Bug breakdown — only for Saucedemo project */}
+                          {meta.bugBreakdown && (
+                            <div className="mb-3">
+                              <p
+                                className="text-xs font-bold mb-2"
+                                style={{
+                                  fontFamily: "var(--font-kalam), cursive",
+                                }}
+                              >
+                                Bug Severity Breakdown
+                              </p>
+                              <div className="flex gap-1.5 flex-wrap">
+                                {(
+                                  Object.entries(meta.bugBreakdown) as Array<
+                                    [keyof typeof BUG_SEV_COLORS, number]
+                                  >
+                                ).map(([sev, count]) => {
+                                  const col = BUG_SEV_COLORS[sev];
+                                  return (
+                                    <span
+                                      key={sev}
+                                      className="text-[11px] font-bold px-2 py-0.5 capitalize"
+                                      style={{
+                                        background: isDark
+                                          ? col.darkBg
+                                          : col.bg,
+                                        color: isDark ? col.darkText : col.text,
+                                        borderRadius: "4px 8px 4px 8px",
+                                      }}
+                                    >
+                                      {sev}: {count}
+                                    </span>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* QA Process breadcrumb */}
+                          {meta.process && (
+                            <div className="flex flex-wrap items-center gap-1">
+                              {meta.process.map((step, i) => (
+                                <span
+                                  key={step}
+                                  className="flex items-center gap-1"
+                                >
+                                  <span className="text-[10px] font-mono text-muted-foreground">
+                                    {step}
+                                  </span>
+                                  {i < meta.process!.length - 1 && (
+                                    <span className="text-[10px] text-muted-foreground/40">
+                                      →
+                                    </span>
+                                  )}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </motion.div>
+                      );
+                    })()}
 
                   {/* Description */}
                   <motion.div
@@ -365,7 +559,9 @@ export function ProjectDialog({
                       className="text-base font-semibold mb-2 text-foreground"
                       style={{ fontFamily: "var(--font-kalam), cursive" }}
                     >
-                      About This Project
+                      {project.category === "qa"
+                        ? "What I Tested"
+                        : "About This Project"}
                     </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       {project.longDescription || project.description}
@@ -384,11 +580,21 @@ export function ProjectDialog({
                         className="text-base font-semibold mb-2 text-foreground"
                         style={{ fontFamily: "var(--font-kalam), cursive" }}
                       >
-                        Key Features
+                        {project.category === "qa"
+                          ? "Test Coverage & Findings"
+                          : "Key Features"}
                       </h3>
-                      <ul className="list-disc list-inside space-y-1.5 text-sm text-muted-foreground">
+                      <ul className="space-y-1.5">
                         {project.features.map((feature, index) => (
-                          <li key={index}>{feature}</li>
+                          <li
+                            key={index}
+                            className="flex gap-2 text-sm text-muted-foreground"
+                          >
+                            <span className="text-primary shrink-0 mt-0.5">
+                              {project.category === "qa" ? "✓" : "•"}
+                            </span>
+                            {feature}
+                          </li>
                         ))}
                       </ul>
                     </motion.div>
@@ -405,7 +611,9 @@ export function ProjectDialog({
                       className="text-base font-semibold mb-2 text-foreground"
                       style={{ fontFamily: "var(--font-kalam), cursive" }}
                     >
-                      Technologies Used
+                      {project.category === "qa"
+                        ? "Tools & Methods"
+                        : "Technologies Used"}
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {project.techStack.map((tech) => (

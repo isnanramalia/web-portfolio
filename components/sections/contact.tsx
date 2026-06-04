@@ -51,7 +51,7 @@ export function ContactSection() {
               viewport={{ once: true }}
             >
               <motion.h2
-                className="text-2xl sm:text-3xl font-bold mb-5 text-foreground doodle-section-heading"
+                className="text-2xl sm:text-3xl font-bold mb-5 mt-2 text-foreground doodle-section-heading"
                 variants={fadeInUp}
               >
                 Let's Work Together

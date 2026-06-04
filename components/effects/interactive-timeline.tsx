@@ -176,7 +176,10 @@ export function InteractiveTimeline({
                   <>
                     {/* Company Header for Multiple Roles */}
                     <motion.div
-                      className="p-4 bg-card rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow"
+                      className="p-4 bg-card border border-border shadow-sm hover:shadow-md transition-shadow"
+                      style={{
+                        borderRadius: "18px 4px 16px 4px / 4px 16px 4px 18px",
+                      }}
                       initial={{ opacity: 0, x: -20 }}
                       animate={
                         isVisible
@@ -275,7 +278,11 @@ export function InteractiveTimeline({
                                   handleJobExpand(roleKey);
                                 }
                               }}
-                              className="flex-1 p-3 bg-card rounded-xl border border-border cursor-pointer hover:border-primary/50 transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                              className="flex-1 p-3 bg-card border border-border cursor-pointer hover:border-primary/50 transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                              style={{
+                                borderRadius:
+                                  "14px 3px 12px 3px / 3px 12px 3px 14px",
+                              }}
                               initial={{ opacity: 0, x: -15 }}
                               animate={
                                 isVisible
@@ -357,7 +364,11 @@ export function InteractiveTimeline({
                               handleJobExpand(roleKey);
                             }
                           }}
-                          className="p-4 bg-card rounded-2xl border border-border cursor-pointer hover:border-primary/50 transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          className="p-4 bg-card border border-border cursor-pointer hover:border-primary/50 transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          style={{
+                            borderRadius:
+                              "18px 4px 16px 4px / 4px 16px 4px 18px",
+                          }}
                           initial={{ opacity: 0, x: -20 }}
                           animate={
                             isVisible

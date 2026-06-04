@@ -243,8 +243,17 @@ export function MediumSection() {
       <div className="max-w-4xl mx-auto">
         <div className="flex items-end justify-between mb-8">
           <div>
+            <motion.span
+              className="section-eyebrow"
+              initial={{ opacity: 0, y: -8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              viewport={{ once: true }}
+            >
+              ✍️ Documenting the Journey
+            </motion.span>
             <motion.h2
-              className="text-2xl font-medium text-foreground doodle-section-heading"
+              className="text-2xl font-medium mt-2 text-foreground doodle-section-heading"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4 }}

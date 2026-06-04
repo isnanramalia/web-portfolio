@@ -78,18 +78,8 @@ export function Navigation({
     },
   };
 
-  const logoVariants = {
-    initial: { scale: 1, rotateY: 0 },
-    hover: {
-      scale: 1.05,
-      rotateY: 15,
-      transition: {
-        type: "spring" as const,
-        stiffness: 300,
-        damping: 20,
-      },
-    },
-  };
+  // IsnaLogo handles its own hover animation internally (char swap + scale)
+  // so we only need a plain clickable wrapper here.
 
   return (
     <>
@@ -105,14 +95,9 @@ export function Navigation({
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <motion.div
-              variants={logoVariants}
-              whileHover="hover"
-              className="relative cursor-pointer"
-              onClick={scrollToHero}
-            >
+            <div className="relative cursor-pointer" onClick={scrollToHero}>
               <IsnaLogo />
-            </motion.div>
+            </div>
 
             <motion.div
               className="hidden md:flex items-center space-x-8"

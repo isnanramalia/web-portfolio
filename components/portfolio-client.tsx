@@ -16,6 +16,8 @@ import { ProjectsSectionLocal } from "@/components/sections/projects-local";
 import { ContactSection } from "@/components/sections/contact";
 import { FooterSection } from "@/components/sections/footer";
 import { MediumSection } from "@/components/sections/medium";
+import { JourneySection } from "@/components/sections/journey";
+import { QAPlaygroundSection } from "@/components/sections/qa-playground";
 import type { Certificate, Project, WorkExperience } from "@/lib/data";
 
 const FloatingParticles = dynamic(
@@ -311,9 +313,13 @@ export function PortfolioClient({
                 certificates={certificates}
               />
 
+              <JourneySection />
+
               <SkillsSection skillsData={skillsData} />
 
               <ProjectsSectionLocal projects={projects} />
+
+              <QAPlaygroundSection />
 
               <MediumSection />
 

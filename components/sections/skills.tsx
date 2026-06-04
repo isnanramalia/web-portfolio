@@ -23,8 +23,17 @@ export function SkillsSection({ skillsData }: SkillsSectionProps) {
       viewport={{ once: true }}
     >
       <div className="max-w-4xl mx-auto">
+        <motion.span
+          className="section-eyebrow"
+          initial={{ opacity: 0, y: -8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35 }}
+          viewport={{ once: true }}
+        >
+          🧠 How I Think
+        </motion.span>
         <motion.h2
-          className="text-2xl font-medium mb-10 text-foreground doodle-section-heading"
+          className="text-2xl font-medium mb-10 mt-2 text-foreground doodle-section-heading"
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4 }}

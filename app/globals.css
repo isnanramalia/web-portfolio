@@ -1064,9 +1064,12 @@ pre {
 }
 
 /* --- Section tag label (before headings) --- */
+/* display:block + width:fit-content ensures the eyebrow always sits on its
+   own line, even when the heading below uses display:inline-block.
+   align-items removed (only meaningful for flex/grid). */
 .section-eyebrow {
-    display: inline-flex;
-    align-items: center;
+    display: block;
+    width: fit-content;
     font-family: var(--font-kalam), cursive;
     font-size: 0.72rem;
     font-weight: 700;
@@ -1076,7 +1079,7 @@ pre {
     border: 1.5px dashed rgb(var(--primary) / 0.5);
     border-radius: 3px 10px 3px 10px / 10px 3px 10px 3px;
     color: rgb(var(--primary) / 0.7);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 /* --- Doodle divider line --- */
@@ -1103,5 +1106,115 @@ pre {
     .btn-sticker-apply:hover {
         transform: none;
         transition: none;
+    }
+}
+
+/* =====================================================================
+   INTERACTIVE EXPERIENCE — Journey, QA Playground, Spotlight
+   ===================================================================== */
+
+/* --- Journey timeline --- */
+
+/* Dark mode annotation notes use JS-provided inline styles,
+   but the line and markers need a dark-mode tweak */
+.dark .journey-line {
+    border-color: rgb(var(--border));
+}
+
+/* Make the year badge pill crisp in dark */
+.dark [class*="font-mono"][class*="bg-primary\/10"] {
+    background: rgb(var(--primary) / 0.15);
+    color: rgb(var(--primary));
+}
+
+/* --- Bug row (QA Playground) --- */
+
+/* Expand border on hover for visual affordance */
+.qa-bug-row:hover {
+    border-color: rgb(var(--border));
+}
+
+/* --- Spotlight effect: smooth CSS transition backup for
+   browsers without framer-motion hardware acceleration --- */
+.project-card-dim {
+    transition:
+        opacity 0.2s ease,
+        filter 0.2s ease,
+        transform 0.2s ease;
+}
+
+/* --- Section eyebrow dark mode --- */
+.dark .section-eyebrow {
+    border-color: rgb(var(--primary) / 0.4);
+    color: rgb(var(--primary) / 0.8);
+}
+
+/* --- Narrative doodle divider between main content groups --- */
+.narrative-connector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.5rem 0;
+    opacity: 0.35;
+    pointer-events: none;
+    user-select: none;
+}
+
+.narrative-connector::before,
+.narrative-connector::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    border-top: 1.5px dashed currentColor;
+    border-radius: 1px;
+}
+
+/* --- QA Playground stat-sticker enhancement --- */
+.stat-sticker {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.stat-sticker:hover {
+    transform: translateY(-3px) rotate(0.5deg);
+}
+
+/* --- Bug row accessible focus --- */
+.qa-bug-row button:focus-visible {
+    outline: 2px solid rgb(var(--primary));
+    outline-offset: 2px;
+    border-radius: 8px;
+}
+
+/* --- Testing desk tiles active ring --- */
+.sticky-note.sticky-note-blue {
+    box-shadow:
+        0 0 0 2px rgb(var(--primary) / 0.3),
+        3px 4px 0 rgba(0, 0, 0, 0.12),
+        7px 9px 18px rgba(0, 0, 0, 0.07);
+}
+
+/* --- Progress bars inside testing desk --- */
+.qa-progress-bar {
+    height: 8px;
+    border-radius: 2px 6px 2px 6px;
+    background: rgb(var(--muted));
+    overflow: hidden;
+}
+
+.qa-progress-fill {
+    height: 100%;
+    background: rgb(var(--primary));
+    border-radius: 2px 6px 2px 6px;
+    transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* --- Journey annotation note dark mode --- */
+/* Annotations use inline styles with JS light-mode colors.
+   Dark mode override via CSS to ensure readability. */
+@media (prefers-color-scheme: dark) {
+    .journey-annotation {
+        filter: brightness(0.6) saturate(0.8);
     }
 }

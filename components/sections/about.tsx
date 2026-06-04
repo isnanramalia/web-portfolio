@@ -58,7 +58,17 @@ export function AboutSection({
       viewport={{ once: true }}
     >
       <div className="max-w-4xl mx-auto">
-        <div className="mb-12">
+        {/* Section eyebrow */}
+        <motion.span
+          className="section-eyebrow"
+          initial={{ opacity: 0, y: -8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35 }}
+          viewport={{ once: true }}
+        >
+          👋 Meet Isna
+        </motion.span>
+        <div className="mb-12 mt-3">
           <motion.h2
             className="text-2xl font-medium mb-6 flex items-center text-foreground doodle-section-heading"
             initial={{ opacity: 0, x: -20 }}

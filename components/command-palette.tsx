@@ -123,7 +123,11 @@ export function CommandPalette({
         icon: Download,
         group: "action",
         action: () => {
-          window.open("/Isna Nur Amalia - CV.pdf", "_blank", "noopener,noreferrer");
+          window.open(
+            "/Isna Nur Amalia - CV.pdf",
+            "_blank",
+            "noopener,noreferrer",
+          );
           onClose();
         },
       },
@@ -205,7 +209,6 @@ export function CommandPalette({
 
   useEffect(() => {
     if (!open) return;
-
     const handler = (e: KeyboardEvent) => {
       switch (e.key) {
         case "ArrowDown":
@@ -226,7 +229,6 @@ export function CommandPalette({
           break;
       }
     };
-
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [open, flatItems, selectedIdx, onClose]);
@@ -235,7 +237,7 @@ export function CommandPalette({
     <AnimatePresence>
       {open && (
         <>
-          {/* Backdrop */}
+          {/* ── Backdrop ── */}
           <motion.div
             key="cmd-backdrop"
             className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm"
@@ -246,48 +248,67 @@ export function CommandPalette({
             onClick={onClose}
           />
 
-          {/* Palette */}
+          {/* ── Panel ── */}
           <div className="fixed inset-0 z-[101] flex items-start justify-center pt-[14vh] px-4 pointer-events-none">
             <motion.div
               key="cmd-panel"
-              className="w-full max-w-lg bg-background border border-border rounded-2xl shadow-2xl overflow-hidden pointer-events-auto"
+              className="w-full max-w-lg bg-background border-2 border-border pointer-events-auto overflow-hidden relative"
+              style={{
+                /* Organic doodle border-radius — same family as glass-card */
+                borderRadius: "22px 6px 20px 6px / 6px 20px 6px 22px",
+                boxShadow:
+                  "5px 5px 0 rgb(var(--foreground) / 0.05), 0 24px 60px rgba(0,0,0,0.22)",
+              }}
               initial={{ opacity: 0, scale: 0.96, y: -16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: -16 }}
               transition={{ type: "spring", stiffness: 420, damping: 32 }}
             >
-              {/* Search bar */}
-              <div className="flex items-center gap-3 px-4 h-14 border-b border-border">
+              {/* ── Tape decoration (like sticky note / project dialog) ── */}
+              <div
+                className="absolute top-0 left-1/2 -translate-x-1/2 w-14 h-4 z-10 pointer-events-none"
+                style={{
+                  background: "rgba(255,255,255,0.45)",
+                  borderRadius: "0 0 4px 4px",
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.07)",
+                }}
+                aria-hidden="true"
+              />
+
+              {/* ── Search bar ── */}
+              <div className="flex items-center gap-3 px-4 h-14 border-b border-border relative z-0">
                 <Search className="w-4 h-4 text-muted-foreground shrink-0" />
                 <input
                   ref={inputRef}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search commands…"
-                  className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none"
+                  className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground placeholder:font-handwritten outline-none font-handwritten"
                   style={{ outline: "none", border: "none", boxShadow: "none" }}
                   autoComplete="off"
                   spellCheck={false}
                 />
                 <button
                   onClick={onClose}
-                  className="p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+                  className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+                  style={{ borderRadius: "6px 14px 6px 14px" }}
                   aria-label="Close"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
-              {/* Results */}
+              {/* ── Results list ── */}
               <div
                 ref={listRef}
                 className="max-h-[340px] overflow-y-auto overscroll-contain py-2"
               >
                 {grouped.length === 0 ? (
                   <div className="py-12 text-center">
-                    <p className="text-sm text-muted-foreground">
-                      No results for{" "}
-                      <span className="text-foreground font-medium">
+                    <div className="text-3xl mb-3">🔍</div>
+                    <p className="text-sm text-muted-foreground font-handwritten">
+                      Nothing found for{" "}
+                      <span className="text-foreground font-bold">
                         &ldquo;{query}&rdquo;
                       </span>
                     </p>
@@ -295,8 +316,9 @@ export function CommandPalette({
                 ) : (
                   grouped.map((group) => (
                     <div key={group.id}>
-                      {/* Group label */}
-                      <p className="px-4 pt-3 pb-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/70 select-none">
+                      {/* Group label — handwritten label style */}
+                      <p className="px-4 pt-3 pb-1.5 text-[11px] font-handwritten font-bold text-primary/60 select-none flex items-center gap-1.5">
+                        <span className="opacity-60">✦</span>
                         {group.label}
                       </p>
 
@@ -311,27 +333,42 @@ export function CommandPalette({
                             onClick={item.action}
                             onMouseEnter={() => setSelectedIdx(flatIdx)}
                             className={cn(
-                              "w-full flex items-center gap-3 px-3 mx-1 py-2.5 rounded-xl text-left transition-colors duration-75",
+                              "flex items-center gap-3 px-3 py-2.5 text-left transition-colors duration-100",
                               "focus:outline-none",
-                              isSelected ? "bg-accent" : "hover:bg-accent/50",
+                              isSelected
+                                ? "bg-primary/8 dark:bg-primary/12"
+                                : "hover:bg-accent/50",
                             )}
-                            style={{ width: "calc(100% - 8px)" }}
+                            style={{
+                              /* Organic shape on the selected row */
+                              borderRadius: isSelected
+                                ? "12px 4px 12px 4px / 4px 12px 4px 12px"
+                                : "8px 3px 8px 3px / 3px 8px 3px 8px",
+                              /* mx-2 equivalent via left offset */
+                              marginLeft: "8px",
+                              marginRight: "8px",
+                              width: "calc(100% - 16px)",
+                            }}
                           >
-                            {/* Icon */}
+                            {/* Icon box — organic shape */}
                             <div
                               className={cn(
-                                "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-100",
+                                "w-8 h-8 flex items-center justify-center shrink-0 transition-colors duration-100",
                                 isSelected
                                   ? "bg-primary text-primary-foreground"
                                   : "bg-muted text-muted-foreground",
                               )}
+                              style={{
+                                borderRadius:
+                                  "8px 3px 8px 3px / 3px 8px 3px 8px",
+                              }}
                             >
                               <item.icon className="w-4 h-4" />
                             </div>
 
                             {/* Label + description */}
                             <div className="min-w-0 flex-1">
-                              <p className="text-sm font-medium text-foreground leading-tight">
+                              <p className="text-sm font-medium text-foreground leading-tight font-handwritten">
                                 {item.label}
                               </p>
                               <p className="text-xs text-muted-foreground truncate leading-tight mt-0.5">
@@ -339,7 +376,7 @@ export function CommandPalette({
                               </p>
                             </div>
 
-                            {/* Enter hint when selected */}
+                            {/* Enter hint */}
                             <AnimatePresence>
                               {isSelected && (
                                 <motion.kbd
@@ -347,7 +384,11 @@ export function CommandPalette({
                                   animate={{ opacity: 1, scale: 1 }}
                                   exit={{ opacity: 0, scale: 0.8 }}
                                   transition={{ duration: 0.1 }}
-                                  className="shrink-0 px-1.5 py-0.5 text-[10px] font-mono rounded border border-border text-muted-foreground bg-muted/60 select-none"
+                                  className="shrink-0 px-1.5 py-0.5 text-[10px] font-mono border border-border text-muted-foreground bg-muted/60 select-none"
+                                  style={{
+                                    borderRadius:
+                                      "3px 7px 3px 7px / 7px 3px 7px 3px",
+                                  }}
                                 >
                                   ↵
                                 </motion.kbd>
@@ -361,27 +402,31 @@ export function CommandPalette({
                 )}
               </div>
 
-              {/* Footer */}
+              {/* ── Footer ── */}
               <div className="px-4 py-2.5 border-t border-border flex items-center gap-4">
-                <span className="flex items-center gap-1.5 text-[10px] text-muted-foreground select-none">
-                  <kbd className="px-1.5 py-0.5 rounded border border-border bg-muted/60 font-mono text-[9px]">
-                    ↑↓
-                  </kbd>
-                  navigate
-                </span>
-                <span className="flex items-center gap-1.5 text-[10px] text-muted-foreground select-none">
-                  <kbd className="px-1.5 py-0.5 rounded border border-border bg-muted/60 font-mono text-[9px]">
-                    ↵
-                  </kbd>
-                  select
-                </span>
-                <span className="flex items-center gap-1.5 text-[10px] text-muted-foreground select-none">
-                  <kbd className="px-1.5 py-0.5 rounded border border-border bg-muted/60 font-mono text-[9px]">
-                    esc
-                  </kbd>
-                  close
-                </span>
-                <span className="ml-auto text-[10px] text-muted-foreground/50 select-none">
+                {(
+                  [
+                    { keys: "↑↓", label: "navigate" },
+                    { keys: "↵", label: "select" },
+                    { keys: "esc", label: "close" },
+                  ] as const
+                ).map(({ keys, label }) => (
+                  <span
+                    key={label}
+                    className="flex items-center gap-1.5 text-[10px] text-muted-foreground select-none font-handwritten"
+                  >
+                    <kbd
+                      className="px-1.5 py-0.5 border border-border bg-muted/60 font-mono text-[9px]"
+                      style={{
+                        borderRadius: "3px 6px 3px 6px / 6px 3px 6px 3px",
+                      }}
+                    >
+                      {keys}
+                    </kbd>
+                    {label}
+                  </span>
+                ))}
+                <span className="ml-auto text-[10px] text-muted-foreground/50 select-none font-handwritten">
                   ⌘K
                 </span>
               </div>
