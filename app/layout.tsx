@@ -85,7 +85,7 @@ const jsonLd = {
   "@type": "Person",
   name: "Isna Nur Amalia",
   url: BASE_URL,
-  image: `${BASE_URL}/foto.png`,
+  image: `${BASE_URL}/foto.jpg`,
   sameAs: [
     "https://github.com/isnanramalia",
     "https://linkedin.com/in/isnanramalia",

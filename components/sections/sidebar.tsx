@@ -87,14 +87,11 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
                   <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/5 to-transparent rounded-2xl" />
 
                   <Image
-                    src="/foto.png"
+                    src="/foto.jpg"
                     alt="Isna Nur Amalia"
                     fill
                     className="rounded-xl object-cover"
                   />
-                  <p className="absolute bottom-2 left-0 right-0 text-center text-xs font-handwritten opacity-50 select-none">
-                    Isna ✓
-                  </p>
                 </motion.div>
                 <motion.div
                   className="absolute -top-2 -right-2"
@@ -179,15 +176,6 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
                 </svg>
               </motion.div>
             </div>
-          </motion.div>
-
-          <motion.div
-            className="mb-3"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.15 }}
-          >
-            <span className="section-eyebrow">✓ Open to Work</span>
           </motion.div>
 
           <motion.h1

@@ -174,6 +174,16 @@ export function BugHunt() {
   const cardRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scoreRef = useRef(0);
   const keyRef = useRef(0);
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const el = document.documentElement;
+    const check = () => setIsDark(el.classList.contains("dark"));
+    check();
+    const obs = new MutationObserver(check);
+    obs.observe(el, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, []);
 
   const cancel = (
     r: React.MutableRefObject<ReturnType<typeof setTimeout> | null>,
@@ -297,59 +307,118 @@ export function BugHunt() {
 
             {/* Tooltip */}
             <motion.span
-              className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] font-semibold text-primary bg-background border border-border px-2 py-0.5 rounded-full shadow pointer-events-none"
+              className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] font-handwritten font-bold text-primary bg-background border-2 border-primary/30 px-2.5 py-0.5 shadow-sm pointer-events-none"
+              style={{
+                borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px",
+              }}
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
             >
-              catch me!
+              catch me! 🐞
             </motion.span>
           </motion.button>
         )}
       </AnimatePresence>
 
-      {/* ── Bug Report Card ───────────────────────────────────────────── */}
+      {/* ── Bug Report Card (doodle-style sticky note) ────────────── */}
       <AnimatePresence>
         {report && (
           <motion.div
             key={report.key}
             className="fixed bottom-8 z-[150] w-[320px] max-w-[calc(100vw-2rem)]"
             style={{ left: "50%", x: "-50%" }}
-            initial={{ opacity: 0, y: 40, scale: 0.88 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            initial={{ opacity: 0, y: 40, scale: 0.88, rotate: -1 }}
+            animate={{ opacity: 1, y: 0, scale: 1, rotate: -0.5 }}
             exit={{ opacity: 0, y: 28, scale: 0.94 }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
           >
-            <div className="bg-background border border-border rounded-2xl shadow-2xl overflow-hidden">
-              {/* ── Celebration banner ──────────────────────────────── */}
-              <div className="px-4 py-2.5 bg-primary/5 border-b border-border flex items-center gap-2.5">
+            {/* Sticky-note green card — colour-aware via state */}
+            <div
+              className="overflow-hidden relative"
+              style={{
+                background: isDark
+                  ? "linear-gradient(to bottom, #0e3119, #0a2314 80%)"
+                  : "linear-gradient(to bottom, #dcfce7, #f0fdf4 80%)",
+                border: `2px solid ${isDark ? "#166534" : "#86efac"}`,
+                borderRadius: "3px 3px 3px 3px",
+                boxShadow: isDark
+                  ? "3px 4px 0 rgba(0,0,0,0.3), 7px 9px 18px rgba(0,0,0,0.2)"
+                  : "3px 4px 0 rgba(0,0,0,0.11), 7px 9px 18px rgba(0,0,0,0.07)",
+                paddingTop: "14px",
+              }}
+            >
+              {/* Tape strip */}
+              <div
+                className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
+                style={{
+                  width: 52,
+                  height: 14,
+                  background: isDark
+                    ? "rgba(255,255,255,0.1)"
+                    : "rgba(255,255,255,0.55)",
+                  borderRadius: "0 0 3px 3px",
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.08)",
+                  transform: "translateX(-50%) rotate(-1.5deg)",
+                  zIndex: 2,
+                }}
+                aria-hidden="true"
+              />
+
+              {/* ── Celebration banner */}
+              <div
+                className="px-4 py-2.5 flex items-center gap-2.5"
+                style={{ borderBottom: "1px solid rgba(0,0,0,0.08)" }}
+              >
                 <span className="text-base" aria-hidden>
                   🎉
                 </span>
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold text-foreground leading-tight">
+                  <p
+                    className={`text-sm font-bold leading-tight ${isDark ? "text-green-200" : "text-green-900"}`}
+                    style={{ fontFamily: "var(--font-kalam), cursive" }}
+                  >
                     Bug caught!
                   </p>
-                  <p className="text-[10px] text-muted-foreground leading-tight mt-0.5 truncate">
+                  <p
+                    className={`text-[10px] leading-tight mt-0.5 truncate ${isDark ? "text-green-300/70" : "text-green-800/70"}`}
+                  >
                     {CATCH_MESSAGES[(report.score - 1) % CATCH_MESSAGES.length]}
                   </p>
                 </div>
               </div>
 
-              {/* ── Header ──────────────────────────────────────────── */}
-              <div className="flex items-center justify-between px-4 py-2.5 bg-muted/40 border-b border-border">
+              {/* ── Header: bug ID + status + close */}
+              <div
+                className="flex items-center justify-between px-4 py-2"
+                style={{ borderBottom: "1px solid rgba(0,0,0,0.07)" }}
+              >
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 flex items-center justify-center">
-                    <Bug className="w-4 h-4 text-primary" />
-                  </div>
-                  <span className="text-xs font-mono font-bold text-primary tracking-widest">
+                  <Bug
+                    className={`w-3.5 h-3.5 ${isDark ? "text-green-400" : "text-green-700"}`}
+                  />
+                  <span
+                    className={`text-xs font-mono font-bold tracking-widest ${isDark ? "text-green-300" : "text-green-800"}`}
+                  >
                     {report.id}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-green-700 bg-green-500/10 border border-green-500/25 px-2 py-0.5 rounded-full">
-                    <CheckCircle2 className="w-3 h-3" />
+                  {/* CLOSED stamp */}
+                  <span
+                    className={`inline-flex items-center gap-1 text-[9px] font-bold ${isDark ? "text-green-400" : "text-green-700"}`}
+                    style={{
+                      fontFamily: "var(--font-kalam), cursive",
+                      border: "2px solid #15803d",
+                      borderRadius: "2px",
+                      padding: "1px 5px",
+                      transform: "rotate(-6deg)",
+                      opacity: 0.7,
+                      letterSpacing: "0.1em",
+                    }}
+                  >
+                    <CheckCircle2 className="w-2.5 h-2.5" />
                     CLOSED
                   </span>
                   <button
@@ -357,7 +426,8 @@ export function BugHunt() {
                       cancel(cardRef);
                       setReport(null);
                     }}
-                    className="p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                    className={`p-1 transition-colors ${isDark ? "text-green-400/70 hover:text-green-200" : "text-green-700/60 hover:text-green-900"}`}
+                    style={{ borderRadius: "4px 10px 4px 10px" }}
                     aria-label="Dismiss"
                   >
                     <X className="w-3.5 h-3.5" />
@@ -365,24 +435,36 @@ export function BugHunt() {
                 </div>
               </div>
 
-              {/* ── Body ────────────────────────────────────────────── */}
+              {/* ── Body */}
               <div className="px-4 py-3 space-y-3">
-                <p className="text-sm font-semibold text-foreground leading-snug">
+                <p
+                  className={`text-sm font-bold leading-snug ${isDark ? "text-green-200" : "text-green-900"}`}
+                  style={{ fontFamily: "var(--font-kalam), cursive" }}
+                >
                   {report.title}
                 </p>
 
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                   {/* Severity */}
                   <div className="flex items-center gap-1.5">
-                    <AlertCircle className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
-                    <span className="text-xs text-muted-foreground">
+                    <AlertCircle
+                      className={`w-3.5 h-3.5 shrink-0 ${isDark ? "text-green-400/60" : "text-green-700/60"}`}
+                    />
+                    <span
+                      className={`text-xs ${isDark ? "text-green-300/60" : "text-green-800/60"}`}
+                    >
                       Severity
                     </span>
                   </div>
                   <div>
+                    {/* Dashed case-badge style */}
                     <span
-                      className={`inline-flex items-center px-2 py-0.5 rounded-full border text-[10px] font-bold
-                        ${report.sev.bg} ${report.sev.text} ${report.sev.border}`}
+                      className={`text-[10px] font-mono font-bold px-2 py-0.5 ${report.sev.text}`}
+                      style={{
+                        border: "1.5px dashed currentColor",
+                        borderRadius: "3px",
+                        opacity: 0.75,
+                      }}
                     >
                       {report.sev.label}
                     </span>
@@ -390,43 +472,71 @@ export function BugHunt() {
 
                   {/* Assignee */}
                   <div className="flex items-center gap-1.5">
-                    <User className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
-                    <span className="text-xs text-muted-foreground">
+                    <User
+                      className={`w-3.5 h-3.5 shrink-0 ${isDark ? "text-green-400/60" : "text-green-700/60"}`}
+                    />
+                    <span
+                      className={`text-xs ${isDark ? "text-green-300/60" : "text-green-800/60"}`}
+                    >
                       Assignee
                     </span>
                   </div>
-                  <span className="text-xs font-medium text-foreground">
-                    Isna Nur Amalia
+                  <span
+                    className={`text-xs font-bold ${isDark ? "text-green-200" : "text-green-900"}`}
+                    style={{ fontFamily: "var(--font-kalam), cursive" }}
+                  >
+                    Isna
                   </span>
 
                   {/* Reporter */}
                   <div className="flex items-center gap-1.5">
-                    <MousePointerClick className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
-                    <span className="text-xs text-muted-foreground">
+                    <MousePointerClick
+                      className={`w-3.5 h-3.5 shrink-0 ${isDark ? "text-green-400/60" : "text-green-700/60"}`}
+                    />
+                    <span
+                      className={`text-xs ${isDark ? "text-green-300/60" : "text-green-800/60"}`}
+                    >
                       Reporter
                     </span>
                   </div>
-                  <span className="text-xs font-medium text-foreground">
-                    You
+                  <span
+                    className={`text-xs font-bold ${isDark ? "text-green-200" : "text-green-900"}`}
+                    style={{ fontFamily: "var(--font-kalam), cursive" }}
+                  >
+                    You 😎
                   </span>
 
                   {/* Score */}
                   <div className="flex items-center gap-1.5">
-                    <Trophy className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
-                    <span className="text-xs text-muted-foreground">
+                    <Trophy
+                      className={`w-3.5 h-3.5 shrink-0 ${isDark ? "text-green-400/60" : "text-green-700/60"}`}
+                    />
+                    <span
+                      className={`text-xs ${isDark ? "text-green-300/60" : "text-green-800/60"}`}
+                    >
                       Caught
                     </span>
                   </div>
-                  <span className="text-xs font-bold text-primary">
-                    {report.score} {report.score === 1 ? "bug" : "bugs"}
+                  <span
+                    className={`text-xs font-bold ${isDark ? "text-green-400" : "text-green-700"}`}
+                    style={{ fontFamily: "var(--font-kalam), cursive" }}
+                  >
+                    {report.score} {report.score === 1 ? "bug" : "bugs"} 🏆
                   </span>
                 </div>
               </div>
 
-              {/* ── Progress bar (auto-dismiss countdown) ───────────── */}
-              <div className="h-0.5 bg-muted overflow-hidden">
+              {/* ── Pencil-style countdown bar */}
+              <div
+                className="h-1.5 overflow-hidden"
+                style={{
+                  background: "rgba(0,0,0,0.06)",
+                  borderRadius: "0 0 2px 2px",
+                }}
+              >
                 <motion.div
-                  className="h-full bg-primary"
+                  className="h-full bg-green-500"
+                  style={{ borderRadius: "0 0 2px 2px" }}
                   initial={{ width: "100%" }}
                   animate={{ width: "0%" }}
                   transition={{ duration: CARD_MS / 1000, ease: "linear" }}

@@ -50,10 +50,6 @@ export function ContactSection() {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <motion.div variants={fadeInUp} className="mb-2">
-                <span className="section-eyebrow">📨 Let&apos;s Connect</span>
-              </motion.div>
-
               <motion.h2
                 className="text-2xl sm:text-3xl font-bold mb-5 text-foreground doodle-section-heading"
                 variants={fadeInUp}

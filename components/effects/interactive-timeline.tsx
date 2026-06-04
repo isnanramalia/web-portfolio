@@ -1,12 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 
@@ -106,19 +101,6 @@ export function InteractiveTimeline({
   const timelineRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Scroll progress for animated gradient line
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start center", "end center"],
-  });
-
-  const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const lineOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.1, 0.9, 1],
-    [0.3, 1, 1, 0.3],
-  );
-
   // IntersectionObserver for performance optimization
   useEffect(() => {
     if (!timelineRef.current) return;
@@ -148,75 +130,8 @@ export function InteractiveTimeline({
     setExpandedJob((prev) => (prev === jobKey ? null : jobKey));
   }, []);
 
-  // Calculate approximate SVG height for path drawing
-  const svgHeight = Math.max(workExperience.length * 180, 600);
-
   return (
     <div ref={containerRef} className="relative">
-      {/* Animated SVG Path with Gradient - Fills as you scroll */}
-      <div className="absolute left-[5px] top-0 bottom-0 w-px pointer-events-none">
-        <svg
-          width="2"
-          height={svgHeight}
-          viewBox={`0 0 2 ${svgHeight}`}
-          className="absolute top-8 left-0"
-          style={{ overflow: "visible" }}
-          aria-hidden="true"
-        >
-          <defs>
-            <linearGradient
-              id="timeline-gradient"
-              x1="0%"
-              y1="0%"
-              x2="0%"
-              y2="100%"
-            >
-              <stop
-                offset="0%"
-                stopColor="currentColor"
-                stopOpacity="0"
-                className="text-muted-foreground"
-              />
-              <stop
-                offset="10%"
-                stopColor="currentColor"
-                stopOpacity="0.3"
-                className="text-muted-foreground"
-              />
-              <stop
-                offset="50%"
-                stopColor="currentColor"
-                stopOpacity="0.6"
-                className="text-primary"
-              />
-              <stop
-                offset="90%"
-                stopColor="currentColor"
-                stopOpacity="0.3"
-                className="text-muted-foreground"
-              />
-              <stop
-                offset="100%"
-                stopColor="currentColor"
-                stopOpacity="0"
-                className="text-muted-foreground"
-              />
-            </linearGradient>
-          </defs>
-          <motion.path
-            d={`M 1 0 L 1 ${svgHeight}`}
-            stroke="url(#timeline-gradient)"
-            strokeWidth="2"
-            fill="none"
-            style={{
-              pathLength,
-              opacity: lineOpacity,
-            }}
-            initial={{ pathLength: 0 }}
-          />
-        </svg>
-      </div>
-
       {/* Timeline Items */}
       <div ref={timelineRef} className="space-y-6">
         {workExperience.map((company, companyIdx) => {
@@ -225,6 +140,8 @@ export function InteractiveTimeline({
           );
           const isMultiRole = company.roles.length > 1;
           const isVisible = visibleItems.has(companyIdx);
+          const isFirst = companyIdx === 0;
+          const isLast = companyIdx === workExperience.length - 1;
 
           return (
             <div
@@ -232,6 +149,23 @@ export function InteractiveTimeline({
               data-timeline-index={companyIdx}
               className="relative flex items-start gap-5"
             >
+              {/* Bridge: item top → just under dot — joins the tail of the previous item.
+                  Omitted on the very first item (nothing above to connect to). */}
+              {!isFirst && (
+                <div
+                  className="absolute left-[5px] top-0 h-8 w-px bg-border/60"
+                  aria-hidden="true"
+                />
+              )}
+              {/* Tail: just below dot → past item bottom — bridges into the next item.
+                  Omitted on the last item so no line hangs below the final dot. */}
+              {!isLast && (
+                <div
+                  className="absolute left-[5px] top-10 -bottom-6 w-px bg-border/60"
+                  aria-hidden="true"
+                />
+              )}
+
               {/* Timeline Dot */}
               <div className="relative z-10 flex-shrink-0 mt-7">
                 <TimelineDot isActive={isCompanyActive} />
@@ -294,32 +228,34 @@ export function InteractiveTimeline({
 
                     {/* Nested Roles Timeline */}
                     <div className="relative mt-3 ml-5 space-y-3">
-                      {/* Connecting line for nested roles */}
-                      <motion.div
-                        className="absolute left-[4px] top-4 bottom-4 w-px pointer-events-none bg-muted-foreground/20"
-                        aria-hidden="true"
-                        initial={{ scaleY: 0 }}
-                        animate={isVisible ? { scaleY: 1 } : { scaleY: 0 }}
-                        transition={{
-                          duration: 0.6,
-                          ease: "easeOut",
-                          delay: 0.2,
-                        }}
-                        style={{ transformOrigin: "top" }}
-                      />
-
                       {company.roles.map((role, roleIdx) => {
                         const roleKey = `${companyIdx}-${roleIdx}`;
                         const isRoleActive = role.period
                           .toLowerCase()
                           .includes("present");
                         const isExpanded = expandedJob === roleKey;
+                        const isLastRole = roleIdx === company.roles.length - 1;
+                        const isFirstRole = roleIdx === 0;
 
                         return (
                           <div
                             key={roleIdx}
                             className="relative flex items-start gap-3"
                           >
+                            {/* Bridge: item top → dot — joins previous role's tail */}
+                            {!isFirstRole && (
+                              <div
+                                className="absolute left-[4px] top-0 h-[18px] w-px bg-muted-foreground/20"
+                                aria-hidden="true"
+                              />
+                            )}
+                            {/* Tail: below dot → next role — omitted on last role */}
+                            {!isLastRole && (
+                              <div
+                                className="absolute left-[4px] top-7 -bottom-3 w-px bg-muted-foreground/20"
+                                aria-hidden="true"
+                              />
+                            )}
                             {/* Role Timeline Dot */}
                             <div className="relative z-10 flex-shrink-0 mt-[18px]">
                               <TimelineDot
@@ -513,26 +449,6 @@ export function InteractiveTimeline({
           );
         })}
       </div>
-
-      {/* Scroll Progress Indicator - Desktop Only */}
-      <motion.div
-        className="fixed right-8 top-1/2 -translate-y-1/2 hidden lg:block z-50"
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.5, duration: 0.4 }}
-      >
-        <div className="relative w-1 h-32 bg-muted-foreground/20 rounded-full overflow-hidden backdrop-blur-sm">
-          <motion.div
-            className="absolute top-0 left-0 right-0 bg-gradient-to-b from-primary to-primary/70 rounded-full shadow-lg shadow-primary/20"
-            style={{
-              height: useTransform(scrollYProgress, [0, 1], ["0%", "100%"]),
-            }}
-          />
-        </div>
-        <p className="text-[10px] text-muted-foreground/60 text-center mt-2 font-medium">
-          SCROLL
-        </p>
-      </motion.div>
     </div>
   );
 }

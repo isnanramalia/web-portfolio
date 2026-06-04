@@ -16,11 +16,7 @@ import { ProjectsSectionLocal } from "@/components/sections/projects-local";
 import { ContactSection } from "@/components/sections/contact";
 import { FooterSection } from "@/components/sections/footer";
 import { MediumSection } from "@/components/sections/medium";
-import type {
-  Certificate,
-  Project,
-  WorkExperience,
-} from "@/lib/data";
+import type { Certificate, Project, WorkExperience } from "@/lib/data";
 
 const FloatingParticles = dynamic(
   () =>
@@ -78,6 +74,8 @@ interface PortfolioClientProps {
   skillsData: SkillItem[];
   projects: Project[];
   certificates: Certificate[];
+  /** If provided, the portfolio scrolls to this section after the preloader exits */
+  initialSection?: string;
 }
 
 type IdleWindow = Window & {
@@ -88,12 +86,21 @@ type IdleWindow = Window & {
   cancelIdleCallback?: (handle: number) => void;
 };
 
+const SECTION_PATHS: Record<string, string> = {
+  about: "/about",
+  skills: "/skills",
+  projects: "/projects",
+  writing: "/writing",
+  contact: "/contact",
+};
+
 export function PortfolioClient({
   education,
   workExperience,
   skillsData,
   projects,
   certificates,
+  initialSection,
 }: PortfolioClientProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [introComplete, setIntroComplete] = useState(false);
@@ -190,16 +197,62 @@ export function PortfolioClient({
     const element = document.getElementById(sectionId);
     if (element) {
       const navHeight = 80;
-      const elementPosition = element.offsetTop - navHeight;
-      window.scrollTo({ top: elementPosition, behavior: "smooth" });
+      // getBoundingClientRect is accurate even with CSS transforms
+      const pos =
+        element.getBoundingClientRect().top + window.scrollY - navHeight;
+      window.scrollTo({ top: Math.max(0, pos), behavior: "smooth" });
+
+      // pushState so browser back/forward works per section
+      const newPath = SECTION_PATHS[sectionId];
+      if (newPath && window.location.pathname !== newPath) {
+        window.history.pushState({ section: sectionId }, "", newPath);
+      }
     }
     setMobileMenuOpen(false);
   }, []);
 
   const scrollToHero = useCallback(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    if (window.location.pathname !== "/") {
+      window.history.pushState(null, "", "/");
+    }
     setMobileMenuOpen(false);
   }, []);
+
+  // Handle browser back/forward navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      const MAP: Record<string, string> = {
+        "/": "about",
+        "/about": "about",
+        "/skills": "skills",
+        "/projects": "projects",
+        "/writing": "writing",
+        "/contact": "contact",
+      };
+      const target = MAP[window.location.pathname] ?? "about";
+      const el = document.getElementById(target);
+      if (el) {
+        const pos = el.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top: Math.max(0, pos), behavior: "smooth" });
+      }
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  // Scroll to initialSection once the preloader exits
+  useEffect(() => {
+    if (!introComplete || !initialSection) return;
+    const timer = setTimeout(() => {
+      const el = document.getElementById(initialSection);
+      if (el) {
+        const pos = el.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top: Math.max(0, pos), behavior: "smooth" });
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [introComplete, initialSection]);
 
   const navigationItems = [
     { id: "about", label: "About", icon: User },

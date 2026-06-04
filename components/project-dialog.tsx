@@ -2,7 +2,6 @@
 
 import { useEffect, useLayoutEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Github, ExternalLink, X } from "lucide-react";
 import Image from "next/image";
@@ -27,6 +26,54 @@ interface ProjectDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
+
+// ── Category color helpers ─────────────────────────────────────────────────
+
+function getCategoryBg(category?: string): string {
+  switch (category) {
+    case "qa":
+      return "linear-gradient(to bottom, #dcfce7, #f8fff9 60%)";
+    case "mobile":
+      return "linear-gradient(to bottom, #dbeafe, #f8fbff 60%)";
+    default:
+      return "linear-gradient(to bottom, #fef9c3, #fefff8 60%)";
+  }
+}
+
+function getCategoryBgDark(category?: string): string {
+  switch (category) {
+    case "qa":
+      return "#0e3119";
+    case "mobile":
+      return "#102440";
+    default:
+      return "#3d3610";
+  }
+}
+
+function getCategoryBorder(category?: string): string {
+  switch (category) {
+    case "qa":
+      return "#bbf7d0";
+    case "mobile":
+      return "#bfdbfe";
+    default:
+      return "#fde68a";
+  }
+}
+
+function getCategoryBorderDark(category?: string): string {
+  switch (category) {
+    case "qa":
+      return "#166534";
+    case "mobile":
+      return "#1e3a5f";
+    default:
+      return "#92400e";
+  }
+}
+
+// ── Animation variants ─────────────────────────────────────────────────────
 
 const CONTENT_VARIANTS = {
   hidden: { opacity: 0, y: 10 },
@@ -62,7 +109,7 @@ function ActionButtons({
   fullWidth?: boolean;
 }) {
   const cls = cn(
-    "rounded-2xl",
+    "btn-sticker-apply",
     fullWidth ? "flex-1 justify-center" : "smooth-hover",
   );
 
@@ -72,7 +119,7 @@ function ActionButtons({
         <Button
           asChild
           className={cn(
-            "bg-primary hover:bg-primary/90 text-primary-foreground",
+            "btn-sticker-primary-apply bg-primary hover:bg-primary/90 text-primary-foreground",
             cls,
           )}
         >
@@ -91,7 +138,7 @@ function ActionButtons({
         <Button
           asChild
           className={cn(
-            "bg-primary hover:bg-primary/90 text-primary-foreground",
+            "btn-sticker-primary-apply bg-primary hover:bg-primary/90 text-primary-foreground",
             cls,
           )}
         >
@@ -111,7 +158,7 @@ function ActionButtons({
           variant="outline"
           asChild
           className={cn(
-            "border-border text-foreground hover:bg-accent bg-transparent",
+            "btn-sticker-apply border-border text-foreground hover:bg-accent bg-transparent",
             cls,
           )}
         >
@@ -136,10 +183,23 @@ export function ProjectDialog({
   onOpenChange,
 }: ProjectDialogProps) {
   const [mounted, setMounted] = useState(false);
+  const [isDark, setIsDark] = useState(false);
   const isMobile = useIsMobile();
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains("dark"));
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -185,12 +245,23 @@ export function ProjectDialog({
             <motion.div
               key="dialog"
               className={cn(
-                "relative bg-background shadow-2xl border border-border pointer-events-auto flex flex-col overflow-hidden",
-                isMobile
-                  ? "w-full rounded-t-3xl border-b-0"
-                  : "rounded-2xl max-w-4xl w-full",
+                "relative shadow-2xl pointer-events-auto flex flex-col overflow-hidden",
+                isMobile ? "w-full rounded-t-3xl" : "max-w-4xl w-full",
               )}
-              style={{ maxHeight: "90dvh" }}
+              style={{
+                maxHeight: "90dvh",
+                background: isDark
+                  ? getCategoryBgDark(project.category)
+                  : getCategoryBg(project.category),
+                border: `2px solid ${
+                  isDark
+                    ? getCategoryBorderDark(project.category)
+                    : getCategoryBorder(project.category)
+                }`,
+                ...(isMobile
+                  ? {}
+                  : { borderRadius: "22px 6px 22px 6px / 6px 22px 6px 22px" }),
+              }}
               initial={
                 isMobile ? { y: "100%" } : { opacity: 0, scale: 0.95, y: 16 }
               }
@@ -204,6 +275,19 @@ export function ProjectDialog({
                   : { duration: 0.22, ease: [0.25, 0.46, 0.45, 0.94] }
               }
             >
+              {/* Tape decoration — desktop only */}
+              {!isMobile && (
+                <div
+                  className="absolute top-0 left-1/2 -translate-x-1/2 w-14 h-4 z-10 pointer-events-none"
+                  style={{
+                    background: "rgba(255,255,255,0.55)",
+                    borderRadius: "0 0 3px 3px",
+                    boxShadow: "0 2px 4px rgba(0,0,0,0.08)",
+                  }}
+                  aria-hidden="true"
+                />
+              )}
+
               {/* Mobile drag handle */}
               {isMobile && (
                 <div className="flex justify-center pt-3 pb-1 shrink-0">
@@ -212,10 +296,11 @@ export function ProjectDialog({
               )}
 
               {/* ── Header ── */}
-              <div className="px-6 pt-4 pb-4 border-b border-border shrink-0">
+              <div className="px-6 pt-4 pb-4 border-b border-black/10 dark:border-white/10 shrink-0">
                 <div className="flex items-start justify-between gap-4">
                   <motion.h2
                     className="text-xl font-bold text-foreground leading-snug"
+                    style={{ fontFamily: "var(--font-kalam), cursive" }}
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.08, duration: 0.2, ease: "easeOut" }}
@@ -224,7 +309,8 @@ export function ProjectDialog({
                   </motion.h2>
 
                   <motion.button
-                    className="p-2 rounded-2xl hover:bg-accent transition-colors shrink-0 -mr-1"
+                    className="p-2 hover:bg-black/10 dark:hover:bg-white/10 transition-colors shrink-0 -mr-1"
+                    style={{ borderRadius: "6px 14px 6px 14px" }}
                     aria-label="Close dialog"
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -239,12 +325,9 @@ export function ProjectDialog({
               {/* ── Scrollable content ── */}
               <div className="overflow-y-auto flex-1 px-6 pb-4 overscroll-contain">
                 <div className="space-y-5 pt-4">
-                  {/* Image */}
+                  {/* Image — polaroid style */}
                   <motion.div
-                    className={cn(
-                      "overflow-hidden rounded-2xl w-full",
-                      isMobile ? "h-44" : "h-64",
-                    )}
+                    className={cn("w-full", isMobile ? "h-44" : "h-64")}
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{
@@ -253,13 +336,22 @@ export function ProjectDialog({
                       ease: [0.25, 0.46, 0.45, 0.94],
                     }}
                   >
-                    <Image
-                      src={project.image || "/placeholder.svg"}
-                      alt={project.title}
-                      width={600}
-                      height={300}
-                      className="w-full h-full object-cover"
-                    />
+                    <div
+                      style={{
+                        background: "white",
+                        padding: "5px 5px 22px 5px",
+                        boxShadow: "1px 2px 5px rgba(0,0,0,0.14)",
+                        height: "100%",
+                      }}
+                    >
+                      <Image
+                        src={project.image || "/placeholder.svg"}
+                        alt={project.title}
+                        width={600}
+                        height={300}
+                        className="w-full h-full object-cover block"
+                      />
+                    </div>
                   </motion.div>
 
                   {/* Description */}
@@ -269,7 +361,10 @@ export function ProjectDialog({
                     animate="visible"
                     custom={0.18}
                   >
-                    <h3 className="text-base font-semibold mb-2 text-foreground">
+                    <h3
+                      className="text-base font-semibold mb-2 text-foreground"
+                      style={{ fontFamily: "var(--font-kalam), cursive" }}
+                    >
                       About This Project
                     </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">
@@ -285,7 +380,10 @@ export function ProjectDialog({
                       animate="visible"
                       custom={0.24}
                     >
-                      <h3 className="text-base font-semibold mb-2 text-foreground">
+                      <h3
+                        className="text-base font-semibold mb-2 text-foreground"
+                        style={{ fontFamily: "var(--font-kalam), cursive" }}
+                      >
                         Key Features
                       </h3>
                       <ul className="list-disc list-inside space-y-1.5 text-sm text-muted-foreground">
@@ -303,18 +401,25 @@ export function ProjectDialog({
                     animate="visible"
                     custom={featuresDelay}
                   >
-                    <h3 className="text-base font-semibold mb-2 text-foreground">
+                    <h3
+                      className="text-base font-semibold mb-2 text-foreground"
+                      style={{ fontFamily: "var(--font-kalam), cursive" }}
+                    >
                       Technologies Used
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {project.techStack.map((tech) => (
-                        <Badge
+                        <span
                           key={tech}
-                          variant="secondary"
-                          className="bg-accent text-accent-foreground border-border rounded-xl text-xs"
+                          className="text-xs px-2 py-0.5 font-mono font-semibold"
+                          style={{
+                            background: "rgba(0,0,0,0.07)",
+                            borderRadius: "2px 6px 2px 6px / 6px 2px 6px 2px",
+                            border: "1px dashed rgba(0,0,0,0.2)",
+                          }}
                         >
                           {tech}
-                        </Badge>
+                        </span>
                       ))}
                     </div>
                   </motion.div>
@@ -336,7 +441,7 @@ export function ProjectDialog({
 
               {isMobile && hasLinks && (
                 <motion.div
-                  className="shrink-0 px-6 py-4 border-t border-border bg-background"
+                  className="shrink-0 px-6 py-4 border-t border-black/10 dark:border-white/10 bg-transparent"
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.22, duration: 0.2, ease: "easeOut" }}

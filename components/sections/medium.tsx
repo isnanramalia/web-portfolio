@@ -267,7 +267,7 @@ export function MediumSection() {
             href="https://medium.com/@isnanramalia"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors shrink-0 group marker-link"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground hover:font-semibold transition-all shrink-0 group"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.1 }}

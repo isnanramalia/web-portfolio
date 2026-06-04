@@ -128,7 +128,7 @@ export function AboutSection({
                 href="https://www.linkedin.com/in/isnanramalia/details/certifications/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors shrink-0 group marker-link"
+                className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground hover:font-semibold transition-all shrink-0 group"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.1 }}
@@ -194,10 +194,10 @@ export function AboutSection({
                           href={cert.credentialUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 mt-2 transition-colors marker-link"
+                          className="inline-flex items-center gap-1 text-xs text-primary hover:font-semibold mt-2 transition-all group"
                         >
                           View Certificate
-                          <ExternalLink className="w-3 h-3" />
+                          <ExternalLink className="w-3 h-3 flex-shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                         </a>
                       )}
                     </div>

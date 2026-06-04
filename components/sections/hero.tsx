@@ -418,7 +418,7 @@ export function HeroSection({
           <div className="flex items-center justify-center gap-3 mb-5">
             <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-border shrink-0">
               <Image
-                src="/foto.png"
+                src="/foto.jpg"
                 alt="Isna Nur Amalia"
                 fill
                 className="object-cover"
