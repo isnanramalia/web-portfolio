@@ -177,9 +177,6 @@ export function InteractiveTimeline({
                     {/* Company Header for Multiple Roles */}
                     <motion.div
                       className="p-4 bg-card border border-border shadow-sm hover:shadow-md transition-shadow"
-                      style={{
-                        borderRadius: "18px 4px 16px 4px / 4px 16px 4px 18px",
-                      }}
                       initial={{ opacity: 0, x: -20 }}
                       animate={
                         isVisible
@@ -191,6 +188,7 @@ export function InteractiveTimeline({
                         delay: companyIdx * 0.08,
                       }}
                       style={{
+                        borderRadius: "18px 4px 16px 4px / 4px 16px 4px 18px",
                         willChange: "transform, opacity",
                         transform: "translate3d(0, 0, 0)",
                       }}
@@ -279,10 +277,6 @@ export function InteractiveTimeline({
                                 }
                               }}
                               className="flex-1 p-3 bg-card border border-border cursor-pointer hover:border-primary/50 transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                              style={{
-                                borderRadius:
-                                  "14px 3px 12px 3px / 3px 12px 3px 14px",
-                              }}
                               initial={{ opacity: 0, x: -15 }}
                               animate={
                                 isVisible
@@ -294,6 +288,8 @@ export function InteractiveTimeline({
                                 delay: companyIdx * 0.08 + roleIdx * 0.05,
                               }}
                               style={{
+                                borderRadius:
+                                  "14px 3px 12px 3px / 3px 12px 3px 14px",
                                 willChange: "transform, opacity",
                                 transform: "translate3d(0, 0, 0)",
                               }}
@@ -368,6 +364,8 @@ export function InteractiveTimeline({
                           style={{
                             borderRadius:
                               "18px 4px 16px 4px / 4px 16px 4px 18px",
+                            willChange: "transform, opacity",
+                            transform: "translate3d(0, 0, 0)",
                           }}
                           initial={{ opacity: 0, x: -20 }}
                           animate={
@@ -378,10 +376,6 @@ export function InteractiveTimeline({
                           transition={{
                             duration: 0.4,
                             delay: companyIdx * 0.08,
-                          }}
-                          style={{
-                            willChange: "transform, opacity",
-                            transform: "translate3d(0, 0, 0)",
                           }}
                           whileHover={{ scale: 1.01 }}
                           whileTap={{ scale: 0.99 }}

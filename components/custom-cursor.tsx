@@ -156,7 +156,7 @@ export function CustomCursor() {
       {/* Dot — snappy, follows cursor tightly */}
       <motion.div
         aria-hidden
-        className="fixed top-0 left-0 pointer-events-none z-[10003]"
+        className="fixed top-0 left-0 pointer-events-none z-[100100]"
         style={{
           x: dotX,
           y: dotY,
@@ -184,7 +184,7 @@ export function CustomCursor() {
       {/* Ring — lags slightly behind for elegant trail */}
       <motion.div
         aria-hidden
-        className="fixed top-0 left-0 pointer-events-none z-[10002]"
+        className="fixed top-0 left-0 pointer-events-none z-[100090]"
         style={{
           x: ringX,
           y: ringY,
@@ -193,6 +193,7 @@ export function CustomCursor() {
           willChange: "transform",
         }}
       >
+
         <motion.div
           className="relative rounded-full border border-primary"
           animate={{

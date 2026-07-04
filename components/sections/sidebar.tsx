@@ -7,6 +7,8 @@ import { Download, Send, Github, Linkedin, Instagram } from "lucide-react";
 import Image from "next/image";
 import { socialMedia } from "@/lib/data";
 import { useMagneticEffect } from "@/hooks/use-advanced-animations";
+import { PhysicsNode } from "@/components/physics-node";
+
 
 interface SidebarProps {
   scrollToSection: (sectionId: string) => void;
@@ -55,127 +57,142 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
           className="text-center"
         >
           <motion.div className="mb-6 flex justify-center">
-            <div style={{ transform: "rotate(-1.5deg)" }} className="relative">
-              <motion.div
-                ref={magneticRef.ref as any}
+            {/* Profile photo — physics-enabled: will fall on crash */}
+            <PhysicsNode
+              dropDelay={0}
+              returnDelay={0}
+              restitution={0.38}
+              friction={0.06}
+              density={0.004}
+              initialImpulse={1.2}
+            >
+              <div
+                id="sidebar-photo-card"
+                style={{ transform: "rotate(-1.5deg)" }}
                 className="relative"
-                style={{ x: magneticRef.x, y: magneticRef.y }}
-                whileHover={{ scale: 1.08, rotateY: 5 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
                 <motion.div
-                  className="w-32 h-40 bg-gradient-to-br from-background/80 via-card/90 to-muted/80 backdrop-blur-lg border border-border/50 rounded-2xl flex items-center justify-center p-1 shadow-lg relative overflow-hidden"
-                  style={{
-                    backdropFilter: "blur(16px) saturate(120%)",
-                    background: `
-                    linear-gradient(135deg,
-                      rgb(var(--background) / 0.8),
-                      rgb(var(--card) / 0.9),
-                      rgb(var(--muted) / 0.8)
-                    )
-                  `,
-                  }}
-                  whileHover={{
-                    scale: 1.02,
-                    backdropFilter: "blur(20px) saturate(130%)",
-                  }}
-                  transition={{
-                    duration: 0.3,
-                    ease: "easeOut",
-                  }}
+                  ref={magneticRef.ref as any}
+                  className="relative"
+                  style={{ x: magneticRef.x, y: magneticRef.y }}
+                  whileHover={{ scale: 1.08, rotateY: 5 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/5 to-transparent rounded-2xl" />
+                  <motion.div
+                    className="w-32 h-40 bg-gradient-to-br from-background/80 via-card/90 to-muted/80 backdrop-blur-lg border border-border/50 rounded-2xl flex items-center justify-center p-1 shadow-lg relative overflow-hidden"
+                    style={{
+                      backdropFilter: "blur(16px) saturate(120%)",
+                      background: `
+                      linear-gradient(135deg,
+                        rgb(var(--background) / 0.8),
+                        rgb(var(--card) / 0.9),
+                        rgb(var(--muted) / 0.8)
+                      )
+                    `,
+                    }}
+                    whileHover={{
+                      scale: 1.02,
+                      backdropFilter: "blur(20px) saturate(130%)",
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      ease: "easeOut",
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/5 to-transparent rounded-2xl" />
 
-                  <Image
-                    src="/foto.jpg"
-                    alt="Isna Nur Amalia"
-                    fill
-                    className="rounded-xl object-cover"
-                  />
+                    <Image
+                      src="/foto.jpg"
+                      alt="Isna Nur Amalia"
+                      fill
+                      className="rounded-xl object-cover"
+                    />
+                  </motion.div>
+                  <motion.div
+                    className="absolute -top-2 -right-2"
+                    style={{ display: "none" }}
+                  >
+                    <IsnaLogo size="sm" />
+                  </motion.div>
+
+                  <div className="absolute inset-0 bg-muted/20 rounded-2xl blur-lg -z-10 opacity-[0.12]" />
+
+                  {/* Doodle star decorations */}
+                  <svg
+                    className="sidebar-star-doodle"
+                    style={{
+                      top: "-8px",
+                      right: "-12px",
+                      width: "20px",
+                      height: "20px",
+                    }}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 2 L13.5 8 L20 8 L14.5 12 L16.5 18 L12 14.5 L7.5 18 L9.5 12 L4 8 L10.5 8 Z" />
+                  </svg>
+                  <svg
+                    className="sidebar-star-doodle"
+                    style={{
+                      bottom: "4px",
+                      left: "-14px",
+                      width: "14px",
+                      height: "14px",
+                      opacity: 0.18,
+                    }}
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    stroke="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="4" />
+                  </svg>
+                  <svg
+                    className="sidebar-star-doodle"
+                    style={{
+                      top: "20px",
+                      left: "-10px",
+                      width: "16px",
+                      height: "16px",
+                      opacity: 0.15,
+                    }}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 2 L13.5 8 L20 8 L14.5 12 L16.5 18 L12 14.5 L7.5 18 L9.5 12 L4 8 L10.5 8 Z" />
+                  </svg>
+                  <svg
+                    className="sidebar-star-doodle"
+                    style={{
+                      top: "-4px",
+                      left: "8px",
+                      width: "10px",
+                      height: "10px",
+                      opacity: 0.12,
+                    }}
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    stroke="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="5" />
+                  </svg>
                 </motion.div>
-                <motion.div
-                  className="absolute -top-2 -right-2"
-                  style={{ display: "none" }}
-                >
-                  <IsnaLogo size="sm" />
-                </motion.div>
+              </div>
+            </PhysicsNode>
 
-                <div className="absolute inset-0 bg-muted/20 rounded-2xl blur-lg -z-10 opacity-[0.12]" />
-
-                {/* Doodle star decorations */}
-                <svg
-                  className="sidebar-star-doodle"
-                  style={{
-                    top: "-8px",
-                    right: "-12px",
-                    width: "20px",
-                    height: "20px",
-                  }}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path d="M12 2 L13.5 8 L20 8 L14.5 12 L16.5 18 L12 14.5 L7.5 18 L9.5 12 L4 8 L10.5 8 Z" />
-                </svg>
-                <svg
-                  className="sidebar-star-doodle"
-                  style={{
-                    bottom: "4px",
-                    left: "-14px",
-                    width: "14px",
-                    height: "14px",
-                    opacity: 0.18,
-                  }}
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  stroke="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <circle cx="12" cy="12" r="4" />
-                </svg>
-                <svg
-                  className="sidebar-star-doodle"
-                  style={{
-                    top: "20px",
-                    left: "-10px",
-                    width: "16px",
-                    height: "16px",
-                    opacity: 0.15,
-                  }}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path d="M12 2 L13.5 8 L20 8 L14.5 12 L16.5 18 L12 14.5 L7.5 18 L9.5 12 L4 8 L10.5 8 Z" />
-                </svg>
-                <svg
-                  className="sidebar-star-doodle"
-                  style={{
-                    top: "-4px",
-                    left: "8px",
-                    width: "10px",
-                    height: "10px",
-                    opacity: 0.12,
-                  }}
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  stroke="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <circle cx="12" cy="12" r="5" />
-                </svg>
-              </motion.div>
-            </div>
           </motion.div>
 
           <motion.h1
@@ -193,11 +210,22 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <p className="text-sm font-medium text-foreground">
-              Frontend Developer
-              <span className="mx-1.5 text-muted-foreground/50">·</span>
-              <span className="text-primary">QA Practitioner</span>
-            </p>
+            <PhysicsNode
+              dropDelay={200}
+              returnDelay={200}
+              restitution={0.5}
+              friction={0.1}
+              initialImpulse={0.85}
+            >
+              <div id="sidebar-role-badge">
+                <p className="text-sm font-medium text-foreground">
+                  Frontend Developer
+                  <span className="mx-1.5 text-muted-foreground/50">·</span>
+                  <span className="text-primary">QA Practitioner</span>
+                </p>
+              </div>
+            </PhysicsNode>
+
             <p className="text-xs text-muted-foreground mt-1 font-handwritten">
               📍 Semarang, Indonesia
             </p>

@@ -20,6 +20,5 @@ export {
 // Interactive timeline visualization
 export {
   InteractiveTimeline,
-  type TimelineMilestone,
-  type TimelineItemProps,
 } from "./interactive-timeline";
+
