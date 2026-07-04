@@ -33,8 +33,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, Activity, CheckCircle2, RefreshCw } from "lucide-react";
+import { Zap, Activity, CheckCircle2, RefreshCw, AlertTriangle, X } from "lucide-react";
 import { useSandboxPhase, useTriggerHeal, useResetSandbox } from "@/lib/sandbox-store";
+
 import { RescueTerminal } from "@/components/rescue-terminal";
 import {
   disablePhysicsPointer,
@@ -109,8 +110,88 @@ function BlueprintBackground() {
 }
 
 // ---------------------------------------------------------------------------
+// Crash toast (Doodle style)
+// ---------------------------------------------------------------------------
+
+function CrashToast({ onDismiss }: { onDismiss: () => void }) {
+  useEffect(() => {
+    const t = setTimeout(onDismiss, 6000);
+    return () => clearTimeout(t);
+  }, [onDismiss]);
+
+  return (
+    <motion.div
+      id="crash-toast"
+      role="alert"
+      aria-live="assertive"
+      className="fixed top-24 left-1/2 z-[10010] w-[calc(100vw-2rem)] max-w-lg"
+      style={{ translateX: "-50%" }}
+      initial={{ y: -120, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: -120, opacity: 0 }}
+      transition={{ type: "spring", stiffness: 420, damping: 28 }}
+    >
+      {/* Doodle red tape sticker above the note */}
+      <div 
+        className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-red-500/20 dark:bg-red-500/10 border border-red-500/30 z-20 pointer-events-none"
+        style={{
+          borderRadius: "1px",
+          transform: "translateX(-50%) rotate(-2deg)",
+          boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+        }}
+      />
+
+      <div 
+        className="relative flex items-start gap-3 bg-red-50/95 dark:bg-red-950/95 px-5 py-4 border-2 border-red-500 text-foreground"
+        style={{
+          borderRadius: "16px 4px 18px 5px / 5px 18px 4px 16px",
+          boxShadow: "5px 5px 0 rgba(239, 68, 68, 0.4)",
+          backdropFilter: "blur(8px)",
+        }}
+      >
+        {/* icon */}
+        <div className="mt-0.5 shrink-0 rounded-lg bg-red-500/10 p-1.5 border border-red-500/20">
+          <AlertTriangle className="h-4 w-4 text-red-500 dark:text-red-400" />
+        </div>
+
+        {/* text */}
+        <div className="flex-1 min-w-0 text-left">
+          <p className="font-handwritten text-sm font-bold tracking-wider text-red-600 dark:text-red-400 uppercase">
+            ⚠️ Critical Exception
+          </p>
+          <p className="mt-1 font-mono text-xs font-semibold text-red-950 dark:text-red-100">
+            DOM Exceptions Detected. CSS Grid Collapsed.
+          </p>
+          <p className="mt-1.5 font-mono text-[10px] text-red-800/60 dark:text-red-300/60">
+            at HeroSection.render() — stress_test.spec.ts:42
+          </p>
+        </div>
+
+        {/* dismiss */}
+        <button
+          onClick={onDismiss}
+          className="shrink-0 rounded-lg p-1 text-red-500/50 hover:bg-red-50/20 hover:text-red-600 transition-colors"
+          aria-label="Dismiss notification"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      {/* Progress bar — drains over 6 s */}
+      <motion.div
+        className="mt-2 h-1 rounded-full bg-red-500/50 max-w-[96%] mx-auto"
+        initial={{ scaleX: 1, originX: 0 }}
+        animate={{ scaleX: 0 }}
+        transition={{ duration: 6, ease: "linear" }}
+      />
+    </motion.div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Activate button
 // ---------------------------------------------------------------------------
+
 
 function ActivateButton({ onActivate }: { onActivate: () => void }) {
   const [isPressed, setIsPressed] = useState(false);
@@ -263,6 +344,8 @@ export function ChaosHud() {
   const triggerHeal = useTriggerHeal();
   const reset       = useResetSandbox();
 
+  const [showToast, setShowToast] = useState(false);
+
   // ── Terminal visibility: only during "healing" (exits on verified) ────────
   const showTerminal = phase === "healing";
 
@@ -271,6 +354,15 @@ export function ChaosHud() {
 
   // ── Restore banner: only in verified ────────────────────────────────────
   const showRestored = phase === "verified";
+
+  // Trigger crash toast when phase transitions to "crashed"
+  useEffect(() => {
+    if (phase === "crashed") {
+      setShowToast(true);
+    } else {
+      setShowToast(false);
+    }
+  }, [phase]);
 
   // ── Destroy physics engine 2.5 s after verified ──────────────────────────
   // (all return animations complete within ~1.8 s)
@@ -289,6 +381,13 @@ export function ChaosHud() {
 
   return (
     <>
+      {/* ── Crash Toast Overlay ───────────────────────────────────── */}
+      <AnimatePresence>
+        {showToast && (
+          <CrashToast key="crash-toast" onDismiss={() => setShowToast(false)} />
+        )}
+      </AnimatePresence>
+
       {/* ── Blueprint grid background ─────────────────────────────── */}
       <AnimatePresence>
         {showBlueprint && <BlueprintBackground key="blueprint" />}
@@ -315,3 +414,4 @@ export function ChaosHud() {
     </>
   );
 }
+
