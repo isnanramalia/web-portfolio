@@ -2,7 +2,7 @@
 
 let _consolePrinted = false;
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 import { User, Wrench, FolderOpen, MessageCircle, PenLine } from "lucide-react";
@@ -10,14 +10,30 @@ import { Preloader } from "@/components/preloader";
 import { Navigation } from "@/components/sections/navigation";
 import { Sidebar } from "@/components/sections/sidebar";
 import { HeroSection } from "@/components/sections/hero";
-import { AboutSection } from "@/components/sections/about";
-import { SkillsSection } from "@/components/sections/skills";
-import { ProjectsSectionLocal } from "@/components/sections/projects-local";
-import { ContactSection } from "@/components/sections/contact";
-import { FooterSection } from "@/components/sections/footer";
-import { MediumSection } from "@/components/sections/medium";
-import { JourneySection } from "@/components/sections/journey";
-import { QAPlaygroundSection } from "@/components/sections/qa-playground";
+const AboutSection = dynamic(() =>
+  import("@/components/sections/about").then((m) => m.AboutSection)
+);
+const SkillsSection = dynamic(() =>
+  import("@/components/sections/skills").then((m) => m.SkillsSection)
+);
+const ProjectsSectionLocal = dynamic(() =>
+  import("@/components/sections/projects-local").then((m) => m.ProjectsSectionLocal)
+);
+const ContactSection = dynamic(() =>
+  import("@/components/sections/contact").then((m) => m.ContactSection)
+);
+const FooterSection = dynamic(() =>
+  import("@/components/sections/footer").then((m) => m.FooterSection)
+);
+const MediumSection = dynamic(() =>
+  import("@/components/sections/medium").then((m) => m.MediumSection)
+);
+const JourneySection = dynamic(() =>
+  import("@/components/sections/journey").then((m) => m.JourneySection)
+);
+const QAPlaygroundSection = dynamic(() =>
+  import("@/components/sections/qa-playground").then((m) => m.QAPlaygroundSection)
+);
 import type { Certificate, Project, WorkExperience } from "@/lib/data";
 
 const FloatingParticles = dynamic(
@@ -121,6 +137,7 @@ export function PortfolioClient({
   const [cmdOpen, setCmdOpen] = useState(false);
   const [cmdLoaded, setCmdLoaded] = useState(false);
   const { theme, setTheme } = useTheme();
+
 
   const openCommand = useCallback(() => {
     setCmdLoaded(true);
@@ -300,8 +317,6 @@ export function PortfolioClient({
         <Navigation
           mobileMenuOpen={mobileMenuOpen}
           setMobileMenuOpen={setMobileMenuOpen}
-          theme={theme}
-          setTheme={setTheme}
           navigationItems={navigationItems}
           scrollToSection={scrollToSection}
           scrollToHero={scrollToHero}

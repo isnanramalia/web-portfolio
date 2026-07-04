@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
+import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -382,6 +383,29 @@ export function HeroSection({
   scrollToSection,
   startAnimations,
 }: HeroSectionProps) {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const [isHighlighting, setIsHighlighting] = useState(false);
+  const prevThemeRef = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    if (prevThemeRef.current !== undefined && prevThemeRef.current !== theme) {
+      setIsHighlighting(true);
+      const timer = setTimeout(() => {
+        setIsHighlighting(false);
+      }, 950);
+      return () => clearTimeout(timer);
+    }
+    prevThemeRef.current = theme;
+  }, [theme, mounted]);
+
+  const isDark = mounted && theme === "dark";
+
   return (
     <motion.section
       id="hero"
@@ -390,6 +414,21 @@ export function HeroSection({
       initial="hidden"
       animate={startAnimations ? "visible" : "hidden"}
     >
+      {/* QA Mode system diagnostic overlay (desktop only) */}
+      <AnimatePresence>
+        {isDark && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.4 }}
+            className="absolute top-4 right-4 hidden md:flex items-center gap-2 px-3 py-1.5 rounded border border-primary/30 bg-primary/5 font-mono text-[10px] text-primary select-none z-50 tracking-wider shadow-[0_0_10px_rgba(214,192,179,0.15)]"
+          >
+            <span className="w-1.5 h-1.5 bg-primary rounded-full animate-ping" />
+            <span>[SYSTEM_CHECK: QA_MODE_ACTIVE]</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {/* Decorative background blobs */}
       <FloatingElement speed={0.3} direction="up" amplitude={30}>
         <motion.div
@@ -497,6 +536,7 @@ export function HeroSection({
                   alt="Isna Nur Amalia"
                   fill
                   className="object-cover"
+                  priority
                 />
               </div>
             </PhysicsNode>
@@ -564,17 +604,36 @@ export function HeroSection({
 
           {/* Tagline — typewriter effect */}
           <motion.h1
-            className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 leading-tight"
+            className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 leading-tight relative w-fit mx-auto lg:mx-0"
             variants={staggerItem}
           >
-            <span className="block text-foreground min-h-[1.25em]">
+            {/* Smooth transition highlight glow around tagline */}
+            <motion.div
+              className="absolute -inset-4 rounded-2xl blur-xl pointer-events-none -z-10 bg-primary/10 dark:bg-[#D6C0B3]/8"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={isHighlighting ? { opacity: 1, scale: 1.03 } : { opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.38, ease: "easeOut" }}
+            />
+            <span 
+              className={`block min-h-[1.25em] transition-all duration-500 ${
+                isDark 
+                  ? "text-muted-foreground/45 font-medium" 
+                  : "text-primary font-extrabold"
+              }`}
+            >
               <TypewriterLine
                 text={LINE1}
                 delayMs={LINE1_DELAY_MS}
                 start={startAnimations}
               />
             </span>
-            <span className="block text-primary min-h-[1.25em]">
+            <span 
+              className={`block min-h-[1.25em] transition-all duration-500 ${
+                isDark 
+                  ? "text-primary font-extrabold drop-shadow-[0_0_10px_rgba(214,192,179,0.35)]" 
+                  : "text-muted-foreground/50 font-medium"
+              }`}
+            >
               <TypewriterLine
                 text={LINE2}
                 delayMs={LINE2_DELAY_MS}

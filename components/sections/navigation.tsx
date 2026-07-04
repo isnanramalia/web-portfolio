@@ -3,9 +3,11 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { MoonIcon, SunIcon, Menu, Search } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import { IsnaLogo } from "../isna-logo";
 import { useNavigationScrollState } from "@/hooks/use-navigation-scroll-state";
+import { ThemeToggle } from "@/components/theme-toggle";
+
 
 interface NavigationItem {
   id: string;
@@ -16,8 +18,6 @@ interface NavigationItem {
 interface NavigationProps {
   mobileMenuOpen: boolean;
   setMobileMenuOpen: (open: boolean) => void;
-  theme: string | undefined;
-  setTheme: (theme: string) => void;
   navigationItems: NavigationItem[];
   scrollToSection: (sectionId: string) => void;
   scrollToHero: () => void;
@@ -27,8 +27,6 @@ interface NavigationProps {
 export function Navigation({
   mobileMenuOpen,
   setMobileMenuOpen,
-  theme,
-  setTheme,
   navigationItems,
   scrollToSection,
   scrollToHero,
@@ -37,21 +35,6 @@ export function Navigation({
   const { scrolled, activeSection } = useNavigationScrollState();
   const toggleMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
-  const handleThemeToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-
-    document.documentElement.style.setProperty("--theme-x", `${e.clientX}px`);
-    document.documentElement.style.setProperty("--theme-y", `${e.clientY}px`);
-
-    if (!("startViewTransition" in document)) {
-      setTheme(nextTheme);
-      return;
-    }
-
-    (
-      document as Document & { startViewTransition: (cb: () => void) => void }
-    ).startViewTransition(() => setTheme(nextTheme));
-  };
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -179,45 +162,8 @@ export function Navigation({
                   hidden: { opacity: 0, scale: 0.8 },
                   visible: { opacity: 1, scale: 1 },
                 }}
-                whileHover={{
-                  scale: 1.1,
-                  rotate: theme === "dark" ? 180 : 0,
-                  transition: { type: "spring", stiffness: 200, damping: 10 },
-                }}
-                whileTap={{ scale: 0.9 }}
               >
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleThemeToggle}
-                  className="relative overflow-hidden"
-                  aria-label={
-                    theme === "dark"
-                      ? "Switch to light mode"
-                      : "Switch to dark mode"
-                  }
-                >
-                  <motion.div
-                    animate={{
-                      rotate: theme === "dark" ? 0 : 180,
-                      opacity: theme === "dark" ? 1 : 0,
-                    }}
-                    transition={{ duration: 0.3 }}
-                    className="absolute inset-0 flex items-center justify-center"
-                  >
-                    <MoonIcon className="h-4 w-4" />
-                  </motion.div>
-                  <motion.div
-                    animate={{
-                      rotate: theme === "dark" ? 180 : 0,
-                      opacity: theme === "dark" ? 0 : 1,
-                    }}
-                    transition={{ duration: 0.3 }}
-                    className="absolute inset-0 flex items-center justify-center"
-                  >
-                    <SunIcon className="h-4 w-4" />
-                  </motion.div>
-                </Button>
+                <ThemeToggle />
               </motion.div>
 
               <motion.button

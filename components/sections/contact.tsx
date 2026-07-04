@@ -36,12 +36,7 @@ export function ContactSection() {
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <FloatingElement speed={0.2} direction="right" amplitude={20}>
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-          </FloatingElement>
-          <FloatingElement speed={0.25} direction="left" amplitude={25}>
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent/10 rounded-full blur-2xl pointer-events-none" />
-          </FloatingElement>
+
 
           <div className="relative z-10 text-center max-w-2xl mx-auto">
             <motion.div

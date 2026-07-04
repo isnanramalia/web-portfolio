@@ -2,8 +2,8 @@ export const education = [
   {
     degree: "Bachelor of Computer Science",
     institution: "Dian Nuswantoro University",
-    period: "2022 - expected 2026",
-    description: "Focused on Software Engineering and Web Development",
+    period: "2022 - 2026",
+    description: "Graduated with GPA 3.83/4.00. Focused on Software Engineering and Web Development.",
   },
 ];
 
