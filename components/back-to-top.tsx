@@ -8,14 +8,20 @@ export function BackToTop() {
   const [visible, setVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const [hovered, setHovered] = useState(false);
+  const [hasContainer, setHasContainer] = useState(false);
 
   useEffect(() => {
     let rafId: number | null = null;
 
     const readProgress = () => {
-      const scrollTop = window.scrollY;
-      const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight;
+      const container = document.getElementById("top-screen-scroll-container");
+      setHasContainer(!!container);
+
+      const scrollTop = container ? container.scrollTop : window.scrollY;
+      const scrollHeight = container ? container.scrollHeight : document.documentElement.scrollHeight;
+      const clientHeight = container ? container.clientHeight : window.innerHeight;
+
+      const maxScroll = scrollHeight - clientHeight;
       const nextProgress = maxScroll > 0 ? Math.min(scrollTop / maxScroll, 1) : 0;
       const nextVisible = nextProgress > 0.08;
 
@@ -33,8 +39,29 @@ export function BackToTop() {
 
     readProgress();
     window.addEventListener("scroll", onScroll, { passive: true });
+
+    const container = document.getElementById("top-screen-scroll-container");
+    if (container) {
+      container.addEventListener("scroll", onScroll, { passive: true });
+    }
+
+    // Observe DOM changes to attach scroll handler to container if it mounts later
+    const observer = new MutationObserver(() => {
+      const container = document.getElementById("top-screen-scroll-container");
+      if (container) {
+        container.removeEventListener("scroll", onScroll);
+        container.addEventListener("scroll", onScroll, { passive: true });
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
     return () => {
       window.removeEventListener("scroll", onScroll);
+      const container = document.getElementById("top-screen-scroll-container");
+      if (container) {
+        container.removeEventListener("scroll", onScroll);
+      }
+      observer.disconnect();
       if (rafId !== null) cancelAnimationFrame(rafId);
     };
   }, []);
@@ -43,14 +70,27 @@ export function BackToTop() {
   const circumference = 2 * Math.PI * r;
   const strokeDashoffset = circumference * (1 - progress);
 
+  const handleScrollToTop = () => {
+    const container = document.getElementById("top-screen-scroll-container");
+    if (container) {
+      container.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <AnimatePresence>
       {visible && (
         <motion.button
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={handleScrollToTop}
           onHoverStart={() => setHovered(true)}
           onHoverEnd={() => setHovered(false)}
-          className="fixed bottom-6 right-4 sm:right-6 z-40 w-12 h-12 select-none"
+          className={`z-40 w-12 h-12 select-none ${
+            hasContainer 
+              ? "absolute bottom-6 right-6" 
+              : "fixed bottom-20 right-4 sm:right-6"
+          }`}
           aria-label="Scroll back to top"
           initial={{ opacity: 0, scale: 0.4, y: 16 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}

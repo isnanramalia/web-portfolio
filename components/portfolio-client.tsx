@@ -5,7 +5,8 @@ let _consolePrinted = false;
 import { useCallback, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
-import { User, Wrench, FolderOpen, MessageCircle, PenLine } from "lucide-react";
+import { User, Wrench, FolderOpen, MessageCircle, PenLine, Terminal } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Preloader } from "@/components/preloader";
 import { Navigation } from "@/components/sections/navigation";
 import { Sidebar } from "@/components/sections/sidebar";
@@ -18,6 +19,8 @@ import { FooterSection } from "@/components/sections/footer";
 import { MediumSection } from "@/components/sections/medium";
 import { JourneySection } from "@/components/sections/journey";
 import { QAPlaygroundSection } from "@/components/sections/qa-playground";
+import { useNavigationScrollState } from "@/hooks/use-navigation-scroll-state";
+import { QATerminal } from "@/components/qa-terminal";
 import type { Certificate, Project, WorkExperience } from "@/lib/data";
 
 const FloatingParticles = dynamic(
@@ -122,6 +125,11 @@ export function PortfolioClient({
   const [cmdLoaded, setCmdLoaded] = useState(false);
   const { theme, setTheme } = useTheme();
 
+  // Custom states for Dual-Screen layout
+  const [isMobile, setIsMobile] = useState(false);
+  const [terminalOpen, setTerminalOpen] = useState(false);
+  const { activeSection } = useNavigationScrollState();
+
   const openCommand = useCallback(() => {
     setCmdLoaded(true);
     setCmdOpen((prev) => !prev);
@@ -129,6 +137,13 @@ export function PortfolioClient({
 
   useEffect(() => {
     setMounted(true);
+
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
 
     const media = window.matchMedia("(pointer: fine)");
     const syncPointerDecorations = () => {
@@ -161,11 +176,17 @@ export function PortfolioClient({
 
     if (typeof media.addEventListener === "function") {
       media.addEventListener("change", syncPointerDecorations);
-      return () => media.removeEventListener("change", syncPointerDecorations);
+      return () => {
+        media.removeEventListener("change", syncPointerDecorations);
+        window.removeEventListener("resize", checkMobile);
+      };
     }
 
     media.addListener(syncPointerDecorations);
-    return () => media.removeListener(syncPointerDecorations);
+    return () => {
+      media.removeListener(syncPointerDecorations);
+      window.removeEventListener("resize", checkMobile);
+    };
   }, []);
 
   useEffect(() => {
@@ -178,6 +199,18 @@ export function PortfolioClient({
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [openCommand]);
+
+  // Lock body scroll when mobile terminal drawer is open
+  useEffect(() => {
+    if (isMobile && terminalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [terminalOpen, isMobile]);
 
   useEffect(() => {
     if (!introComplete) return;
@@ -206,12 +239,21 @@ export function PortfolioClient({
 
   const scrollToSection = useCallback((sectionId: string) => {
     const element = document.getElementById(sectionId);
+    const container = document.getElementById("top-screen-scroll-container");
+    const navHeight = 80;
+
     if (element) {
-      const navHeight = 80;
-      // getBoundingClientRect is accurate even with CSS transforms
-      const pos =
-        element.getBoundingClientRect().top + window.scrollY - navHeight;
-      window.scrollTo({ top: Math.max(0, pos), behavior: "smooth" });
+      if (container) {
+        const containerRect = container.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+        const relativeTop = elementRect.top - containerRect.top + container.scrollTop;
+        const pos = relativeTop - navHeight;
+
+        container.scrollTo({ top: Math.max(0, pos), behavior: "smooth" });
+      } else {
+        const pos = element.getBoundingClientRect().top + window.scrollY - navHeight;
+        window.scrollTo({ top: Math.max(0, pos), behavior: "smooth" });
+      }
 
       // pushState so browser back/forward works per section
       const newPath = SECTION_PATHS[sectionId];
@@ -223,7 +265,13 @@ export function PortfolioClient({
   }, []);
 
   const scrollToHero = useCallback(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    const container = document.getElementById("top-screen-scroll-container");
+    if (container) {
+      container.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    
     if (window.location.pathname !== "/") {
       window.history.pushState(null, "", "/");
     }
@@ -243,9 +291,18 @@ export function PortfolioClient({
       };
       const target = MAP[window.location.pathname] ?? "about";
       const el = document.getElementById(target);
+      const container = document.getElementById("top-screen-scroll-container");
       if (el) {
-        const pos = el.getBoundingClientRect().top + window.scrollY - 80;
-        window.scrollTo({ top: Math.max(0, pos), behavior: "smooth" });
+        if (container) {
+          const containerRect = container.getBoundingClientRect();
+          const elRect = el.getBoundingClientRect();
+          const relativeTop = elRect.top - containerRect.top + container.scrollTop;
+          const pos = relativeTop - 80;
+          container.scrollTo({ top: Math.max(0, pos), behavior: "smooth" });
+        } else {
+          const pos = el.getBoundingClientRect().top + window.scrollY - 80;
+          window.scrollTo({ top: Math.max(0, pos), behavior: "smooth" });
+        }
       }
     };
     window.addEventListener("popstate", handlePopState);
@@ -257,9 +314,18 @@ export function PortfolioClient({
     if (!introComplete || !initialSection) return;
     const timer = setTimeout(() => {
       const el = document.getElementById(initialSection);
+      const container = document.getElementById("top-screen-scroll-container");
       if (el) {
-        const pos = el.getBoundingClientRect().top + window.scrollY - 80;
-        window.scrollTo({ top: Math.max(0, pos), behavior: "smooth" });
+        if (container) {
+          const containerRect = container.getBoundingClientRect();
+          const elRect = el.getBoundingClientRect();
+          const relativeTop = elRect.top - containerRect.top + container.scrollTop;
+          const pos = relativeTop - 80;
+          container.scrollTo({ top: Math.max(0, pos), behavior: "smooth" });
+        } else {
+          const pos = el.getBoundingClientRect().top + window.scrollY - 80;
+          window.scrollTo({ top: Math.max(0, pos), behavior: "smooth" });
+        }
       }
     }, 300);
     return () => clearTimeout(timer);
@@ -281,38 +347,107 @@ export function PortfolioClient({
     <>
       <Preloader onComplete={() => setIntroComplete(true)} />
 
-      <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
-        {decorationsReady && <FloatingParticles />}
-        {decorationsReady && <BackToTop />}
-        {pointerDecorationsReady && <CustomCursor />}
-        {decorationsReady && pointerDecorationsReady && <BugHunt />}
-        <ChaosHud />
+      {!isMobile ? (
+        /* Desktop Dual-Screen Layout */
+        <div className="h-screen w-screen overflow-hidden flex flex-col bg-background text-foreground transition-colors duration-300">
+          {decorationsReady && <FloatingParticles />}
+          {pointerDecorationsReady && <CustomCursor />}
+          {decorationsReady && pointerDecorationsReady && <BugHunt />}
+          <ChaosHud />
 
+          {cmdLoaded && (
+            <CommandPalette
+              open={cmdOpen}
+              onClose={() => setCmdOpen(false)}
+              scrollToSection={scrollToSection}
+            />
+          )}
 
-        {cmdLoaded && (
-          <CommandPalette
-            open={cmdOpen}
-            onClose={() => setCmdOpen(false)}
+          {/* Top Screen (60% height) */}
+          <div className="h-[60vh] min-h-[60vh] w-full relative overflow-hidden flex flex-col border-b border-border shadow-md bg-muted/40 dark:bg-zinc-900/40">
+            <Navigation
+              mobileMenuOpen={mobileMenuOpen}
+              setMobileMenuOpen={setMobileMenuOpen}
+              theme={theme}
+              setTheme={setTheme}
+              navigationItems={navigationItems}
+              scrollToSection={scrollToSection}
+              scrollToHero={scrollToHero}
+              onOpenCommand={openCommand}
+            />
+
+            <div className="mx-auto w-full max-w-5xl flex flex-1 overflow-hidden relative bg-background border-x border-border/40 shadow-inner">
+              <Sidebar scrollToSection={scrollToSection} />
+
+              <div 
+                id="top-screen-scroll-container"
+                className="w-full lg:ml-[35%] lg:w-[65%] h-full overflow-y-auto relative z-10 scroll-smooth pt-16"
+              >
+                {decorationsReady && <BackToTop />}
+                
+                <HeroSection
+                  scrollToSection={scrollToSection}
+                  startAnimations={introComplete}
+                />
+
+                <AboutSection
+                  education={education}
+                  workExperience={workExperience}
+                  certificates={certificates}
+                />
+
+                <JourneySection />
+
+                <SkillsSection skillsData={skillsData} />
+
+                <ProjectsSectionLocal projects={projects} />
+
+                <QAPlaygroundSection />
+
+                <MediumSection />
+
+                <ContactSection />
+
+                <FooterSection />
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Screen (40% height) */}
+          <div className="h-[40vh] min-h-[40vh] w-full overflow-hidden shrink-0">
+            <QATerminal activeSection={activeSection} />
+          </div>
+        </div>
+      ) : (
+        /* Mobile Standard Layout */
+        <div className="min-h-screen bg-background text-foreground transition-colors duration-300 pb-20">
+          {decorationsReady && <FloatingParticles />}
+          {decorationsReady && <BackToTop />}
+          {pointerDecorationsReady && <CustomCursor />}
+          {decorationsReady && pointerDecorationsReady && <BugHunt />}
+          <ChaosHud />
+
+          {cmdLoaded && (
+            <CommandPalette
+              open={cmdOpen}
+              onClose={() => setCmdOpen(false)}
+              scrollToSection={scrollToSection}
+            />
+          )}
+
+          <Navigation
+            mobileMenuOpen={mobileMenuOpen}
+            setMobileMenuOpen={setMobileMenuOpen}
+            theme={theme}
+            setTheme={setTheme}
+            navigationItems={navigationItems}
             scrollToSection={scrollToSection}
+            scrollToHero={scrollToHero}
+            onOpenCommand={openCommand}
           />
-        )}
 
-        <Navigation
-          mobileMenuOpen={mobileMenuOpen}
-          setMobileMenuOpen={setMobileMenuOpen}
-          theme={theme}
-          setTheme={setTheme}
-          navigationItems={navigationItems}
-          scrollToSection={scrollToSection}
-          scrollToHero={scrollToHero}
-          onOpenCommand={openCommand}
-        />
-
-        <div className="flex">
-          <Sidebar scrollToSection={scrollToSection} />
-
-          <div className="w-full lg:ml-[35%] lg:w-[65%] min-h-screen relative z-10">
-            <div className="pt-16">
+          <div className="flex pt-16">
+            <div className="w-full relative z-10">
               <HeroSection
                 scrollToSection={scrollToSection}
                 startAnimations={introComplete}
@@ -339,8 +474,51 @@ export function PortfolioClient({
               <FooterSection />
             </div>
           </div>
+
+          {/* Floating Action Button for Terminal */}
+          <button
+            onClick={() => setTerminalOpen(true)}
+            className="fixed bottom-6 right-4 sm:right-6 z-40 w-12 h-12 rounded-full bg-[#1a1b26] text-white border-2 border-foreground shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-all"
+            style={{
+              borderRadius: "20px 8px 20px 10px / 10px 20px 8px 24px",
+              boxShadow: "3px 3px 0 rgba(0,0,0,0.15)",
+            }}
+          >
+            <Terminal className="w-5 h-5 text-[#7aa2f7] animate-pulse" />
+          </button>
+
+          {/* Mobile Terminal Sheet Drawer */}
+          <AnimatePresence>
+            {terminalOpen && (
+              <>
+                {/* Backdrop */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.5 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setTerminalOpen(false)}
+                  className="fixed inset-0 bg-black/60 z-40"
+                />
+
+                {/* Bottom Sheet */}
+                <motion.div
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "100%" }}
+                  transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                  className="fixed bottom-0 left-0 right-0 h-[60vh] rounded-t-2xl overflow-hidden z-50 border-t-2 border-foreground"
+                >
+                  <QATerminal
+                    activeSection={activeSection}
+                    isMobileDrawer={true}
+                    onCloseMobile={() => setTerminalOpen(false)}
+                  />
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </div>
-      </div>
+      )}
     </>
   );
 }

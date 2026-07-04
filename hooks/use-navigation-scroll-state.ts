@@ -71,17 +71,19 @@ export function useNavigationScrollState() {
     const readScrollState = () => {
       if (sectionElsRef.current.length === 0) cacheElements();
 
-      const scrollY = window.scrollY;
+      const container = document.getElementById("top-screen-scroll-container");
+      const scrollY = container ? container.scrollTop : window.scrollY;
       const nextScrolled = scrollY > 50;
 
-      // "Active" = the last section whose document-top is at or above the
-      // detection threshold (viewport top + nav height + small buffer).
-      const threshold = scrollY + NAV_HEIGHT + 40;
+      // Threshold is relative to the viewport top
+      const threshold = NAV_HEIGHT + 40;
       let nextSection = SECTIONS[0] as string;
 
       for (const { id, el } of sectionElsRef.current) {
-        const elDocTop = el.getBoundingClientRect().top + scrollY;
-        if (threshold >= elDocTop) {
+        const rect = el.getBoundingClientRect();
+        // Since rect.top is relative to the viewport, it represents the element's top position.
+        // If it is smaller than threshold, it has scrolled past the threshold.
+        if (rect.top <= threshold + 5) {
           nextSection = id;
         }
       }
@@ -114,8 +116,30 @@ export function useNavigationScrollState() {
     readScrollState();
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    
+    const container = document.getElementById("top-screen-scroll-container");
+    if (container) {
+      container.addEventListener("scroll", handleScroll, { passive: true });
+    }
+
+    // Observe changes to the DOM to attach listener to container if it mounts later
+    const observer = new MutationObserver(() => {
+      const container = document.getElementById("top-screen-scroll-container");
+      if (container) {
+        container.removeEventListener("scroll", handleScroll);
+        container.addEventListener("scroll", handleScroll, { passive: true });
+      }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      const container = document.getElementById("top-screen-scroll-container");
+      if (container) {
+        container.removeEventListener("scroll", handleScroll);
+      }
+      observer.disconnect();
       if (rafId.current !== null) cancelAnimationFrame(rafId.current);
     };
   }, [cacheElements]);

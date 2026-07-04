@@ -48,7 +48,7 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
   const magneticRef = useMagneticEffect(0.2);
 
   return (
-    <div className="hidden lg:block fixed left-0 top-16 w-[35%] h-[calc(100vh-5rem)] overflow-y-auto bg-background border-r border-border z-40">
+    <div className="hidden lg:block absolute left-0 top-16 w-[35%] h-[calc(100%-4rem)] overflow-y-auto bg-background border-r border-border z-40">
       <div className="p-8 h-full flex flex-col items-center justify-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
