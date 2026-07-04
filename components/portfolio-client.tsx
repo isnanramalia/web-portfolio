@@ -62,6 +62,14 @@ const BugHunt = dynamic(
   { ssr: false },
 );
 
+const ChaosHud = dynamic(
+  () =>
+    import("@/components/chaos-hud").then((m) => ({
+      default: m.ChaosHud,
+    })),
+  { ssr: false },
+);
+
 type SkillItem = {
   name: string;
   logo: string;
@@ -222,6 +230,9 @@ export function PortfolioClient({
         {decorationsReady && <BackToTop />}
         {pointerDecorationsReady && <CustomCursor />}
         {decorationsReady && pointerDecorationsReady && <BugHunt />}
+
+        {/* Chaos Sandbox HUD — always mounted, self-manages visibility via phase state */}
+        <ChaosHud />
 
         {cmdLoaded && (
           <CommandPalette

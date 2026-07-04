@@ -7,6 +7,7 @@ import { Download, Send, Github, Linkedin, Instagram } from "lucide-react";
 import Image from "next/image";
 import { socialMedia } from "@/lib/data";
 import { useMagneticEffect } from "@/hooks/use-advanced-animations";
+import { PhysicsNode } from "@/components/physics-node";
 
 interface SidebarProps {
   scrollToSection: (sectionId: string) => void;
@@ -55,52 +56,63 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
           className="text-center"
         >
           <motion.div className="mb-6 flex justify-center">
-            <motion.div
-              ref={magneticRef.ref as any}
-              className="relative"
-              style={{ x: magneticRef.x, y: magneticRef.y }}
-              whileHover={{ scale: 1.08, rotateY: 5 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            {/* Profile photo — physics-enabled: will fall on crash */}
+            <PhysicsNode
+              dropDelay={0}
+              returnDelay={0}
+              restitution={0.38}
+              friction={0.06}
+              density={0.004}
+              initialImpulse={1.2}
             >
               <motion.div
-                className="w-32 h-40 bg-gradient-to-br from-background/80 via-card/90 to-muted/80 backdrop-blur-lg border border-border/50 rounded-2xl flex items-center justify-center p-1 shadow-lg relative overflow-hidden"
-                style={{
-                  backdropFilter: "blur(16px) saturate(120%)",
-                  background: `
-                    linear-gradient(135deg,
-                      rgb(var(--background) / 0.8),
-                      rgb(var(--card) / 0.9),
-                      rgb(var(--muted) / 0.8)
-                    )
-                  `,
-                }}
-                whileHover={{
-                  scale: 1.02,
-                  backdropFilter: "blur(20px) saturate(130%)",
-                }}
-                transition={{
-                  duration: 0.3,
-                  ease: "easeOut",
-                }}
+                id="sidebar-photo-wrapper"
+                ref={magneticRef.ref as any}
+                className="relative"
+                style={{ x: magneticRef.x, y: magneticRef.y }}
+                whileHover={{ scale: 1.08, rotateY: 5 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/5 to-transparent rounded-2xl" />
+                <motion.div
+                  className="w-32 h-40 bg-gradient-to-br from-background/80 via-card/90 to-muted/80 backdrop-blur-lg border border-border/50 rounded-2xl flex items-center justify-center p-1 shadow-lg relative overflow-hidden"
+                  style={{
+                    backdropFilter: "blur(16px) saturate(120%)",
+                    background: `
+                      linear-gradient(135deg,
+                        rgb(var(--background) / 0.8),
+                        rgb(var(--card) / 0.9),
+                        rgb(var(--muted) / 0.8)
+                      )
+                    `,
+                  }}
+                  whileHover={{
+                    scale: 1.02,
+                    backdropFilter: "blur(20px) saturate(130%)",
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    ease: "easeOut",
+                  }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/5 to-transparent rounded-2xl" />
 
-                <Image
-                  src="/foto.png"
-                  alt="Isna Nur Amalia"
-                  fill
-                  className="rounded-xl object-cover"
-                />
-              </motion.div>
-              <motion.div
-                className="absolute -top-2 -right-2"
-                style={{ display: "none" }}
-              >
-                <IsnaLogo size="sm" />
-              </motion.div>
+                  <Image
+                    src="/foto.png"
+                    alt="Isna Nur Amalia"
+                    fill
+                    className="rounded-xl object-cover"
+                  />
+                </motion.div>
+                <motion.div
+                  className="absolute -top-2 -right-2"
+                  style={{ display: "none" }}
+                >
+                  <IsnaLogo size="sm" />
+                </motion.div>
 
-              <div className="absolute inset-0 bg-muted/20 rounded-2xl blur-lg -z-10 opacity-[0.12]" />
-            </motion.div>
+                <div className="absolute inset-0 bg-muted/20 rounded-2xl blur-lg -z-10 opacity-[0.12]" />
+              </motion.div>
+            </PhysicsNode>
           </motion.div>
 
           <motion.h1
@@ -118,11 +130,20 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <p className="text-sm font-medium text-foreground">
-              Frontend Developer
-              <span className="mx-1.5 text-muted-foreground/50">·</span>
-              <span className="text-primary">QA Practitioner</span>
-            </p>
+            {/* Role badge — physics-enabled */}
+            <PhysicsNode
+              dropDelay={200}
+              returnDelay={200}
+              restitution={0.5}
+              friction={0.1}
+              initialImpulse={0.85}
+            >
+              <p id="sidebar-role-badge" className="text-sm font-medium text-foreground">
+                Frontend Developer
+                <span className="mx-1.5 text-muted-foreground/50">·</span>
+                <span className="text-primary">QA Practitioner</span>
+              </p>
+            </PhysicsNode>
             <p className="text-xs text-muted-foreground mt-1">
               Based in Semarang, Indonesia
             </p>
