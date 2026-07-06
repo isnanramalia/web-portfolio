@@ -106,6 +106,8 @@ export function Sidebar({ scrollToSection }: SidebarProps) {
                       alt="Isna Nur Amalia"
                       fill
                       className="rounded-xl object-cover"
+                      priority
+                      sizes="128px"
                     />
                   </motion.div>
                   <motion.div

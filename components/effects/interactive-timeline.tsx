@@ -153,7 +153,7 @@ export function InteractiveTimeline({
                   Omitted on the very first item (nothing above to connect to). */}
               {!isFirst && (
                 <div
-                  className="absolute left-[5px] top-0 h-8 w-px bg-border/60"
+                  className="absolute left-[5px] top-0 h-8 border-l border-border"
                   aria-hidden="true"
                 />
               )}
@@ -161,7 +161,7 @@ export function InteractiveTimeline({
                   Omitted on the last item so no line hangs below the final dot. */}
               {!isLast && (
                 <div
-                  className="absolute left-[5px] top-10 -bottom-6 w-px bg-border/60"
+                  className="absolute left-[5px] top-10 -bottom-6 border-l border-border"
                   aria-hidden="true"
                 />
               )}
@@ -246,14 +246,16 @@ export function InteractiveTimeline({
                             {/* Bridge: item top → dot — joins previous role's tail */}
                             {!isFirstRole && (
                               <div
-                                className="absolute left-[4px] top-0 h-[18px] w-px bg-muted-foreground/20"
+                                className="absolute left-[4.5px] top-0 h-[18px] border-l border-border"
+                                style={{ opacity: 0.55 }}
                                 aria-hidden="true"
                               />
                             )}
                             {/* Tail: below dot → next role — omitted on last role */}
                             {!isLastRole && (
                               <div
-                                className="absolute left-[4px] top-7 -bottom-3 w-px bg-muted-foreground/20"
+                                className="absolute left-[4.5px] top-7 -bottom-3 border-l border-border"
+                                style={{ opacity: 0.55 }}
                                 aria-hidden="true"
                               />
                             )}

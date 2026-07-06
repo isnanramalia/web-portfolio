@@ -457,6 +457,7 @@ export function HeroSection({
                   fill
                   className="object-cover"
                   priority
+                  sizes="56px"
                 />
               </div>
             </PhysicsNode>

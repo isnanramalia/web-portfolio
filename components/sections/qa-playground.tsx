@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, RotateCcw, ChevronDown, Terminal } from "lucide-react";
+import { Play, RotateCcw, ChevronDown, Terminal, X, Bug } from "lucide-react";
+import { createPortal } from "react-dom";
+import { DefectFinder } from "./defect-finder";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -420,12 +422,105 @@ function BugPanel({ bug, onClose }: { bug: BugDetail; onClose: () => void }) {
   );
 }
 
+interface QAPlaygroundModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  type: "terminal" | "game" | null;
+  children: React.ReactNode;
+}
+
+function QAPlaygroundModal({ open, onOpenChange, type, children }: QAPlaygroundModalProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted || !open) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [mounted, open]);
+
+  if (!mounted || !open || !type) return null;
+
+  const title = type === "terminal" ? "Automated Test Simulator" : "Defect Finder Game";
+
+  const modalContent = (
+    <AnimatePresence>
+      {open && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <motion.div
+            key="playground-backdrop"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => onOpenChange(false)}
+          />
+
+          {/* Wrapper */}
+          <motion.div
+            key="playground-dialog"
+            initial={{ opacity: 0, scale: 0.95, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 15 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="relative w-full max-w-3xl glass-strong sketchy-border shadow-2xl p-6 md:p-8 flex flex-col z-[10000] overflow-hidden text-left"
+            style={{
+              borderRadius: "24px 8px 24px 8px / 8px 24px 8px 24px",
+              maxHeight: "92vh",
+            }}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => onOpenChange(false)}
+              className="absolute top-4 right-4 p-2 rounded-full border border-border/40 hover:bg-muted/40 text-muted-foreground hover:text-foreground transition-colors z-30"
+              aria-label="Close dialog"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            {/* Title & Icon Header */}
+            <div className="flex items-center gap-3 border-b border-border/30 pb-4 mb-6">
+              <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                {type === "terminal" ? <Terminal className="w-5 h-5" /> : <Bug className="w-5 h-5 animate-pulse" />}
+              </div>
+              <div>
+                <h3 className="text-lg font-bold font-mono text-foreground leading-tight">
+                  {title}
+                </h3>
+                <p className="text-xs text-muted-foreground font-mono mt-0.5">
+                  {type === "terminal" ? "E2E Test Execution log" : "Find 3 hidden defects on the form"}
+                </p>
+              </div>
+            </div>
+
+            {/* Body Content */}
+            <div className="flex-1 overflow-y-auto pr-1">
+              {children}
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+
+  return createPortal(modalContent, document.body);
+}
+
 // ── Main Component ────────────────────────────────────────────────────────────
 
 export function QAPlaygroundSection() {
   const [ts, setTs] = useState<TerminalState>(makeInitState);
   const [runState, setRunState] = useState<RunState>("idle");
   const [activeBug, setActiveBug] = useState<BugDetail | null>(null);
+  const [activeModal, setActiveModal] = useState<"terminal" | "game" | null>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const outputRef = useRef<HTMLDivElement>(null);
 
@@ -499,7 +594,6 @@ export function QAPlaygroundSection() {
 
   const { passed, failed } = countResults(ts);
   const totalCases = SUITES.reduce((n, s) => n + s.cases.length, 0);
-  const hasAnyVisible = ts.suiteVisible.some(Boolean);
 
   return (
     <motion.section
@@ -539,312 +633,378 @@ export function QAPlaygroundSection() {
           transition={{ duration: 0.4, delay: 0.08 }}
           viewport={{ once: true }}
         >
-          Watch a real manual test suite execute — then click any failed test to
-          read the full bug report.
+          Explore different QA workflows. Run automated test suites using the simulator, or test your manual bug-hunting skills in our interactive game.
         </motion.p>
 
-        {/* ── Terminal window ──────────────────────────────────────────────── */}
-        <motion.div
-          className="mt-8 overflow-hidden shadow-2xl"
-          style={{
-            borderRadius: "16px 4px 16px 4px / 4px 16px 4px 16px",
-            border: "1px solid #30363d",
-          }}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          viewport={{ once: true }}
-        >
-          {/* Title bar */}
-          <div
-            className="flex items-center gap-1.5 px-4 py-3"
-            style={{
-              background: "#161b22",
-              borderBottom: "1px solid #30363d",
-            }}
-          >
-            <span className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-            <span className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
-            <span className="w-3 h-3 rounded-full bg-[#28c840]" />
-            <div className="flex-1 flex items-center justify-center gap-2">
-              <Terminal className="w-3.5 h-3.5 text-[#7d8590]" />
-              <span className="text-[11px] text-[#7d8590] font-mono">
-                test-runner — saucedemo
-              </span>
-            </div>
-            {/* Run / Reset button in titlebar */}
-            <button
-              onClick={runTests}
-              disabled={runState === "running"}
-              className="flex items-center gap-1.5 px-3 py-1 text-[11px] font-mono font-bold transition-opacity disabled:opacity-40"
-              style={{
-                background: runState === "complete" ? "#21262d" : "#1f6feb",
-                color: runState === "complete" ? "#7d8590" : "#ffffff",
-                borderRadius: "4px 8px 4px 8px",
-                border: "1px solid",
-                borderColor: runState === "complete" ? "#30363d" : "#388bfd55",
-              }}
-              aria-label={
-                runState === "complete"
-                  ? "Run tests again"
-                  : runState === "running"
-                    ? "Running…"
-                    : "Run tests"
+        {/* Selection Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+          {/* Card 1: Automated Test Simulator */}
+          <motion.div
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.2 }}
+            className="glass-card sketchy-border p-6 cursor-pointer hover:border-primary/50 flex flex-col justify-between group min-h-[220px] text-left"
+            onClick={() => {
+              setActiveModal("terminal");
+              if (runState === "idle") {
+                setTimeout(runTests, 300);
               }
-            >
-              {runState === "running" ? (
-                <>
-                  <span className="animate-spin inline-block">⠋</span>
-                  Running…
-                </>
-              ) : runState === "complete" ? (
-                <>
-                  <RotateCcw className="w-3 h-3" />
-                  Re-run
-                </>
-              ) : (
-                <>
-                  <Play className="w-3 h-3" />
-                  Run
-                </>
-              )}
-            </button>
-          </div>
-
-          {/* Output area */}
-          <div
-            ref={outputRef}
-            className="p-4 font-mono text-[13px] leading-relaxed overflow-y-auto"
-            style={{
-              background: "#0d1117",
-              color: "#e6edf3",
-              minHeight: "240px",
-              maxHeight: "420px",
             }}
+            style={{ borderRadius: "20px 6px 20px 6px / 6px 20px 6px 20px" }}
           >
-            {/* Prompt */}
-            <div>
-              <span style={{ color: "#3fb950" }}>$</span>{" "}
-              <span style={{ color: "#e6edf3" }}>
-                npm run test:e2e -- --project=saucedemo
-              </span>
+            <div className="space-y-3">
+              <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <Terminal className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-bold text-foreground font-mono">
+                Automated Test Simulator
+              </h3>
+              <p className="text-xs text-muted-foreground leading-relaxed font-mono">
+                Watch a real-time E2E test suite execute on a checkout application. Click failed assertions to view generated bug reports.
+              </p>
             </div>
+            <div className="mt-4 pt-3 border-t border-border/20 flex items-center justify-between text-xs font-mono font-bold text-primary">
+              <span>Launch Simulator</span>
+              <span>→</span>
+            </div>
+          </motion.div>
 
-            {runState === "idle" && (
+          {/* Card 2: Defect Finder Game */}
+          <motion.div
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.2 }}
+            className="glass-card sketchy-border p-6 cursor-pointer hover:border-primary/50 flex flex-col justify-between group min-h-[220px] text-left"
+            onClick={() => setActiveModal("game")}
+            style={{ borderRadius: "6px 20px 6px 20px / 20px 6px 20px 6px" }}
+          >
+            <div className="space-y-3">
+              <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <Bug className="w-5 h-5 animate-pulse" />
+              </div>
+              <h3 className="text-base font-bold text-foreground font-mono">
+                Defect Finder Game
+              </h3>
+              <p className="text-xs text-muted-foreground leading-relaxed font-mono">
+                Put on your QA hat! Inspect and interact with a checkout form to find and document 3 hidden functional/validation defects.
+              </p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-border/20 flex items-center justify-between text-xs font-mono font-bold text-primary">
+              <span>Play Mini-Game</span>
+              <span>→</span>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Dialog Popup */}
+        <QAPlaygroundModal
+          open={activeModal !== null}
+          onOpenChange={(open) => {
+            if (!open) {
+              setActiveModal(null);
+              if (activeModal === "terminal" && runState === "running") {
+                clearTimers();
+                setRunState("idle");
+                setTs(makeInitState());
+              }
+            }
+          }}
+          type={activeModal}
+        >
+          {activeModal === "terminal" && (
+            <div className="space-y-6">
+              {/* Terminal window */}
               <div
-                className="mt-2 flex items-center gap-2"
-                style={{ color: "#7d8590" }}
+                className="overflow-hidden shadow-2xl text-left"
+                style={{
+                  borderRadius: "16px 4px 16px 4px / 4px 16px 4px 16px",
+                  border: "1px solid #30363d",
+                }}
               >
-                Press{" "}
-                <span
-                  className="inline-flex items-center gap-1 px-2 py-0.5"
+                {/* Title bar */}
+                <div
+                  className="flex items-center gap-1.5 px-4 py-3"
                   style={{
-                    background: "#21262d",
-                    borderRadius: "3px 6px 3px 6px",
-                    border: "1px solid #30363d",
-                    color: "#e6edf3",
+                    background: "#161b22",
+                    borderBottom: "1px solid #30363d",
                   }}
                 >
-                  <Play className="w-3 h-3" />
-                  Run
-                </span>{" "}
-                to execute the test suite
-              </div>
-            )}
+                  <span className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+                  <span className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
+                  <span className="w-3 h-3 rounded-full bg-[#28c840]" />
+                  <div className="flex-1 flex items-center justify-center gap-2">
+                    <Terminal className="w-3.5 h-3.5 text-[#7d8590]" />
+                    <span className="text-[11px] text-[#7d8590] font-mono">
+                      test-runner — saucedemo
+                    </span>
+                  </div>
+                  {/* Run / Reset button in titlebar */}
+                  <button
+                    onClick={runTests}
+                    disabled={runState === "running"}
+                    className="flex items-center gap-1.5 px-3 py-1 text-[11px] font-mono font-bold transition-opacity disabled:opacity-40"
+                    style={{
+                      background: runState === "complete" ? "#21262d" : "#1f6feb",
+                      color: runState === "complete" ? "#7d8590" : "#ffffff",
+                      borderRadius: "4px 8px 4px 8px",
+                      border: "1px solid",
+                      borderColor: runState === "complete" ? "#30363d" : "#388bfd55",
+                    }}
+                    aria-label={
+                      runState === "complete"
+                        ? "Run tests again"
+                        : runState === "running"
+                          ? "Running…"
+                          : "Run tests"
+                    }
+                  >
+                    {runState === "running" ? (
+                      <>
+                        <span className="animate-spin inline-block">⠋</span>
+                        Running…
+                      </>
+                    ) : runState === "complete" ? (
+                      <>
+                        <RotateCcw className="w-3 h-3" />
+                        Re-run
+                      </>
+                    ) : (
+                      <>
+                        <Play className="w-3 h-3" />
+                        Run
+                      </>
+                    )}
+                  </button>
+                </div>
 
-            {(runState === "running" || runState === "complete") && (
-              <div className="mt-1" style={{ color: "#7d8590" }}>
-                {runState === "running" ? "▶  Running manual test suite…" : ""}
-              </div>
-            )}
+                {/* Output area */}
+                <div
+                  ref={outputRef}
+                  className="p-4 font-mono text-[13px] leading-relaxed overflow-y-auto"
+                  style={{
+                    background: "#0d1117",
+                    color: "#e6edf3",
+                    minHeight: "240px",
+                    maxHeight: "420px",
+                  }}
+                >
+                  {/* Prompt */}
+                  <div>
+                    <span style={{ color: "#3fb950" }}>$</span>{" "}
+                    <span style={{ color: "#e6edf3" }}>
+                      npm run test:e2e -- --project=saucedemo
+                    </span>
+                  </div>
 
-            {/* Suite + case output */}
-            {hasAnyVisible && (
-              <div className="mt-3 space-y-3">
-                {SUITES.map((suite, si) => {
-                  if (!ts.suiteVisible[si]) return null;
-                  return (
-                    <div key={si}>
-                      {/* Suite header */}
-                      <div className="flex items-center gap-2 mb-1">
-                        <span style={{ color: "#388bfd" }}>●</span>
-                        <span
-                          style={{ color: "#e6edf3" }}
-                          className="font-bold"
-                        >
-                          {suite.name}
-                        </span>
-                      </div>
-
-                      {/* Cases */}
-                      <div className="space-y-0.5 ml-4">
-                        {suite.cases.map((tc, ci) => {
-                          const status = ts.caseStatus[si][ci];
-                          if (status === "pending") return null;
-
-                          const isBugActive = activeBug?.id === tc.bug?.id;
-
-                          return (
-                            <div key={ci}>
-                              {/* Case row */}
-                              <div className="flex items-start gap-2">
-                                {status === "running" && (
-                                  <>
-                                    <span
-                                      className="animate-spin inline-block shrink-0 mt-0.5"
-                                      style={{ color: "#e3b341" }}
-                                    >
-                                      ⠋
-                                    </span>
-                                    <span style={{ color: "#e3b341" }}>
-                                      {tc.title}
-                                    </span>
-                                  </>
-                                )}
-                                {status === "pass" && (
-                                  <>
-                                    <span
-                                      className="shrink-0 mt-0.5"
-                                      style={{ color: "#3fb950" }}
-                                    >
-                                      ✓
-                                    </span>
-                                    <span style={{ color: "#3fb950" }}>
-                                      {tc.title}
-                                    </span>
-                                    <span
-                                      className="shrink-0 tabular-nums"
-                                      style={{ color: "#7d8590" }}
-                                    >
-                                      {tc.duration}ms
-                                    </span>
-                                  </>
-                                )}
-                                {status === "fail" && (
-                                  <>
-                                    <span
-                                      className="shrink-0 mt-0.5"
-                                      style={{ color: "#f85149" }}
-                                    >
-                                      ✗
-                                    </span>
-                                    <span style={{ color: "#f85149" }}>
-                                      {tc.title}
-                                    </span>
-                                    <span
-                                      className="shrink-0 tabular-nums"
-                                      style={{ color: "#7d8590" }}
-                                    >
-                                      {tc.duration}ms
-                                    </span>
-                                  </>
-                                )}
-                              </div>
-
-                              {/* Bug ref — clickable */}
-                              {status === "fail" && tc.bug && (
-                                <button
-                                  className="ml-4 mt-0.5 flex items-center gap-1.5 text-left w-full group"
-                                  onClick={() =>
-                                    setActiveBug(isBugActive ? null : tc.bug!)
-                                  }
-                                >
-                                  <span style={{ color: "#7d8590" }}>└─</span>
-                                  <span
-                                    className="text-[11px] font-bold"
-                                    style={{
-                                      color: SEV[tc.bug.severity].color,
-                                    }}
-                                  >
-                                    {tc.bug.id}
-                                  </span>
-                                  <span
-                                    className="text-[11px] font-bold uppercase"
-                                    style={{
-                                      color: SEV[tc.bug.severity].color,
-                                      opacity: 0.75,
-                                    }}
-                                  >
-                                    [{SEV[tc.bug.severity].label}]
-                                  </span>
-                                  <span
-                                    className="text-[11px] flex-1 truncate group-hover:underline underline-offset-2"
-                                    style={{ color: "#8b949e" }}
-                                  >
-                                    {tc.bug.title}
-                                  </span>
-                                  <ChevronDown
-                                    className="w-3 h-3 shrink-0 transition-transform"
-                                    style={{
-                                      color: "#7d8590",
-                                      transform: isBugActive
-                                        ? "rotate(180deg)"
-                                        : "none",
-                                    }}
-                                  />
-                                </button>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
+                  {runState === "idle" && (
+                    <div
+                      className="mt-2 flex items-center gap-2"
+                      style={{ color: "#7d8590" }}
+                    >
+                      Press{" "}
+                      <span
+                        className="inline-flex items-center gap-1 px-2 py-0.5"
+                        style={{
+                          background: "#21262d",
+                          borderRadius: "3px 6px 3px 6px",
+                          border: "1px solid #30363d",
+                          color: "#e6edf3",
+                        }}
+                      >
+                        <Play className="w-3 h-3" />
+                        Run
+                      </span>{" "}
+                      to execute the test suite
                     </div>
-                  );
-                })}
-              </div>
-            )}
+                  )}
 
-            {/* Summary row */}
-            {runState === "complete" && (
-              <div
-                className="mt-4 pt-3 flex flex-wrap gap-x-4 gap-y-1"
-                style={{ borderTop: "1px solid #30363d" }}
-              >
-                <span style={{ color: "#3fb950" }}>✓ {passed} passed</span>
-                <span style={{ color: "#f85149" }}>✗ {failed} failed</span>
-                <span style={{ color: "#7d8590" }}>• {totalCases} total</span>
-                <span style={{ color: "#7d8590" }}>
-                  •{" "}
-                  {passed === totalCases
-                    ? "All green!"
-                    : `${totalCases - passed} need attention`}
-                </span>
-              </div>
-            )}
-          </div>
-        </motion.div>
+                  {(runState === "running" || runState === "complete") && (
+                    <div className="mt-1" style={{ color: "#7d8590" }}>
+                      {runState === "running" ? "▶  Running E2E automation test suite…" : ""}
+                    </div>
+                  )}
 
-        {/* ── Bug detail panel (outside terminal, below) ──────────────────── */}
-        <AnimatePresence>
-          {activeBug && (
-            <BugPanel
-              key={activeBug.id}
-              bug={activeBug}
-              onClose={() => setActiveBug(null)}
-            />
+                  {/* Suite + case output */}
+                  {ts.suiteVisible.some(Boolean) && (
+                    <div className="mt-3 space-y-3">
+                      {SUITES.map((suite, si) => {
+                        if (!ts.suiteVisible[si]) return null;
+                        return (
+                          <div key={si}>
+                            {/* Suite header */}
+                            <div className="flex items-center gap-2 mb-1">
+                              <span style={{ color: "#388bfd" }}>●</span>
+                              <span
+                                style={{ color: "#e6edf3" }}
+                                className="font-bold"
+                              >
+                                {suite.name}
+                              </span>
+                            </div>
+
+                            {/* Cases */}
+                            <div className="space-y-0.5 ml-4">
+                              {suite.cases.map((tc, ci) => {
+                                const status = ts.caseStatus[si][ci];
+                                if (status === "pending") return null;
+
+                                const isBugActive = activeBug?.id === tc.bug?.id;
+
+                                return (
+                                  <div key={ci}>
+                                    {/* Case row */}
+                                    <div className="flex items-start gap-2">
+                                      {status === "running" && (
+                                        <>
+                                          <span
+                                            className="animate-spin inline-block shrink-0 mt-0.5"
+                                            style={{ color: "#e3b341" }}
+                                          >
+                                            ⠋
+                                          </span>
+                                          <span style={{ color: "#e3b341" }}>
+                                            {tc.title}
+                                          </span>
+                                        </>
+                                      )}
+                                      {status === "pass" && (
+                                        <>
+                                          <span
+                                            className="shrink-0 mt-0.5"
+                                            style={{ color: "#3fb950" }}
+                                          >
+                                            ✓
+                                          </span>
+                                          <span style={{ color: "#3fb950" }}>
+                                            {tc.title}
+                                          </span>
+                                          <span
+                                            className="shrink-0 tabular-nums"
+                                            style={{ color: "#7d8590" }}
+                                          >
+                                            {tc.duration}ms
+                                          </span>
+                                        </>
+                                      )}
+                                      {status === "fail" && (
+                                        <>
+                                          <span
+                                            className="shrink-0 mt-0.5"
+                                            style={{ color: "#f85149" }}
+                                          >
+                                            ✗
+                                          </span>
+                                          <span style={{ color: "#f85149" }}>
+                                            {tc.title}
+                                          </span>
+                                          <span
+                                            className="shrink-0 tabular-nums"
+                                            style={{ color: "#7d8590" }}
+                                          >
+                                            {tc.duration}ms
+                                          </span>
+                                        </>
+                                      )}
+                                    </div>
+
+                                    {/* Bug ref — clickable */}
+                                    {status === "fail" && tc.bug && (
+                                      <button
+                                        className="ml-4 mt-0.5 flex items-center gap-1.5 text-left w-full group"
+                                        onClick={() =>
+                                          setActiveBug(isBugActive ? null : tc.bug!)
+                                        }
+                                      >
+                                        <span style={{ color: "#7d8590" }}>└─</span>
+                                        <span
+                                          className="text-[11px] font-bold"
+                                          style={{
+                                            color: SEV[tc.bug.severity].color,
+                                          }}
+                                        >
+                                          {tc.bug.id}
+                                        </span>
+                                        <span
+                                          className="text-[11px] font-bold uppercase"
+                                          style={{
+                                            color: SEV[tc.bug.severity].color,
+                                            opacity: 0.75,
+                                          }}
+                                        >
+                                          [{SEV[tc.bug.severity].label}]
+                                        </span>
+                                        <span
+                                          className="text-[11px] flex-1 truncate group-hover:underline underline-offset-2"
+                                          style={{ color: "#8b949e" }}
+                                        >
+                                          {tc.bug.title}
+                                        </span>
+                                        <ChevronDown
+                                          className="w-3 h-3 shrink-0 transition-transform"
+                                          style={{
+                                            color: "#7d8590",
+                                            transform: isBugActive
+                                              ? "rotate(180deg)"
+                                              : "none",
+                                          }}
+                                        />
+                                      </button>
+                                    )}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* Summary row */}
+                  {runState === "complete" && (
+                    <div
+                      className="mt-4 pt-3 flex flex-wrap gap-x-4 gap-y-1"
+                      style={{ borderTop: "1px solid #30363d" }}
+                    >
+                      <span style={{ color: "#3fb950" }}>✓ {passed} passed</span>
+                      <span style={{ color: "#f85149" }}>✗ {failed} failed</span>
+                      <span style={{ color: "#7d8590" }}>• {totalCases} total</span>
+                      <span style={{ color: "#7d8590" }}>
+                        •{" "}
+                        {passed === totalCases
+                          ? "All green!"
+                          : `${totalCases - passed} need attention`}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Bug detail panel (inside modal, below) */}
+              <AnimatePresence>
+                {activeBug && (
+                  <BugPanel
+                    key={activeBug.id}
+                    bug={activeBug}
+                    onClose={() => setActiveBug(null)}
+                  />
+                )}
+              </AnimatePresence>
+
+              {/* Hint text */}
+              {runState === "idle" && (
+                <p className="text-xs text-muted-foreground font-handwritten italic text-center">
+                  — 14 test cases across 4 suites, 9 bugs found —
+                </p>
+              )}
+              {runState === "complete" && (
+                <p className="text-xs text-muted-foreground font-handwritten italic text-center">
+                  — click any failed test to read the full bug report —
+                </p>
+              )}
+            </div>
           )}
-        </AnimatePresence>
 
-        {/* ── Hint text ────────────────────────────────────────────────────── */}
-        {runState === "idle" && (
-          <motion.p
-            className="mt-3 text-xs text-muted-foreground font-handwritten italic text-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            — 14 test cases across 4 suites, 9 bugs found —
-          </motion.p>
-        )}
-        {runState === "complete" && (
-          <motion.p
-            className="mt-3 text-xs text-muted-foreground font-handwritten italic text-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            — click any failed test to read the full bug report —
-          </motion.p>
-        )}
+          {activeModal === "game" && <DefectFinder />}
+        </QAPlaygroundModal>
       </div>
     </motion.section>
   );

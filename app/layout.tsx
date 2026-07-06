@@ -8,6 +8,7 @@ const quicksand = Quicksand({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-quicksand",
+  display: "swap",
 });
 
 const kalam = Kalam({
@@ -20,6 +21,7 @@ const kalam = Kalam({
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+  display: "swap",
 });
 
 const BASE_URL = "https://isnanramalia.vercel.app";
