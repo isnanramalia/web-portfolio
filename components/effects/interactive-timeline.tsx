@@ -152,18 +152,20 @@ export function InteractiveTimeline({
               {/* Bridge: item top → just under dot — joins the tail of the previous item.
                   Omitted on the very first item (nothing above to connect to). */}
               {!isFirst && (
-                <div
-                  className="absolute left-[5px] top-0 h-8 border-l border-border"
-                  aria-hidden="true"
-                />
+                <div className="absolute left-[0px] top-0 h-8 w-3 pointer-events-none flex items-center justify-center">
+                  <svg width="12" height="100%" viewBox="0 0 12 100" preserveAspectRatio="none" className="stroke-border fill-none opacity-60">
+                    <path d="M 6,0 C 2,25 10,75 6,100" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+                  </svg>
+                </div>
               )}
               {/* Tail: just below dot → past item bottom — bridges into the next item.
                   Omitted on the last item so no line hangs below the final dot. */}
               {!isLast && (
-                <div
-                  className="absolute left-[5px] top-10 -bottom-6 border-l border-border"
-                  aria-hidden="true"
-                />
+                <div className="absolute left-[0px] top-10 -bottom-6 w-3 pointer-events-none flex items-center justify-center">
+                  <svg width="12" height="100%" viewBox="0 0 12 100" preserveAspectRatio="none" className="stroke-border fill-none opacity-60">
+                    <path d="M 6,0 C 1,25 11,75 6,100" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+                  </svg>
+                </div>
               )}
 
               {/* Timeline Dot */}
@@ -245,19 +247,19 @@ export function InteractiveTimeline({
                           >
                             {/* Bridge: item top → dot — joins previous role's tail */}
                             {!isFirstRole && (
-                              <div
-                                className="absolute left-[4.5px] top-0 h-[18px] border-l border-border"
-                                style={{ opacity: 0.55 }}
-                                aria-hidden="true"
-                              />
+                              <div className="absolute left-[-1px] top-0 h-[18px] w-3 pointer-events-none flex items-center justify-center" style={{ opacity: 0.45 }}>
+                                <svg width="12" height="100%" viewBox="0 0 12 100" preserveAspectRatio="none" className="stroke-border fill-none">
+                                  <path d="M 6,0 C 4,30 8,70 6,100" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+                                </svg>
+                              </div>
                             )}
                             {/* Tail: below dot → next role — omitted on last role */}
                             {!isLastRole && (
-                              <div
-                                className="absolute left-[4.5px] top-7 -bottom-3 border-l border-border"
-                                style={{ opacity: 0.55 }}
-                                aria-hidden="true"
-                              />
+                              <div className="absolute left-[-1px] top-7 -bottom-3 w-3 pointer-events-none flex items-center justify-center" style={{ opacity: 0.45 }}>
+                                <svg width="12" height="100%" viewBox="0 0 12 100" preserveAspectRatio="none" className="stroke-border fill-none">
+                                  <path d="M 6,0 C 4,30 8,70 6,100" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+                                </svg>
+                              </div>
                             )}
                             {/* Role Timeline Dot */}
                             <div className="relative z-10 flex-shrink-0 mt-[18px]">
@@ -330,7 +332,7 @@ export function InteractiveTimeline({
                                     style={{ overflow: "hidden" }}
                                   >
                                     <div className="pt-3 mt-3 border-t border-border">
-                                      <p className="text-xs text-muted-foreground leading-relaxed">
+                                      <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">
                                         {role.fullDescription}
                                       </p>
                                     </div>
@@ -439,7 +441,7 @@ export function InteractiveTimeline({
                                 style={{ overflow: "hidden" }}
                               >
                                 <div className="pt-3 mt-3 border-t border-border">
-                                  <p className="text-xs text-muted-foreground leading-relaxed">
+                                  <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">
                                     {role.fullDescription}
                                   </p>
                                 </div>

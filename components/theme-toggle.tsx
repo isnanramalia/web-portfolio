@@ -47,17 +47,20 @@ export function ThemeToggle() {
 
   return (
     <div className="relative group/tooltip shrink-0">
-      <div
+      <button
+        onClick={handleToggle}
         className={cn(
-          "relative flex items-center justify-between p-1 select-none w-[168px] h-[38px] shrink-0",
+          "relative flex items-center justify-between p-1 select-none w-[168px] h-[38px] shrink-0 cursor-pointer",
           // Consistent styling matching the search button's border, text, and hover classes
-          "border border-border text-xs text-muted-foreground hover:border-foreground/30 hover:bg-muted/40 transition-all duration-150"
+          "border border-border text-xs text-muted-foreground hover:border-foreground/30 hover:bg-muted/40 transition-all duration-150",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
         )}
         style={{
           borderRadius: "10px 3px 10px 3px / 3px 10px 3px 10px"
         }}
-        role="group"
-        aria-label="Theme selection"
+        role="switch"
+        aria-checked={isDark}
+        aria-label="Toggle theme mode"
       >
         {/* Sliding Active Pill (Parent-anchored math-safe position) */}
         <motion.div
@@ -82,51 +85,37 @@ export function ThemeToggle() {
         />
 
         {/* Option 1: Build */}
-        <button
-          onClick={(e) => {
-            if (isDark) {
-              handleToggle(e);
-            }
-          }}
+        <div
           className={cn(
-            "relative flex-1 flex items-center justify-center h-full z-10 font-bold text-xs font-mono select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 transition-colors duration-300",
-            !isDark ? "text-[#FAF8F5]" : "text-muted-foreground hover:text-foreground"
+            "relative flex-1 flex items-center justify-center h-full z-10 font-bold text-xs font-mono select-none transition-colors duration-300",
+            !isDark ? "text-[#FAF8F5]" : "text-muted-foreground group-hover/tooltip:text-foreground"
           )}
           style={{
             borderRadius: "8px 2px 8px 2px / 2px 8px 2px 8px"
           }}
-          aria-pressed={!isDark}
-          aria-label="Build Mode"
         >
           <span className="flex items-center gap-1.5">
             <Code className="w-3.5 h-3.5" />
             <span>Build</span>
           </span>
-        </button>
+        </div>
 
         {/* Option 2: Break */}
-        <button
-          onClick={(e) => {
-            if (!isDark) {
-              handleToggle(e);
-            }
-          }}
+        <div
           className={cn(
-            "relative flex-1 flex items-center justify-center h-full z-10 font-bold text-xs font-mono select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 transition-colors duration-300",
-            isDark ? "text-[#D6C0B3]" : "text-muted-foreground hover:text-foreground"
+            "relative flex-1 flex items-center justify-center h-full z-10 font-bold text-xs font-mono select-none transition-colors duration-300",
+            isDark ? "text-[#D6C0B3]" : "text-muted-foreground group-hover/tooltip:text-foreground"
           )}
           style={{
             borderRadius: "8px 2px 8px 2px / 2px 8px 2px 8px"
           }}
-          aria-pressed={isDark}
-          aria-label="Break Mode"
         >
           <span className="flex items-center gap-1.5">
             <Bug className="w-3.5 h-3.5" />
             <span>Break</span>
           </span>
-        </button>
-      </div>
+        </div>
+      </button>
 
 
       {/* Tooltip */}

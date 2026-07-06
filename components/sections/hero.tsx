@@ -26,31 +26,6 @@ import { useTriggerCrash, useSandboxPhase } from "@/lib/sandbox-store";
 
 // ── QA Doodle SVG components ──────────────────────────────────────────────
 
-
-const DoodleBug = ({ className }: { className?: string }) => (
-  <svg
-    viewBox="0 0 80 80"
-    className={className}
-    fill="none"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    <ellipse cx="40" cy="46" rx="13" ry="16" strokeWidth="2.5" />
-    <ellipse cx="40" cy="30" rx="9" ry="10" strokeWidth="2.5" />
-    <line x1="27" y1="40" x2="13" y2="33" strokeWidth="2" />
-    <line x1="27" y1="47" x2="11" y2="47" strokeWidth="2" />
-    <line x1="27" y1="54" x2="13" y2="61" strokeWidth="2" />
-    <line x1="53" y1="40" x2="67" y2="33" strokeWidth="2" />
-    <line x1="53" y1="47" x2="69" y2="47" strokeWidth="2" />
-    <line x1="53" y1="54" x2="67" y2="61" strokeWidth="2" />
-    <circle cx="35" cy="27" r="1.5" fill="currentColor" strokeWidth="0" />
-    <circle cx="45" cy="27" r="1.5" fill="currentColor" strokeWidth="0" />
-  </svg>
-);
-
 const DoodleSmallCheck = ({ className }: { className?: string }) => (
   <svg
     viewBox="0 0 24 24"
@@ -63,22 +38,6 @@ const DoodleSmallCheck = ({ className }: { className?: string }) => (
     aria-hidden="true"
   >
     <polyline points="3,12 9,19 21,6" strokeWidth="3" />
-  </svg>
-);
-
-const DoodleArrow = ({ className }: { className?: string }) => (
-  <svg
-    viewBox="0 0 50 30"
-    className={className}
-    fill="none"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    <path d="M2,15 C10,8 25,22 42,10" strokeWidth="2" />
-    <polyline points="36,5 42,10 38,17" strokeWidth="2" />
   </svg>
 );
 
@@ -399,22 +358,6 @@ export function HeroSection({
         />
       </FloatingElement>
 
-
-
-      {/* Bug — bottom-left */}
-      <motion.div
-        className="absolute left-4 bottom-20 hidden xl:block text-primary/15 pointer-events-none select-none"
-        animate={{ y: [0, -7, 0], rotate: [0, -4, 3, 0] }}
-        transition={{
-          duration: 11,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 2.5,
-        }}
-      >
-        <DoodleBug className="w-20 h-20" />
-      </motion.div>
-
       {/* Scattered small checks */}
       <motion.div
         className="absolute right-4 top-1/2 hidden lg:block text-green-600/20 pointer-events-none select-none"
@@ -422,15 +365,6 @@ export function HeroSection({
         transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
       >
         <DoodleSmallCheck className="w-7 h-7" />
-      </motion.div>
-
-      {/* Doodle arrow near scroll hint */}
-      <motion.div
-        className="absolute left-6 bottom-8 hidden lg:block text-primary/15 pointer-events-none select-none"
-        animate={{ x: [0, 4, 0], opacity: [0.4, 0.7, 0.4] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <DoodleArrow className="w-12 h-8" />
       </motion.div>
 
       <div className="max-w-4xl mx-auto relative z-10 w-full">

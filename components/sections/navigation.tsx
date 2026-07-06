@@ -35,6 +35,9 @@ export function Navigation({
   const { scrolled, activeSection } = useNavigationScrollState();
   const toggleMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
+  // Active tab layoutId transitions handle the elastic sketch loops natively.
+
+
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -70,14 +73,15 @@ export function Navigation({
         initial="hidden"
         animate="visible"
         variants={navigationVariants}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-border ${
-          scrolled
-            ? "bg-background/80 backdrop-blur-md shadow-[0_4px_24px_-4px_rgba(0,0,0,0.12)]"
-            : "bg-background"
+        className={`fixed z-50 top-0 left-0 right-0 w-full border-b border-border transition-all duration-300 ease-in-out bg-background/95 backdrop-blur-md ${
+          scrolled ? "shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)]" : ""
         }`}
+        style={{
+          borderRadius: "0px",
+        }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between transition-all duration-200 h-16">
             <div className="relative cursor-pointer" onClick={scrollToHero}>
               <IsnaLogo />
             </div>
@@ -117,15 +121,30 @@ export function Navigation({
                   {item.label}
                   {activeSection === item.id && (
                     <motion.div
-                      className="absolute inset-0 -z-10 nav-marker-pill"
+                      className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none"
                       layoutId="activeSection"
                       initial={false}
                       transition={{
                         type: "spring",
-                        stiffness: 380,
-                        damping: 30,
+                        stiffness: 180,
+                        damping: 14,
                       }}
-                    />
+                    >
+                      <svg
+                        className="w-[115%] h-[125%] absolute text-[#0B1957]/80 dark:text-[#AB886D]/80"
+                        viewBox="0 0 100 100"
+                        preserveAspectRatio="none"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path
+                          d="M 5,50 C 5,15 25,6 50,6 C 75,6 95,15 95,50 C 95,85 75,94 50,94 C 25,94 5,85 7,55 C 8,35 20,16 40,10"
+                        />
+                      </svg>
+                    </motion.div>
                   )}
                 </motion.button>
               ))}
