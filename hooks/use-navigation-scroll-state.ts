@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-const SECTIONS = ["about", "skills", "projects", "writing", "contact"] as const;
+const SECTIONS = ["about", "skills", "projects", "qa", "writing", "contact"] as const;
 
 /** Pixels from the top of the viewport that count as "in" a section */
 const NAV_HEIGHT = 80;
@@ -11,6 +11,7 @@ const SECTION_PATHS: Record<string, string> = {
   about: "/about",
   skills: "/skills",
   projects: "/projects",
+  qa: "/qa",
   writing: "/writing",
   contact: "/contact",
 };
@@ -21,6 +22,7 @@ function sectionFromPathname(pathname: string): string {
     "/about": "about",
     "/skills": "skills",
     "/projects": "projects",
+    "/qa": "qa",
     "/writing": "writing",
     "/contact": "contact",
   };
@@ -69,7 +71,14 @@ export function useNavigationScrollState() {
     cacheElements();
 
     const readScrollState = () => {
-      if (sectionElsRef.current.length === 0) cacheElements();
+      const currentIds = sectionElsRef.current.map((item) => item.id);
+      const hasMissingFromDom = SECTIONS.some(
+        (id) => !currentIds.includes(id) && document.getElementById(id)
+      );
+
+      if (sectionElsRef.current.length === 0 || hasMissingFromDom) {
+        cacheElements();
+      }
 
       const scrollY = window.scrollY;
       const nextScrolled = scrollY > 50;

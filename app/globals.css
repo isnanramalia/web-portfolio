@@ -256,13 +256,13 @@
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
 }
 
 .dark .glass-strong {
-    background: rgba(30, 41, 59, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    background: rgba(73, 54, 40, 0.85);
+    border: 1px solid rgba(171, 136, 109, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
 }
 
 /* Disable backdrop-filter on low-end devices for performance */
@@ -495,57 +495,40 @@ h6 {
 }
 
 .dark .inline-flex.items-center.gap-2.rounded-full.border {
-    background-color: rgba(112, 197, 255, 0.1) !important;
-    border-color: rgba(112, 197, 255, 0.3) !important;
-    color: #70c5ff !important;
+    background-color: rgba(171, 136, 109, 0.15) !important;
+    border-color: rgba(171, 136, 109, 0.4) !important;
+    color: #D6C0B3 !important;
 }
 
 .dark .bg-accent {
-    background-color: rgba(112, 197, 255, 0.15) !important;
-    color: #70c5ff !important;
+    background-color: rgba(171, 136, 109, 0.2) !important;
+    color: #D6C0B3 !important;
 }
 
 .dark .text-muted-foreground.font-medium.bg-accent {
-    background-color: rgba(112, 197, 255, 0.2) !important;
-    color: #70c5ff !important;
+    background-color: rgba(171, 136, 109, 0.2) !important;
+    color: #D6C0B3 !important;
 }
 
-.dark section#contact {
-    background-color: rgba(51, 65, 85, 0.3) !important;
-}
 
-.dark section#contact .bg-accent\/50 {
-    background-color: rgba(51, 65, 85, 0.3) !important;
-}
-
-.dark section#contact .bg-primary {
-    background-color: #70c5ff !important;
-    color: #0f172a !important;
-}
-
-.dark section#contact .bg-primary:hover {
-    background-color: #5fb3f3 !important;
-}
 
 .dark .text-xs.text-muted-foreground.font-medium.bg-accent.px-3.py-1.rounded-xl {
-    background-color: rgba(112, 197, 255, 0.2) !important;
-    color: #70c5ff !important;
+    background-color: rgba(171, 136, 109, 0.2) !important;
+    color: #D6C0B3 !important;
 }
 
 .dark .text-xs.text-muted-foreground.font-medium.bg-accent {
-    background-color: rgba(112, 197, 255, 0.2) !important;
-    color: #70c5ff !important;
+    background-color: rgba(171, 136, 109, 0.2) !important;
+    color: #D6C0B3 !important;
 }
 
 .dark #about span.text-xs.text-muted-foreground.font-medium.bg-accent {
-    background-color: rgba(112, 197, 255, 0.25) !important;
-    color: #70c5ff !important;
-    border: 1px solid rgba(112, 197, 255, 0.3) !important;
+    background-color: rgba(171, 136, 109, 0.2) !important;
+    color: #D6C0B3 !important;
+    border: 1px solid rgba(171, 136, 109, 0.35) !important;
 }
 
-.dark section[id="contact"] {
-    background-color: rgba(30, 41, 59, 0.4) !important;
-}
+
 
 .dark .work-card.active {
     background-color: rgba(112, 197, 255, 0.1) !important;
@@ -553,7 +536,7 @@ h6 {
 }
 
 .dark .text-muted-foreground {
-    color: rgb(148, 163, 184) !important;
+    color: #AB886D !important;
 }
 
 .group:hover .group-hover\:filter {

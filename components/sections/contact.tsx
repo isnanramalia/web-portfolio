@@ -117,7 +117,7 @@ export function ContactSection() {
               </motion.div>
 
               <motion.div
-                className="border-t border-border/60 pt-6"
+                className="border-t border-primary/40 pt-6"
                 variants={staggerItem}
               >
                 <p className="text-xs text-muted-foreground">

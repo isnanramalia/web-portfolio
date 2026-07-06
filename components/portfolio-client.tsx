@@ -5,7 +5,7 @@ let _consolePrinted = false;
 import { useCallback, useEffect, useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
-import { User, Wrench, FolderOpen, MessageCircle, PenLine } from "lucide-react";
+import { User, Wrench, FolderOpen, MessageCircle, PenLine, Bug } from "lucide-react";
 import { Preloader } from "@/components/preloader";
 import { Navigation } from "@/components/sections/navigation";
 import { Sidebar } from "@/components/sections/sidebar";
@@ -117,6 +117,7 @@ const SECTION_PATHS: Record<string, string> = {
   about: "/about",
   skills: "/skills",
   projects: "/projects",
+  qa: "/qa",
   writing: "/writing",
   contact: "/contact",
 };
@@ -255,6 +256,7 @@ export function PortfolioClient({
         "/about": "about",
         "/skills": "skills",
         "/projects": "projects",
+        "/qa": "qa",
         "/writing": "writing",
         "/contact": "contact",
       };
@@ -282,10 +284,15 @@ export function PortfolioClient({
     return () => clearTimeout(timer);
   }, [introComplete, initialSection]);
 
+  const isDark = theme === "dark";
+
   const navigationItems = [
     { id: "about", label: "About", icon: User },
     { id: "skills", label: "Skills", icon: Wrench },
     { id: "projects", label: "Projects", icon: FolderOpen },
+    ...(isDark
+      ? [{ id: "qa", label: "QA Playground", icon: Bug }]
+      : []),
     { id: "writing", label: "Writing", icon: PenLine },
     { id: "contact", label: "Contact", icon: MessageCircle },
   ];
@@ -345,7 +352,7 @@ export function PortfolioClient({
 
               <ProjectsSectionLocal projects={projects} />
 
-              <QAPlaygroundSection />
+              {isDark && <QAPlaygroundSection />}
 
               <MediumSection />
 

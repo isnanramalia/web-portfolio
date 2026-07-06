@@ -25,60 +25,7 @@ import { useTriggerCrash, useSandboxPhase } from "@/lib/sandbox-store";
 
 
 // ── QA Doodle SVG components ──────────────────────────────────────────────
-const DoodleMagnifier = ({ className }: { className?: string }) => (
-  <svg
-    viewBox="0 0 80 80"
-    className={className}
-    fill="none"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    <circle cx="32" cy="32" r="19" strokeWidth="3.5" />
-    <line
-      x1="46"
-      y1="46"
-      x2="70"
-      y2="70"
-      strokeWidth="5"
-      strokeLinecap="round"
-    />
-    <line
-      x1="26"
-      y1="32"
-      x2="38"
-      y2="32"
-      strokeWidth="1.8"
-      strokeOpacity="0.45"
-    />
-    <line
-      x1="32"
-      y1="26"
-      x2="32"
-      y2="38"
-      strokeWidth="1.8"
-      strokeOpacity="0.45"
-    />
-  </svg>
-);
 
-const DoodleCheck = ({ className }: { className?: string }) => (
-  <svg
-    viewBox="0 0 60 60"
-    className={className}
-    fill="none"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    <circle cx="30" cy="30" r="25" strokeWidth="2.5" />
-    <polyline points="17,30 25,40 44,20" strokeWidth="3.8" />
-  </svg>
-);
 
 const DoodleBug = ({ className }: { className?: string }) => (
   <svg
@@ -452,34 +399,7 @@ export function HeroSection({
         />
       </FloatingElement>
 
-      {/* ── QA Doodle Decorations (desktop only) ─────────────────────────── */}
-      {/* Magnifying glass — bottom-right */}
-      <motion.div
-        className="absolute right-6 bottom-16 hidden lg:block text-primary/20 pointer-events-none select-none"
-        animate={{ rotate: [0, 7, -4, 0], y: [0, -10, 5, 0] }}
-        transition={{
-          duration: 9,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 0.5,
-        }}
-      >
-        <DoodleMagnifier className="w-24 h-24" />
-      </motion.div>
 
-      {/* Checkmark circle — top-right */}
-      <motion.div
-        className="absolute right-16 top-10 hidden lg:block text-green-500/25 pointer-events-none select-none"
-        animate={{ rotate: [-6, 4, -6], scale: [1, 1.06, 1] }}
-        transition={{
-          duration: 7,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1,
-        }}
-      >
-        <DoodleCheck className="w-16 h-16" />
-      </motion.div>
 
       {/* Bug — bottom-left */}
       <motion.div

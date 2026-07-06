@@ -70,9 +70,9 @@ export function Navigation({
         initial="hidden"
         animate="visible"
         variants={navigationVariants}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-border ${
           scrolled
-            ? "bg-background/80 backdrop-blur-md border-b border-border/40 shadow-lg"
+            ? "bg-background/80 backdrop-blur-md shadow-[0_4px_24px_-4px_rgba(0,0,0,0.12)]"
             : "bg-background"
         }`}
       >
