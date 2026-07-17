@@ -512,4 +512,31 @@ export const projects: Project[] = [
     website: "https://docs.google.com/spreadsheets/d/1piSwBLaDNsxcTMxo6NKqNM8BhsZ91_sZlf772INq5BY/edit?gid=88393121#gid=88393121",
     category: "qa",
   },
+  {
+    title: "Exploratory Testing – GRAHCIS Material Management",
+    description:
+      "Exploratory testing pada modul Material Management (Setup Item) di GRAHCIS — healthcare information system. Menghasilkan 154 test case dari 28 fitur yang diuji, dengan 24 bugs ditemukan, mencakup skenario positive, negative, dan edge case.",
+    longDescription:
+      "Exploratory Testing dilakukan pada modul Material Management di GRAHCIS (Gracia Health Care Information System V.1), dengan fokus awal pada fitur Setup Item untuk memahami alur sistem, mengidentifikasi fungsi yang tersedia, serta menemukan potensi defect sebelum menyusun test case secara detail.\n\nPendekatan exploratory testing membantu memahami perilaku sistem secara menyeluruh sehingga test case dan bug report yang disusun didasarkan pada hasil observasi langsung, bukan hanya asumsi terhadap fungsi aplikasi.",
+    image: "/project/grahcis.jpg",
+    techStack: [
+      "Exploratory Testing",
+      "Manual Testing",
+      "Bug Reporting",
+      "Google Sheets",
+      "Test Case Design",
+    ],
+    features: [
+      "Eksplorasi fitur Setup Item: daftar item, pencarian data, Detail Item, dan Kartu Stok",
+      "Pengujian fitur penambahan item, validasi input, serta pengelolaan Satuan dan Kamus Item KFA",
+      "Tersusun 154 test case mencakup skenario positive, negative, dan edge case",
+      "Fungsi dasar (daftar item, pencarian, Detail Item, tab Satuan, tab Kamus Item KFA) berjalan sesuai fungsinya",
+      "24 bugs ditemukan — termasuk defect kritis: proses Add Item gagal meskipun data valid",
+      "Validasi mandatory field belum optimal dan sistem tidak memberikan feedback yang jelas kepada pengguna",
+      "Beberapa test case berstatus Blocked karena bergantung pada defect utama pada proses Save",
+    ],
+    website:
+      "https://docs.google.com/spreadsheets/d/1NVettXPMVODHoE30tr6G3tjS9YU3MaRTTC5u11AFdro/edit?usp=sharing",
+    category: "qa",
+  },
 ];

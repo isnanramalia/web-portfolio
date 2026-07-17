@@ -68,6 +68,10 @@ const QA_CARD_METRICS: Record<
     testCases: "UAT",
     bugsFound: "75 users",
   },
+  "Exploratory Testing – GRAHCIS Material Management": {
+    testCases: "154",
+    bugsFound: "24",
+  },
 };
 
 // ── Filter categories ──────────────────────────────────────────────────────

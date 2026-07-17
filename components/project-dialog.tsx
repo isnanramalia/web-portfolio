@@ -133,6 +133,22 @@ const QA_PROJECT_META: Record<
       "Report",
     ],
   },
+  "Exploratory Testing – GRAHCIS Material Management": {
+    stats: [
+      { value: "154", label: "Test Cases", icon: CheckCircle },
+      { value: "24", label: "Bugs Found", icon: Bug },
+      { value: "28", label: "Fitur Diuji", icon: Users },
+      { value: "Exploratory", label: "Method", icon: BarChart3 },
+    ],
+    process: [
+      "Eksplorasi Sistem",
+      "Identifikasi Fitur",
+      "Penyusunan TC",
+      "Eksekusi",
+      "Bug Report",
+      "Summary",
+    ],
+  },
 };
 
 const BUG_SEV_COLORS = {
